@@ -1,0 +1,24 @@
+name: Verificacao temporaria slot agenda
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apps-script-slot-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirmar que 08h continua disponivel com 1 evento
+        shell: bash
+        run: |
+          URL='https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec?action=availability&date=2026-08-31'
+          BODY="$(curl -fsSL --retry 3 "$URL")"
+          echo "$BODY"
+          printf '%s' "$BODY" | grep -q '"ok":true'
+          printf '%s' "$BODY" | grep -q '"value":"08:00"'
+          echo 'Nova regra ativa: 08h permanece disponivel com uma reserva.'
