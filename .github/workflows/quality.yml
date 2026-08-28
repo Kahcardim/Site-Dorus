@@ -37,6 +37,7 @@ jobs:
       - name: Verificar sintaxe Python
         run: |
           python -m py_compile scripts/check_site.py
+          python -m py_compile scripts/check_seo.py
           python -m py_compile scripts/enrich_meta.py
           python -m py_compile scripts/cache_bust.py
           python -m py_compile scripts/summarize_lighthouse.py
@@ -88,3 +89,6 @@ jobs:
 
       - name: Verificar HTML UX acessibilidade privacidade e segurança
         run: python scripts/check_site.py
+
+      - name: Validar SEO técnico sitemap e canonicals
+        run: python scripts/check_seo.py

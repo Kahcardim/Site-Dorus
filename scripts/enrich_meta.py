@@ -1,10 +1,13 @@
 from pathlib import Path
 import html
+import json
 import re
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = 'https://assistenciadorus.com.br/'
 SHARE_IMAGE = BASE_URL + 'assets/dorus-logo-3d.webp'
+SITE_NAME = 'D’orus Assistência Técnica'
 
 
 def first(pattern: str, source: str) -> str | None:
@@ -39,38 +42,11 @@ def relative_asset(rel: str, asset: str) -> str:
 
 
 def ensure_brand_icons(source: str, rel: str) -> str:
-    # Remove referências antigas para evitar que navegadores ou crawlers
-    # escolham a antiga logo WebP como favicon.
-    source = re.sub(
-        r'\s*<link\s+[^>]*rel=["\'][^"\']*(?:shortcut\s+)?icon[^"\']*["\'][^>]*>',
-        '',
-        source,
-        flags=re.I,
-    )
-    source = re.sub(
-        r'\s*<link\s+[^>]*rel=["\']apple-touch-icon["\'][^>]*>',
-        '',
-        source,
-        flags=re.I,
-    )
-    source = re.sub(
-        r'\s*<link\s+[^>]*rel=["\']manifest["\'][^>]*>',
-        '',
-        source,
-        flags=re.I,
-    )
-    source = re.sub(
-        r'\s*<meta\s+[^>]*name=["\']msapplication-TileColor["\'][^>]*>',
-        '',
-        source,
-        flags=re.I,
-    )
-    source = re.sub(
-        r'\s*<meta\s+[^>]*name=["\']msapplication-TileImage["\'][^>]*>',
-        '',
-        source,
-        flags=re.I,
-    )
+    source = re.sub(r'\s*<link\s+[^>]*rel=["\'][^"\']*(?:shortcut\s+)?icon[^"\']*["\'][^>]*>', '', source, flags=re.I)
+    source = re.sub(r'\s*<link\s+[^>]*rel=["\']apple-touch-icon["\'][^>]*>', '', source, flags=re.I)
+    source = re.sub(r'\s*<link\s+[^>]*rel=["\']manifest["\'][^>]*>', '', source, flags=re.I)
+    source = re.sub(r'\s*<meta\s+[^>]*name=["\']msapplication-TileColor["\'][^>]*>', '', source, flags=re.I)
+    source = re.sub(r'\s*<meta\s+[^>]*name=["\']msapplication-TileImage["\'][^>]*>', '', source, flags=re.I)
 
     favicon_48 = relative_asset(rel, 'favicon-48x48.png')
     favicon_192 = relative_asset(rel, 'favicon-192x192.png')
@@ -110,6 +86,84 @@ def ensure_compact_pages(source: str, rel: str) -> str:
     return re.sub(r'</head>', '  ' + link + '\n</head>', source, count=1, flags=re.I)
 
 
+def ensure_language_links(source: str, canonical: str) -> str:
+    source = re.sub(r'\s*<link\s+[^>]*rel=["\']alternate["\'][^>]*hreflang=["\'][^"\']+["\'][^>]*>', '', source, flags=re.I)
+    block = '\n'.join([
+        f'  <link rel="alternate" hreflang="pt-BR" href="{canonical}">',
+        f'  <link rel="alternate" hreflang="x-default" href="{canonical}">',
+    ])
+    return re.sub(r'</head>', block + '\n</head>', source, count=1, flags=re.I)
+
+
+def breadcrumb_name(slug: str) -> str:
+    labels = {
+        'sobre': 'Sobre',
+        'servicos': 'Serviços',
+        'geladeiras': 'Geladeiras',
+        'maquinas-de-lavar': 'Máquinas de lavar',
+        'fogoes': 'Fogões',
+        'freezers': 'Freezers',
+        'lava-loucas': 'Lava-louças',
+        'lava-e-seca': 'Lava e seca',
+        'fornos': 'Fornos',
+        'micro-ondas': 'Micro-ondas',
+        'curiosidades': 'Curiosidades',
+        'agendamento': 'Agendamento',
+        'fale-conosco': 'Fale conosco',
+        'privacidade': 'Privacidade',
+    }
+    return labels.get(slug, slug.replace('-', ' ').title())
+
+
+def ensure_jsonld(source: str, marker_id: str, data: dict) -> str:
+    if f'"@id":"{marker_id}"' in source or f'"@id": "{marker_id}"' in source:
+        return source
+    payload = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+    block = f'  <script type="application/ld+json">{payload}</script>\n'
+    return re.sub(r'</head>', block + '</head>', source, count=1, flags=re.I)
+
+
+def ensure_structured_navigation(source: str, canonical: str) -> str:
+    parsed = urlparse(canonical)
+    parts = [p for p in parsed.path.split('/') if p]
+
+    website_id = BASE_URL + '#website'
+    if canonical == BASE_URL:
+        website = {
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            '@id': website_id,
+            'url': BASE_URL,
+            'name': SITE_NAME,
+            'alternateName': ['D’orus', 'Dorus Assistência Técnica'],
+            'inLanguage': 'pt-BR',
+        }
+        source = ensure_jsonld(source, website_id, website)
+
+    if not parts:
+        return source
+
+    items = [{'@type': 'ListItem', 'position': 1, 'name': 'Início', 'item': BASE_URL}]
+    cumulative = BASE_URL
+    for position, part in enumerate(parts, start=2):
+        cumulative += part + '/'
+        items.append({
+            '@type': 'ListItem',
+            'position': position,
+            'name': breadcrumb_name(part),
+            'item': cumulative,
+        })
+
+    breadcrumb_id = canonical + '#breadcrumb'
+    breadcrumb = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        '@id': breadcrumb_id,
+        'itemListElement': items,
+    }
+    return ensure_jsonld(source, breadcrumb_id, breadcrumb)
+
+
 def enrich(path: Path) -> bool:
     rel = path.relative_to(ROOT).as_posix()
     original = path.read_text(encoding='utf-8')
@@ -125,14 +179,17 @@ def enrich(path: Path) -> bool:
     source = ensure_brand_icons(source, rel)
     source = ensure_final_ui(source, rel)
     source = ensure_compact_pages(source, rel)
+    source = ensure_language_links(source, canonical)
+    source = ensure_structured_navigation(source, canonical)
 
+    source = set_meta(source, 'name', 'robots', 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1')
     source = set_meta(source, 'property', 'og:image', SHARE_IMAGE)
     source = set_meta(source, 'name', 'twitter:image', SHARE_IMAGE)
 
     additions: list[str] = []
     add_meta(additions, 'property', 'og:type', 'website', source)
     add_meta(additions, 'property', 'og:locale', 'pt_BR', source)
-    add_meta(additions, 'property', 'og:site_name', 'D’orus Assistência Técnica', source)
+    add_meta(additions, 'property', 'og:site_name', SITE_NAME, source)
     add_meta(additions, 'property', 'og:title', title, source)
     add_meta(additions, 'property', 'og:description', description, source)
     add_meta(additions, 'property', 'og:url', canonical, source)
@@ -159,10 +216,10 @@ def enrich(path: Path) -> bool:
 def main() -> None:
     changed = 0
     for page in sorted(ROOT.rglob('*.html')):
-        if '.git' in page.parts:
+        if '.git' in page.parts or page.name == '404.html':
             continue
         changed += int(enrich(page))
-    print(f'Metadados sociais, identidade e UI final preparados em {changed} página(s).')
+    print(f'Metadados sociais, identidade e SEO técnico preparados em {changed} página(s).')
 
 
 if __name__ == '__main__':
