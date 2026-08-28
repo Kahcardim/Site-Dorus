@@ -3,7 +3,6 @@
 
   var MEASUREMENT_ID = 'G-480Q4RXYNC';
   var CONSENT_COOKIE = 'dorus_consent';
-  var analyticsEnabled = false;
   var dataLayer = window.dataLayer = window.dataLayer || [];
   var nativePush = dataLayer.push.bind(dataLayer);
 
@@ -17,14 +16,33 @@
     nativePush(arguments);
   }
 
-  if (typeof window.gtag !== 'function') window.gtag = gtag;
+  window.gtag = window.gtag || gtag;
+
+  /* Google tag (gtag.js) — equivalente ao snippet oficial do GA4. */
+  var googleTag = document.createElement('script');
+  googleTag.async = true;
+  googleTag.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
+  googleTag.setAttribute('data-dorus-ga4', MEASUREMENT_ID);
+  document.head.appendChild(googleTag);
+
+  var consentGranted = readConsent() === 'all';
+
+  window.gtag('consent', 'default', {
+    analytics_storage: consentGranted ? 'granted' : 'denied',
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied'
+  });
+
+  window.gtag('js', new Date());
+  window.gtag('config', MEASUREMENT_ID);
 
   function isEventObject(item) {
     return item && Object.prototype.toString.call(item) === '[object Object]' && typeof item.event === 'string' && item.event;
   }
 
   function sendCustomEvent(item) {
-    if (!analyticsEnabled || readConsent() !== 'all') return;
+    if (readConsent() !== 'all') return;
     var params = {};
     Object.keys(item).forEach(function (key) {
       if (key !== 'event') params[key] = item[key];
@@ -41,49 +59,13 @@
     return dataLayer.length;
   };
 
-  function setConsent(value) {
-    window.gtag('consent', 'update', {
-      analytics_storage: value,
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied'
-    });
-  }
-
-  function enableAnalytics() {
-    if (analyticsEnabled) {
-      setConsent('granted');
-      return;
-    }
-
-    analyticsEnabled = true;
-    window.gtag('consent', 'default', {
-      analytics_storage: 'granted',
-      ad_storage: 'denied',
-      ad_user_data: 'denied',
-      ad_personalization: 'denied'
-    });
-    window.gtag('js', new Date());
-    window.gtag('config', MEASUREMENT_ID, {
-      send_page_view: true
-    });
-
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(MEASUREMENT_ID);
-    script.setAttribute('data-dorus-ga4', MEASUREMENT_ID);
-    document.head.appendChild(script);
-  }
-
-  function disableAnalytics() {
-    if (analyticsEnabled) setConsent('denied');
-  }
-
   window.addEventListener('dorus:consent', function (event) {
     var value = event && event.detail ? event.detail.value : null;
-    if (value === 'all') enableAnalytics();
-    else disableAnalytics();
+    window.gtag('consent', 'update', {
+      analytics_storage: value === 'all' ? 'granted' : 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
   });
-
-  if (readConsent() === 'all') enableAnalytics();
 })();
