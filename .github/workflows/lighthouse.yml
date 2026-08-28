@@ -52,7 +52,7 @@ jobs:
       - name: Aguardar site publicado
         shell: bash
         run: |
-          URL="https://kahcardim.github.io/Site-Dorus/"
+          URL="https://assistenciadorus.com.br/"
           for tentativa in {1..18}; do
             if curl --fail --silent --show-error --location "$URL" > /dev/null; then
               echo "Site acessível para auditoria."
@@ -67,7 +67,7 @@ jobs:
       - name: Lighthouse mobile
         shell: bash
         run: |
-          lighthouse "https://kahcardim.github.io/Site-Dorus/?lh=${GITHUB_RUN_ID}" \
+          lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" \
             --only-categories=performance,accessibility,best-practices,seo \
             --output=json \
             --output-path=./lighthouse-mobile.json \
@@ -77,7 +77,7 @@ jobs:
       - name: Lighthouse desktop
         shell: bash
         run: |
-          lighthouse "https://kahcardim.github.io/Site-Dorus/?lh=${GITHUB_RUN_ID}" \
+          lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" \
             --preset=desktop \
             --only-categories=performance,accessibility,best-practices,seo \
             --output=json \

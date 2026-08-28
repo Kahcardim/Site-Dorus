@@ -3,7 +3,7 @@ import html
 import re
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE_URL = 'https://kahcardim.github.io/Site-Dorus/'
+BASE_URL = 'https://assistenciadorus.com.br/'
 SHARE_IMAGE = BASE_URL + 'assets/dorus-logo-3d.webp'
 
 

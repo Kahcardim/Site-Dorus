@@ -31,7 +31,7 @@ jobs:
         run: |
           VERSION="${GITHUB_SHA:0:12}"
           for i in $(seq 1 60); do
-            HTML="$(curl -fsSL --retry 2 "https://kahcardim.github.io/Site-Dorus/?qa=${GITHUB_SHA}&t=${i}" || true)"
+            HTML="$(curl -fsSL --retry 2 "https://assistenciadorus.com.br/?qa=${GITHUB_SHA}&t=${i}" || true)"
             if printf '%s' "$HTML" | grep -q "?v=${VERSION}"; then
               echo "Pages confirmado em ${VERSION}."
               exit 0
@@ -48,7 +48,7 @@ jobs:
           import { chromium } from 'playwright';
           import fs from 'node:fs';
 
-          const base='https://kahcardim.github.io/Site-Dorus/';
+          const base='https://assistenciadorus.com.br/';
           const pages=[
             ['','home'],['sobre/','sobre'],['servicos/','servicos'],['curiosidades/','curiosidades'],
             ['agendamento/','agendamento'],['fale-conosco/','fale-conosco'],['privacidade/','privacidade'],

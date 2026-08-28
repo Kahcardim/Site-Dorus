@@ -32,7 +32,7 @@ def main():
             path = match.group('path')
             # Não altera URLs de terceiros. A única URL absoluta permitida aqui
             # é a do próprio GitHub Pages da D'orus.
-            if path.startswith('http') and not path.startswith('https://kahcardim.github.io/Site-Dorus/'):
+            if path.startswith('http') and not path.startswith('https://assistenciadorus.com.br/'):
                 return match.group(0)
             return f'{path}?v={version}'
 

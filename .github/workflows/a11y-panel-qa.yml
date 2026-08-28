@@ -28,7 +28,7 @@ jobs:
         run: |
           VERSION="${GITHUB_SHA:0:12}"
           for i in $(seq 1 60); do
-            HTML="$(curl -fsSL "https://kahcardim.github.io/Site-Dorus/?a11y=${GITHUB_SHA}&t=${i}" || true)"
+            HTML="$(curl -fsSL "https://assistenciadorus.com.br/?a11y=${GITHUB_SHA}&t=${i}" || true)"
             if printf '%s' "$HTML" | grep -q "?v=${VERSION}"; then exit 0; fi
             sleep 5
           done
@@ -45,7 +45,7 @@ jobs:
           for(const [name,width,height] of sizes){
             const context=await browser.newContext({viewport:{width,height}});
             const page=await context.newPage();
-            await page.goto('https://kahcardim.github.io/Site-Dorus/?panel='+Date.now(),{waitUntil:'domcontentloaded'});
+            await page.goto('https://assistenciadorus.com.br/?panel='+Date.now(),{waitUntil:'domcontentloaded'});
             await page.waitForTimeout(1000);
             const cookie=page.locator('[data-cookie-essential]');
             if(await cookie.isVisible().catch(()=>false)) await cookie.click();
