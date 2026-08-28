@@ -13,7 +13,7 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Validar agenda publicada e limite por horario
+      - name: Validar segundo agendamento e bloqueio do terceiro
         shell: bash
         run: |
           BASE='https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec'
@@ -24,20 +24,16 @@ jobs:
           echo "$STATUS"
           printf '%s' "$STATUS" | grep -q '"ok":true'
 
+          BEFORE="$(curl -fsSL --retry 3 "$BASE?action=availability&date=$DATE")"
+          echo "$BEFORE"
+          printf '%s' "$BEFORE" | grep -q '"value":"08:00"'
+
           payload() {
             local NAME="$1"
             printf '{"action":"create","name":"%s","phone":"11999999999","neighborhood":"Centro","address":"Rua Teste, 1","equipment":"Geladeira","brand":"QA","problem":"Teste automatizado temporario","date":"%s","time":"%s"}' "$NAME" "$DATE" "$SLOT"
           }
 
-          FIRST="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 1')" "$BASE")"
-          echo "$FIRST"
-          printf '%s' "$FIRST" | grep -q '"ok":true'
-
-          AFTER_ONE="$(curl -fsSL --retry 3 "$BASE?action=availability&date=$DATE")"
-          echo "$AFTER_ONE"
-          printf '%s' "$AFTER_ONE" | grep -q '"value":"08:00"'
-
-          SECOND="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 2')" "$BASE")"
+          SECOND="$(curl -fsSL --retry 3 -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 2')" "$BASE")"
           echo "$SECOND"
           printf '%s' "$SECOND" | grep -q '"ok":true'
 
@@ -48,7 +44,7 @@ jobs:
             exit 1
           fi
 
-          THIRD="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 3')" "$BASE")"
+          THIRD="$(curl -fsSL --retry 3 -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 3')" "$BASE")"
           echo "$THIRD"
           printf '%s' "$THIRD" | grep -q '"conflict":true'
           echo 'Limite de duas solicitacoes validado com sucesso.'
