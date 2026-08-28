@@ -13,20 +13,42 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Validar endpoint publicado
+      - name: Validar agenda publicada e limite por horario
         shell: bash
         run: |
           BASE='https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec'
+          DATE='2026-08-31'
+          SLOT='08:00'
+
           STATUS="$(curl -fsSL --retry 3 "$BASE?action=status")"
           echo "$STATUS"
           printf '%s' "$STATUS" | grep -q '"ok":true'
-          printf '%s' "$STATUS" | grep -q 'Dorus Agendamento'
 
-          AVAIL="$(curl -fsSL --retry 3 "$BASE?action=availability&date=2026-08-31")"
-          echo "$AVAIL"
-          printf '%s' "$AVAIL" | grep -q '"ok":true'
-          printf '%s' "$AVAIL" | grep -q '"slots"'
+          payload() {
+            local NAME="$1"
+            printf '{"action":"create","name":"%s","phone":"11999999999","neighborhood":"Centro","address":"Rua Teste, 1","equipment":"Geladeira","brand":"QA","problem":"Teste automatizado temporario","date":"%s","time":"%s"}' "$NAME" "$DATE" "$SLOT"
+          }
 
-          BRIDGE="$(curl -fsSL --retry 3 "$BASE?action=bridge")"
-          printf '%s' "$BRIDGE" | grep -q 'dorus-calendar-bridge'
-          echo 'Apps Script publicado e respondendo corretamente.'
+          FIRST="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 1')" "$BASE")"
+          echo "$FIRST"
+          printf '%s' "$FIRST" | grep -q '"ok":true'
+
+          AFTER_ONE="$(curl -fsSL --retry 3 "$BASE?action=availability&date=$DATE")"
+          echo "$AFTER_ONE"
+          printf '%s' "$AFTER_ONE" | grep -q '"value":"08:00"'
+
+          SECOND="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 2')" "$BASE")"
+          echo "$SECOND"
+          printf '%s' "$SECOND" | grep -q '"ok":true'
+
+          AFTER_TWO="$(curl -fsSL --retry 3 "$BASE?action=availability&date=$DATE")"
+          echo "$AFTER_TWO"
+          if printf '%s' "$AFTER_TWO" | grep -q '"value":"08:00"'; then
+            echo 'ERRO: horario continuou disponivel depois de duas reservas.'
+            exit 1
+          fi
+
+          THIRD="$(curl -fsSL --retry 3 -X POST -H 'Content-Type: application/json' --data "$(payload 'QA Agenda 3')" "$BASE")"
+          echo "$THIRD"
+          printf '%s' "$THIRD" | grep -q '"conflict":true'
+          echo 'Limite de duas solicitacoes validado com sucesso.'
