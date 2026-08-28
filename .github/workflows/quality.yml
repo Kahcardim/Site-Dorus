@@ -1,0 +1,90 @@
+name: Qualidade do site
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validar-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verificar sintaxe JavaScript
+        run: |
+          node --check site.js
+          node --check brand-carousel.js
+          node --check conversion-enhancements.js
+          node --check accessibility-tools.js
+          node --check privacy-consent.js
+
+      - name: Verificar sintaxe Python
+        run: |
+          python -m py_compile scripts/check_site.py
+          python -m py_compile scripts/enrich_meta.py
+          python -m py_compile scripts/cache_bust.py
+          python -m py_compile scripts/summarize_lighthouse.py
+
+      - name: Validar identidade visual e logos locais
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s assets/dorus-logo-3d.webp || { echo 'Logo 3D ausente.'; exit 1; }
+          test ! -e assets/dorus-logo.webp || { echo 'Logo antiga duplicada voltou ao repositório.'; exit 1; }
+          if grep -R --include='*.html' -nE 'assets/dorus-logo\.webp|dorus-menu-digital' .; then
+            echo 'Foi encontrada referência à identidade visual antiga.'
+            exit 1
+          fi
+
+          for marca in brastemp consul electrolux samsung lg continental atlas midea mueller philco panasonic ge-appliances; do
+            test -s "assets/marcas/${marca}.webp" || { echo "Logo ausente: ${marca}"; exit 1; }
+          done
+          if grep -Eq 'upload\.wikimedia\.org|images\.seeklogo\.com' index.html; then
+            echo 'A Home voltou a depender de logos externas.'
+            exit 1
+          fi
+          echo 'OK: logo 3D atual, 12 marcas locais e sem dependências visuais antigas.'
+
+      - name: Proteger arquitetura responsiva da Home
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          layout = Path('layout.css').read_text(encoding='utf-8')
+
+          if re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*grid', layout, re.S | re.I):
+              raise SystemExit('layout.css não pode transformar o carrossel de avaliações em grid.')
+          if not re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*flex\s*!important', layout, re.S | re.I):
+              raise SystemExit('layout.css perdeu o layout flex das avaliações.')
+          if not re.search(r'\.container\s*\{[^}]*padding-inline\s*:\s*0\s*!important', layout, re.S | re.I):
+              raise SystemExit('layout.css perdeu a largura final dos containers.')
+          if 'max-height:850px' not in layout:
+              raise SystemExit('Home perdeu o breakpoint para notebooks com pouca altura.')
+          if not re.search(r'\.hero-media\s+picture>img\s*\{[^}]*object-fit\s*:\s*contain', layout, re.S | re.I):
+              raise SystemExit('Banner da Home perdeu o enquadramento completo.')
+          if '.logo-marquee' not in layout:
+              raise SystemExit('Estilos do carrossel de marcas não estão na camada final.')
+
+          print('OK: layout responsivo, banner, avaliações e carrossel de marcas protegidos.')
+          PY
+
+      - name: Verificar HTML UX acessibilidade privacidade e segurança
+        run: python scripts/check_site.py

@@ -1,0 +1,98 @@
+name: Lighthouse do site
+
+on:
+  workflow_run:
+    workflows: ["Publicar no GitHub Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: lighthouse-site-dorus
+  cancel-in-progress: true
+
+jobs:
+  auditoria:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar versão auditada
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Instalar Lighthouse
+        run: npm install --global lighthouse@12
+
+      - name: Localizar navegador
+        shell: bash
+        run: |
+          CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser || true)"
+          if [ -z "$CHROME_PATH" ]; then
+            echo "Chrome/Chromium não encontrado no runner."
+            exit 1
+          fi
+          echo "CHROME_PATH=$CHROME_PATH" >> "$GITHUB_ENV"
+          echo "Navegador: $CHROME_PATH"
+
+      - name: Aguardar site publicado
+        shell: bash
+        run: |
+          URL="https://kahcardim.github.io/Site-Dorus/"
+          for tentativa in {1..18}; do
+            if curl --fail --silent --show-error --location "$URL" > /dev/null; then
+              echo "Site acessível para auditoria."
+              exit 0
+            fi
+            echo "Aguardando GitHub Pages... tentativa $tentativa/18"
+            sleep 5
+          done
+          echo "O site não ficou acessível dentro do tempo esperado."
+          exit 1
+
+      - name: Lighthouse mobile
+        shell: bash
+        run: |
+          lighthouse "https://kahcardim.github.io/Site-Dorus/?lh=${GITHUB_RUN_ID}" \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json \
+            --output-path=./lighthouse-mobile.json \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --quiet
+
+      - name: Lighthouse desktop
+        shell: bash
+        run: |
+          lighthouse "https://kahcardim.github.io/Site-Dorus/?lh=${GITHUB_RUN_ID}" \
+            --preset=desktop \
+            --only-categories=performance,accessibility,best-practices,seo \
+            --output=json \
+            --output-path=./lighthouse-desktop.json \
+            --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" \
+            --quiet
+
+      - name: Resumir resultados
+        run: python scripts/summarize_lighthouse.py
+
+      - name: Salvar relatórios Lighthouse
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-site-dorus-${{ github.run_id }}
+          path: |
+            lighthouse-mobile.json
+            lighthouse-desktop.json
+          retention-days: 14

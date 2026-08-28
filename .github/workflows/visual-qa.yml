@@ -1,0 +1,148 @@
+name: QA visual
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - 'assets/**'
+      - '.github/workflows/visual-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Instalar navegador de teste
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium
+      - name: Aguardar a mesma revisao no Pages
+        shell: bash
+        run: |
+          VERSION="${GITHUB_SHA:0:12}"
+          for i in $(seq 1 60); do
+            HTML="$(curl -fsSL --retry 2 "https://kahcardim.github.io/Site-Dorus/?qa=${GITHUB_SHA}&t=${i}" || true)"
+            if printf '%s' "$HTML" | grep -q "?v=${VERSION}"; then
+              echo "Pages confirmado em ${VERSION}."
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Pages nao apresentou a revisao ${VERSION}."
+          exit 1
+      - name: Rodar regressao visual responsiva
+        shell: bash
+        run: |
+          mkdir -p visual-qa/screenshots
+          cat > visual-qa.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const base='https://kahcardim.github.io/Site-Dorus/';
+          const pages=[
+            ['','home'],['sobre/','sobre'],['servicos/','servicos'],['curiosidades/','curiosidades'],
+            ['agendamento/','agendamento'],['fale-conosco/','fale-conosco'],['privacidade/','privacidade'],
+            ['servicos/geladeiras/','geladeiras'],['servicos/maquinas-de-lavar/','maquinas-de-lavar'],
+            ['servicos/fogoes/','fogoes'],['servicos/freezers/','freezers'],['servicos/lava-loucas/','lava-loucas'],
+            ['servicos/lava-e-seca/','lava-e-seca'],['servicos/fornos/','fornos'],['servicos/micro-ondas/','micro-ondas']
+          ];
+          const sizes=[['mobile-360',360,800],['mobile-390',390,844],['tablet-768',768,1024],['desktop-1366',1366,768],['desktop-1920',1920,1080]];
+          const browser=await chromium.launch({headless:true});
+          const report=[];
+
+          for(const [size,w,h] of sizes){
+            const context=await browser.newContext({viewport:{width:w,height:h}});
+            let cookieChecked=false;
+            for(const [route,name] of pages){
+              const page=await context.newPage();
+              const errors=[];
+              page.on('pageerror',e=>errors.push(e.message));
+              page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
+              let status=0;
+              try{
+                const res=await page.goto(base+route+'?visual='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
+                status=res?.status()||0;
+                await page.waitForTimeout(850);
+
+                if(!cookieChecked){
+                  const banner=page.locator('[data-cookie-banner]');
+                  if(!(await banner.isVisible().catch(()=>false))) errors.push('Banner de cookies nao apareceu na primeira visita');
+                  const essential=page.locator('[data-cookie-essential]');
+                  if(await essential.isVisible().catch(()=>false)) await essential.click();
+                  cookieChecked=true;
+                }
+
+                await page.evaluate(async()=>{
+                  const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+                  const max=document.documentElement.scrollHeight;
+                  for(let y=0;y<max;y+=Math.max(420,innerHeight*.75)){scrollTo(0,y);await sleep(80)}
+                  scrollTo(0,0);await sleep(300);
+                });
+              }catch(e){errors.push(e.message)}
+
+              const m=await page.evaluate(()=>{
+                const visible=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
+                const overflow=Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth;
+                const clipped=[];
+                for(const e of document.querySelectorAll('h1,h2,h3,h4,p,a,strong,small,label,summary,button')){
+                  if(!visible(e)||!e.textContent.trim())continue;
+                  const s=getComputedStyle(e),bad=e.scrollWidth>e.clientWidth+2||e.scrollHeight>e.clientHeight+2;
+                  if(bad&&/(hidden|clip)/.test(s.overflow+s.overflowX+s.overflowY)) clipped.push(e.textContent.trim().slice(0,80));
+                }
+                const badImages=[...document.images].filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.currentSrc||i.src);
+                const reviews=[...document.querySelectorAll('.review-card')].map(e=>Math.round(e.getBoundingClientRect().width));
+                const serviceHero=document.querySelector('.service-hero-media img');
+                const h1=document.querySelector('h1');
+                const hero=document.querySelector('.hero'),copy=document.querySelector('.hero-copy'),media=document.querySelector('.hero-media'),pic=document.querySelector('.hero-media picture'),img=document.querySelector('.hero-media img');
+                let heroFit=null;
+                if(hero&&copy&&media&&pic&&img){
+                  const hr=hero.getBoundingClientRect(),cr=copy.getBoundingClientRect(),mr=media.getBoundingClientRect(),pr=pic.getBoundingClientRect(),ir=img.getBoundingClientRect(),style=getComputedStyle(img);
+                  heroFit={heroTop:Math.round(hr.top),heroBottom:Math.round(hr.bottom),contentBottom:Math.round(Math.max(cr.bottom,mr.bottom)),media:Math.round(mr.width),picture:[Math.round(pr.width),Math.round(pr.height)],image:[Math.round(ir.width),Math.round(ir.height)],natural:[img.naturalWidth,img.naturalHeight],objectFit:style.objectFit,objectPosition:style.objectPosition};
+                }
+                const launcher=document.querySelector('[data-a11y-launcher]');
+                const cookieSettings=document.querySelector('[data-cookie-settings]');
+                const whatsapp=document.querySelector('.whatsapp-float');
+                const rect=e=>e?e.getBoundingClientRect():null;
+                return {overflow,clipped,badImages,reviews,heroFit,h1:!!h1,h1Size:h1?parseFloat(getComputedStyle(h1).fontSize):0,serviceImageWidth:serviceHero?Math.round(serviceHero.getBoundingClientRect().width):0,a11yLauncher:!!launcher,cookieSettings:!!cookieSettings,launcherRect:rect(launcher),cookieRect:rect(cookieSettings),whatsappRect:rect(whatsapp)};
+              });
+
+              if(['home','servicos','fale-conosco','agendamento','geladeiras','privacidade'].includes(name)) await page.screenshot({path:`visual-qa/screenshots/${size}-${name}.png`,fullPage:true});
+
+              const desktopReviewBad=name==='home'&&w>=1200&&m.reviews.some(x=>x<280);
+              const heroCropBad=name==='home'&&m.heroFit&&m.heroFit.objectFit!=='contain';
+              const desktopTitleBad=name==='home'&&size==='desktop-1366'&&m.h1Size>48;
+              const mobileTitleBad=name==='home'&&w<=390&&m.h1Size>40;
+              const lowDesktopHeroBad=name==='home'&&size==='desktop-1366'&&m.heroFit&&m.heroFit.contentBottom>h+4;
+              const serviceImageBad=name!=='servicos'&&name!=='home'&&name!=='sobre'&&name!=='curiosidades'&&name!=='agendamento'&&name!=='fale-conosco'&&name!=='privacidade'&&m.serviceImageWidth>360;
+              const failed=Boolean(status!==200||errors.length||m.overflow>2||m.clipped.length||m.badImages.length||!m.h1||!m.a11yLauncher||!m.cookieSettings||desktopReviewBad||heroCropBad||desktopTitleBad||mobileTitleBad||lowDesktopHeroBad||serviceImageBad);
+              report.push({size,page:name,status,errors,...m,desktopReviewBad,heroCropBad,desktopTitleBad,mobileTitleBad,lowDesktopHeroBad,serviceImageBad,failed});
+              console.log(size,name,{status,overflow:m.overflow,clip:m.clipped.length,badImages:m.badImages.length,h1Size:m.h1Size,serviceImageWidth:m.serviceImageWidth,hero:m.heroFit,failed});
+              await page.close();
+            }
+            await context.close();
+          }
+          await browser.close();
+          fs.writeFileSync('visual-qa/report.json',JSON.stringify(report,null,2));
+          const failures=report.filter(x=>x.failed);
+          fs.writeFileSync('visual-qa/failures.json',JSON.stringify(failures,null,2));
+          console.log(`Cenarios: ${report.length}; falhas: ${failures.length}`);
+          if(failures.length)process.exitCode=1;
+          EOF
+          node visual-qa.mjs
+      - name: Salvar evidencia
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-${{ github.run_id }}
+          path: visual-qa/
+          retention-days: 7
