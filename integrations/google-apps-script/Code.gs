@@ -2,6 +2,7 @@ const CALENDAR_ID =
   'bca85ae34b7e3894763d97f8b0b5044d895632d3cca7bf0f5806e98156c8a48f@group.calendar.google.com';
 
 const TIMEZONE = 'America/Sao_Paulo';
+const MAX_BOOKINGS_PER_SLOT = 2;
 const ALLOWED_ORIGINS = [
   'https://assistenciadorus.com.br',
   'https://www.assistenciadorus.com.br',
@@ -121,7 +122,7 @@ function getAvailabilityByDate(date) {
   if (!calendar) throw new Error('Agenda D’orus não encontrada.');
 
   const slots = generateSlots(date).filter(slot => {
-    return calendar.getEvents(slot.start, slot.end).length === 0;
+    return calendar.getEvents(slot.start, slot.end).length < MAX_BOOKINGS_PER_SLOT;
   }).map(slot => ({ value: slot.value, label: slot.label }));
 
   return { ok: true, date: date, slots: slots };
@@ -142,11 +143,11 @@ function createAppointment(data) {
 
   try {
     const conflicts = calendar.getEvents(slot.start, slot.end);
-    if (conflicts.length > 0) {
+    if (conflicts.length >= MAX_BOOKINGS_PER_SLOT) {
       return {
         ok: false,
         conflict: true,
-        error: 'Esse horário acabou de ser ocupado. Escolha outro horário.'
+        error: 'Esse horário já atingiu o limite de solicitações. Escolha outro horário.'
       };
     }
 
