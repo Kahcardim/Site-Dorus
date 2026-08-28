@@ -39,19 +39,53 @@ def relative_asset(rel: str, asset: str) -> str:
 
 
 def ensure_brand_icons(source: str, rel: str) -> str:
-    logo = relative_asset(rel, 'assets/dorus-logo-3d.webp')
-    icon = f'<link rel="icon" href="{logo}" type="image/webp">'
-    apple = f'<link rel="apple-touch-icon" href="{logo}">'
+    # Remove referências antigas para evitar que navegadores ou crawlers
+    # escolham a antiga logo WebP como favicon.
+    source = re.sub(
+        r'\s*<link\s+[^>]*rel=["\'][^"\']*(?:shortcut\s+)?icon[^"\']*["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
+    source = re.sub(
+        r'\s*<link\s+[^>]*rel=["\']apple-touch-icon["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
+    source = re.sub(
+        r'\s*<link\s+[^>]*rel=["\']manifest["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
+    source = re.sub(
+        r'\s*<meta\s+[^>]*name=["\']msapplication-TileColor["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
+    source = re.sub(
+        r'\s*<meta\s+[^>]*name=["\']msapplication-TileImage["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
 
-    icon_pattern = r'<link\s+[^>]*rel=["\'][^"\']*icon[^"\']*["\'][^>]*>'
-    if re.search(icon_pattern, source, flags=re.I):
-        source = re.sub(icon_pattern, icon, source, count=1, flags=re.I)
-    else:
-        source = re.sub(r'</head>', '  ' + icon + '\n</head>', source, count=1, flags=re.I)
+    favicon_48 = relative_asset(rel, 'favicon-48x48.png')
+    favicon_192 = relative_asset(rel, 'favicon-192x192.png')
+    apple = relative_asset(rel, 'apple-touch-icon.png')
+    manifest = relative_asset(rel, 'site.webmanifest')
 
-    if not re.search(r'<link\s+[^>]*rel=["\']apple-touch-icon["\'][^>]*>', source, flags=re.I):
-        source = re.sub(r'</head>', '  ' + apple + '\n</head>', source, count=1, flags=re.I)
-    return source
+    block = '\n'.join([
+        f'  <link rel="icon" type="image/png" sizes="48x48" href="{favicon_48}">',
+        f'  <link rel="icon" type="image/png" sizes="192x192" href="{favicon_192}">',
+        f'  <link rel="apple-touch-icon" sizes="180x180" href="{apple}">',
+        f'  <link rel="manifest" href="{manifest}">',
+        '  <meta name="msapplication-TileColor" content="#0d3b8e">',
+        f'  <meta name="msapplication-TileImage" content="{favicon_192}">',
+    ])
+    return re.sub(r'</head>', block + '\n</head>', source, count=1, flags=re.I)
 
 
 def ensure_final_ui(source: str, rel: str) -> str:
@@ -92,7 +126,6 @@ def enrich(path: Path) -> bool:
     source = ensure_final_ui(source, rel)
     source = ensure_compact_pages(source, rel)
 
-    # Compartilhamento sempre usa a identidade D'orus, independentemente da página.
     source = set_meta(source, 'property', 'og:image', SHARE_IMAGE)
     source = set_meta(source, 'name', 'twitter:image', SHARE_IMAGE)
 
