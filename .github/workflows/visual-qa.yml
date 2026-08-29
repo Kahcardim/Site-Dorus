@@ -100,6 +100,10 @@ jobs:
                   if(bad&&/(hidden|clip)/.test(s.overflow+s.overflowX+s.overflowY)) clipped.push(e.textContent.trim().slice(0,80));
                 }
                 const badImages=[...document.images].filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.currentSrc||i.src);
+                const criticalImages=[...document.querySelectorAll('.hero-media img,.service-hero-media img,.brand-logo img,img.logo,.footer img')]
+                  .filter(visible)
+                  .map(i=>({src:i.currentSrc||i.src,fit:getComputedStyle(i).objectFit,natural:[i.naturalWidth,i.naturalHeight],box:[Math.round(i.getBoundingClientRect().width),Math.round(i.getBoundingClientRect().height)]}));
+                const croppedCriticalImages=criticalImages.filter(i=>i.fit==='cover'&&i.natural[0]&&i.natural[1]&&i.box[0]&&i.box[1]&&Math.abs((i.natural[0]/i.natural[1])-(i.box[0]/i.box[1]))>.08);
                 const reviews=[...document.querySelectorAll('.review-card')].map(e=>Math.round(e.getBoundingClientRect().width));
                 const serviceHero=document.querySelector('.service-hero-media img');
                 const h1=document.querySelector('h1');
@@ -113,7 +117,7 @@ jobs:
                 const cookieSettings=document.querySelector('[data-cookie-settings]');
                 const whatsapp=document.querySelector('.whatsapp-float');
                 const rect=e=>e?e.getBoundingClientRect():null;
-                return {overflow,clipped,badImages,reviews,heroFit,h1:!!h1,h1Size:h1?parseFloat(getComputedStyle(h1).fontSize):0,serviceImageWidth:serviceHero?Math.round(serviceHero.getBoundingClientRect().width):0,a11yLauncher:!!launcher,cookieSettings:!!cookieSettings,launcherRect:rect(launcher),cookieRect:rect(cookieSettings),whatsappRect:rect(whatsapp)};
+                return {overflow,clipped,badImages,croppedCriticalImages,reviews,heroFit,h1:!!h1,h1Size:h1?parseFloat(getComputedStyle(h1).fontSize):0,serviceImageWidth:serviceHero?Math.round(serviceHero.getBoundingClientRect().width):0,a11yLauncher:!!launcher,cookieSettings:!!cookieSettings,launcherRect:rect(launcher),cookieRect:rect(cookieSettings),whatsappRect:rect(whatsapp)};
               });
 
               if(['home','servicos','fale-conosco','agendamento','geladeiras','privacidade'].includes(name)) await page.screenshot({path:`visual-qa/screenshots/${size}-${name}.png`,fullPage:true});
@@ -124,9 +128,10 @@ jobs:
               const mobileTitleBad=name==='home'&&w<=390&&m.h1Size>40;
               const lowDesktopHeroBad=name==='home'&&size==='desktop-1366'&&m.heroFit&&m.heroFit.contentBottom>h+4;
               const serviceImageBad=name!=='servicos'&&name!=='home'&&name!=='sobre'&&name!=='curiosidades'&&name!=='agendamento'&&name!=='fale-conosco'&&name!=='privacidade'&&m.serviceImageWidth>360;
-              const failed=Boolean(status!==200||errors.length||m.overflow>2||m.clipped.length||m.badImages.length||!m.h1||!m.a11yLauncher||!m.cookieSettings||desktopReviewBad||heroCropBad||desktopTitleBad||mobileTitleBad||lowDesktopHeroBad||serviceImageBad);
-              report.push({size,page:name,status,errors,...m,desktopReviewBad,heroCropBad,desktopTitleBad,mobileTitleBad,lowDesktopHeroBad,serviceImageBad,failed});
-              console.log(size,name,{status,overflow:m.overflow,clip:m.clipped.length,badImages:m.badImages.length,h1Size:m.h1Size,serviceImageWidth:m.serviceImageWidth,hero:m.heroFit,failed});
+              const imageCropBad=m.croppedCriticalImages.length>0;
+              const failed=Boolean(status!==200||errors.length||m.overflow>2||m.clipped.length||m.badImages.length||!m.h1||!m.a11yLauncher||!m.cookieSettings||desktopReviewBad||heroCropBad||desktopTitleBad||mobileTitleBad||lowDesktopHeroBad||serviceImageBad||imageCropBad);
+              report.push({size,page:name,status,errors,...m,desktopReviewBad,heroCropBad,desktopTitleBad,mobileTitleBad,lowDesktopHeroBad,serviceImageBad,imageCropBad,failed});
+              console.log(size,name,{status,overflow:m.overflow,clip:m.clipped.length,badImages:m.badImages.length,croppedImages:m.croppedCriticalImages.length,h1Size:m.h1Size,serviceImageWidth:m.serviceImageWidth,hero:m.heroFit,failed});
               await page.close();
             }
             await context.close();
@@ -139,6 +144,162 @@ jobs:
           if(failures.length)process.exitCode=1;
           EOF
           node visual-qa.mjs
+      - name: Validar Home agenda formularios e acessibilidade
+        shell: bash
+        run: |
+          cat > functional-smoke.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const base='https://assistenciadorus.com.br/';
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({viewport:{width:1366,height:768}});
+          const failures=[];
+          const evidence={};
+
+          function fail(area,message){failures.push(`${area}: ${message}`)}
+
+          // HOME: critérios acima da dobra e pontos de conversão.
+          {
+            const page=await context.newPage();
+            const runtime=[];
+            page.on('pageerror',e=>runtime.push(e.message));
+            page.on('console',m=>{if(m.type()==='error')runtime.push(m.text())});
+            const res=await page.goto(base+'?functional='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
+            await page.waitForTimeout(1200);
+            const essential=page.locator('[data-cookie-essential]');
+            if(await essential.isVisible().catch(()=>false)) await essential.click();
+            const home=await page.evaluate(()=>{
+              const visible=e=>{if(!e)return false;const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
+              const inViewport=e=>{if(!visible(e))return false;const r=e.getBoundingClientRect();return r.top>=-2&&r.top<innerHeight&&r.left<innerWidth&&r.right>0};
+              const h1=document.querySelector('.hero h1');
+              const img=document.querySelector('.hero-media img');
+              const points=document.querySelector('.hero-points');
+              const desktopNav=document.querySelector('.nav');
+              const whatsapp=document.querySelector('.whatsapp-mini');
+              const agenda=[...document.querySelectorAll('.hero .button')].find(a=>(a.getAttribute('href')||'').includes('agendamento'));
+              const hero=document.querySelector('.hero');
+              return {
+                h1:inViewport(h1),
+                image:inViewport(img)&&img.complete&&img.naturalWidth>0&&getComputedStyle(img).objectFit==='contain',
+                stars:inViewport(points)&&/4,5\s*★/.test(points.textContent),
+                nav:visible(desktopNav),
+                whatsapp:visible(whatsapp)&&(whatsapp.href||'').includes('wa.me/5511913573932'),
+                agenda:visible(agenda),
+                heroBottom:hero?Math.round(hero.getBoundingClientRect().bottom):9999,
+                skip:!!document.querySelector('.skip-link[href="#conteudo"]'),
+                a11y:!!document.querySelector('[data-a11y-launcher]'),
+                title:document.title
+              };
+            });
+            evidence.home={status:res?.status(),runtime,...home};
+            if(res?.status()!==200)fail('Home','HTTP diferente de 200');
+            if(runtime.length)fail('Home','erros de JavaScript/console: '+runtime.join(' | '));
+            for(const key of ['h1','image','stars','nav','whatsapp','agenda','skip','a11y'])if(!home[key])fail('Home',`critério não atendido: ${key}`);
+            if(home.heroBottom>772)fail('Home',`hero principal ultrapassa a dobra em 1366x768 (${home.heroBottom}px)`);
+            const skip=page.locator('.skip-link');
+            await skip.focus();
+            if(!(await skip.evaluate(el=>document.activeElement===el)))fail('Acessibilidade','skip-link não recebe foco');
+            await page.screenshot({path:'visual-qa/screenshots/acceptance-home-1366.png',fullPage:false});
+            await page.close();
+          }
+
+          // AGENDA: validação nativa, domingo, janela de 60 dias e resposta da agenda sem criar evento.
+          {
+            const page=await context.newPage();
+            const runtime=[];
+            page.on('pageerror',e=>runtime.push(e.message));
+            page.on('console',m=>{if(m.type()==='error')runtime.push(m.text())});
+            const res=await page.goto(base+'agendamento/?functional='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
+            await page.waitForTimeout(700);
+            const form=page.locator('[data-schedule-form]');
+            if(!(await form.count()))fail('Agenda','formulário não encontrado');
+            const emptyValid=await form.evaluate(el=>el.checkValidity());
+            if(emptyValid)fail('Agenda','formulário vazio foi considerado válido');
+
+            const constraints=await page.evaluate(()=>{
+              const input=document.querySelector('input[name="data"]');
+              return {min:input?.min||'',max:input?.max||''};
+            });
+            if(!constraints.min||!constraints.max)fail('Agenda','data não recebeu min/max');
+            if(constraints.min&&constraints.max){
+              const diff=Math.round((new Date(constraints.max+'T12:00:00')-new Date(constraints.min+'T12:00:00'))/86400000);
+              if(diff!==60)fail('Agenda',`janela esperada de 60 dias, encontrada ${diff}`);
+            }
+
+            const sunday=await page.evaluate(()=>{
+              const d=new Date();d.setHours(12,0,0,0);
+              for(let i=1;i<=14;i++){const x=new Date(d);x.setDate(d.getDate()+i);if(x.getDay()===0)return x.toISOString().slice(0,10)}
+              return '';
+            });
+            await page.locator('input[name="data"]').fill(sunday);
+            await page.locator('input[name="data"]').dispatchEvent('input');
+            await page.locator('input[name="data"]').dispatchEvent('change');
+            const sundayValid=await page.locator('input[name="data"]').evaluate(el=>el.checkValidity());
+            if(sundayValid)fail('Agenda','domingo não foi bloqueado');
+
+            const validDate=await page.evaluate(()=>{
+              const d=new Date();d.setHours(12,0,0,0);
+              for(let i=14;i<=30;i++){const x=new Date(d);x.setDate(d.getDate()+i);if(x.getDay()!==0)return x.toISOString().slice(0,10)}
+              return '';
+            });
+            await page.locator('input[name="data"]').fill(validDate);
+            await page.locator('input[name="data"]').dispatchEvent('input');
+            await page.locator('input[name="data"]').dispatchEvent('change');
+            try{
+              await page.waitForFunction(()=>{
+                const s=document.querySelector('select[name="periodo"]');
+                if(!s)return false;
+                const text=s.textContent||'';
+                return s.dataset.calendarMode==='slots'&&!text.includes('Consultando agenda');
+              },null,{timeout:13000});
+            }catch{fail('Agenda','backend não respondeu pela ponte em modo online')}
+
+            const agendaState=await page.evaluate(()=>{
+              const s=document.querySelector('select[name="periodo"]');
+              const status=document.querySelector('[data-schedule-status]');
+              return {mode:s?.dataset.calendarMode||'',options:s?[...s.options].map(o=>o.textContent):[],status:status?.textContent||'',ariaLive:status?.getAttribute('aria-live')||''};
+            });
+            evidence.agenda={status:res?.status(),runtime,constraints,sunday,validDate,...agendaState};
+            if(res?.status()!==200)fail('Agenda','HTTP diferente de 200');
+            if(runtime.length)fail('Agenda','erros de JavaScript/console: '+runtime.join(' | '));
+            if(agendaState.mode!=='slots')fail('Agenda','integração caiu em fallback em vez da agenda online');
+            if(agendaState.ariaLive!=='polite')fail('Agenda','feedback do formulário perdeu aria-live');
+            await page.screenshot({path:'visual-qa/screenshots/acceptance-agenda.png',fullPage:true});
+            await page.close();
+          }
+
+          // FALE CONOSCO: required + geração do WhatsApp sem abrir serviço externo no teste.
+          {
+            const page=await context.newPage();
+            const runtime=[];
+            page.on('pageerror',e=>runtime.push(e.message));
+            page.on('console',m=>{if(m.type()==='error')runtime.push(m.text())});
+            const res=await page.goto(base+'fale-conosco/?functional='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
+            await page.waitForTimeout(500);
+            const form=page.locator('#contactForm');
+            if(!(await form.count()))fail('Contato','formulário não encontrado');
+            if(await form.evaluate(el=>el.checkValidity()))fail('Contato','formulário vazio foi considerado válido');
+            await page.evaluate(()=>{window.open=(url)=>{window.__qaOpenedUrl=String(url);return {closed:false}}});
+            await page.locator('#nome').fill('Teste QA Dorus');
+            await page.locator('#problema').fill('Validação automática do formulário; nenhuma solicitação deve ser enviada.');
+            await page.locator('#contactForm button[type="submit"]').click();
+            await page.waitForTimeout(150);
+            const opened=await page.evaluate(()=>window.__qaOpenedUrl||'');
+            evidence.contato={status:res?.status(),runtime,opened};
+            if(res?.status()!==200)fail('Contato','HTTP diferente de 200');
+            if(runtime.length)fail('Contato','erros de JavaScript/console: '+runtime.join(' | '));
+            if(!opened.includes('wa.me/5511913573932'))fail('Contato','formulário não gerou URL correta do WhatsApp');
+            await page.close();
+          }
+
+          await context.close();
+          await browser.close();
+          fs.writeFileSync('visual-qa/acceptance.json',JSON.stringify({evidence,failures},null,2));
+          if(failures.length){console.error(failures.join('\n'));process.exit(1)}
+          console.log('OK: critérios de aceite da Home, agenda, formulários e acessibilidade validados.');
+          EOF
+          node functional-smoke.mjs
       - name: Salvar evidencia
         if: always()
         uses: actions/upload-artifact@v4

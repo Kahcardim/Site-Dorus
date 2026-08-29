@@ -132,6 +132,12 @@
     async function loadAvailability() {
       resetStatus();
       if (!bridgeReady || !dateInput.value) return;
+      if (!dateInput.checkValidity()) {
+        periodSelect.innerHTML = '<option value="">Escolha uma data válida</option>';
+        periodSelect.disabled = true;
+        setStatus(dateInput.validationMessage || 'Escolha uma data válida para consultar a agenda.', true);
+        return;
+      }
       setLoadingOptions();
 
       try {
@@ -214,6 +220,12 @@
           if (result && result.conflict) {
             setStatus('Esse horário acabou de ser ocupado. Atualizei os horários disponíveis para você.', true);
             await loadAvailability();
+            return;
+          }
+          if (result && result.duplicate) {
+            var duplicateUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, slotLabel, true));
+            setStatus('Essa solicitação já foi registrada. Continue pelo WhatsApp para confirmar o atendimento.', false);
+            showWhatsappLink(duplicateUrl);
             return;
           }
           throw new Error(result && result.error ? result.error : 'Não foi possível registrar a solicitação.');
