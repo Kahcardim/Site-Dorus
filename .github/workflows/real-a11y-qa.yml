@@ -1,0 +1,190 @@
+name: QA acessibilidade real - severidade alta
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - 'sitemap.xml'
+      - '.github/workflows/real-a11y-qa.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.html'
+      - '**/*.css'
+      - '**/*.js'
+      - 'sitemap.xml'
+      - '.github/workflows/real-a11y-qa.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  accessibility-real:
+    name: Acessibilidade real - HIGH
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Instalar Playwright
+        run: |
+          npm init -y >/dev/null 2>&1
+          npm install playwright@1.55.0 >/dev/null 2>&1
+          npx playwright install --with-deps chromium >/dev/null 2>&1
+
+      - name: Servir revisão local
+        run: |
+          python3 -m http.server 4174 --bind 127.0.0.1 >/tmp/dorus-a11y-http.log 2>&1 &
+          for i in $(seq 1 20); do
+            curl -fsS http://127.0.0.1:4174/ >/dev/null && exit 0
+            sleep 1
+          done
+          cat /tmp/dorus-a11y-http.log || true
+          exit 1
+
+      - name: Testar contraste menu e texto ampliado em todas as páginas
+        shell: bash
+        run: |
+          mkdir -p real-a11y/screenshots
+          cat > real-a11y.mjs <<'EOF'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+
+          const sitemap=fs.readFileSync('sitemap.xml','utf8');
+          const paths=[...sitemap.matchAll(/<loc>https:\/\/assistenciadorus\.com\.br([^<]*)<\/loc>/g)]
+            .map(m=>m[1]||'/').map(p=>p.startsWith('/')?p:'/'+p);
+          if(!paths.includes('/'))paths.unshift('/');
+          const pages=[...new Set(paths)];
+          const sizes=[['mobile-390',390,844],['desktop-1366',1366,768]];
+          const browser=await chromium.launch({headless:true});
+          const failures=[];
+          const report=[];
+
+          function label(path){return path==='/'?'home':path.replace(/^\//,'').replace(/\/$/,'').replace(/\//g,'--')}
+
+          for(const [size,width,height] of sizes){
+            const context=await browser.newContext({viewport:{width,height}});
+            for(const path of pages){
+              const page=await context.newPage();
+              const runtime=[];
+              page.on('pageerror',e=>runtime.push(e.message));
+              page.on('console',m=>{if(m.type()==='error'&&!/403/.test(m.text()))runtime.push(m.text())});
+              const res=await page.goto('http://127.0.0.1:4174'+path+'?a11yreal='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
+              await page.waitForTimeout(600);
+              const essential=page.locator('[data-cookie-essential]');
+              if(await essential.isVisible().catch(()=>false))await essential.click();
+
+              const launcher=page.locator('[data-a11y-launcher]');
+              const reasons=[];
+              if(res?.status()!==200)reasons.push(`HTTP ${res?.status()}`);
+              if(!(await launcher.isVisible().catch(()=>false)))reasons.push('launcher de acessibilidade invisível');
+
+              if(!reasons.length){
+                await launcher.click();
+                await page.locator('[data-a11y-contrast]').click();
+                await page.waitForTimeout(100);
+                if(size.startsWith('mobile')){
+                  await page.locator('[data-a11y-close]').click();
+                  await page.locator('.mobile-nav summary').click();
+                }
+
+                const contrast=await page.evaluate((mobile)=>{
+                  function rgb(value){
+                    const m=String(value).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/i);
+                    return m?[+m[1],+m[2],+m[3]]:null;
+                  }
+                  function lum(c){
+                    const v=c.map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});
+                    return .2126*v[0]+.7152*v[1]+.0722*v[2];
+                  }
+                  function ratio(a,b){const l1=lum(a),l2=lum(b);return (Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05)}
+                  const selector=mobile?'.mobile-nav a':'.nav a';
+                  const links=[...document.querySelectorAll(selector)].filter(e=>{
+                    const s=getComputedStyle(e),r=e.getBoundingClientRect();
+                    return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0&&r.width>0&&r.height>0;
+                  });
+                  return {
+                    high:document.documentElement.classList.contains('a11y-high-contrast'),
+                    links:links.map(e=>{
+                      const s=getComputedStyle(e),p=e.parentElement?getComputedStyle(e.parentElement):s;
+                      const fg=rgb(s.color),bg=rgb(p.backgroundColor)||rgb(getComputedStyle(document.querySelector('.header')).backgroundColor);
+                      return {text:e.textContent.trim(),fg:s.color,bg:p.backgroundColor,ratio:fg&&bg?ratio(fg,bg):0};
+                    })
+                  };
+                },size.startsWith('mobile'));
+                if(!contrast.high)reasons.push('alto contraste não ativou');
+                if(contrast.links.length<5)reasons.push(`menu visível incompleto: ${contrast.links.length}`);
+                if(contrast.links.some(x=>x.ratio<4.5))reasons.push('contraste do menu abaixo de 4.5:1');
+
+                // Fecha painel/menu e aplica exatamente o máximo oferecido pela ferramenta: 130%.
+                if(size.startsWith('mobile')){
+                  await page.locator('.mobile-nav summary').click();
+                  await launcher.click();
+                }else{
+                  await page.locator('[data-a11y-launcher]').click();
+                }
+                // Se o painel acabou fechado, garante abertura.
+                if(!(await page.locator('[data-a11y-panel]').isVisible().catch(()=>false)))await launcher.click();
+                // Desliga contraste para isolar o teste de escala.
+                const contrastBtn=page.locator('[data-a11y-contrast]');
+                if(await contrastBtn.getAttribute('aria-pressed')==='true')await contrastBtn.click();
+                const plus=page.locator('[data-a11y-font-up]');
+                await plus.click();await plus.click();await plus.click();
+                await page.locator('[data-a11y-close]').click();
+                await page.waitForTimeout(100);
+
+                const scale=await page.evaluate(()=>{
+                  const root=getComputedStyle(document.documentElement).getPropertyValue('--user-font-scale').trim();
+                  const overflow=Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth;
+                  const clipped=[];
+                  const visible=e=>{const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0};
+                  document.querySelectorAll('main h1,main h2,main h3,main p,main a,main strong,main label,main button,main summary').forEach(e=>{
+                    if(!visible(e)||!e.textContent.trim())return;
+                    const s=getComputedStyle(e);
+                    if(/hidden|clip/.test(`${s.overflow} ${s.overflowX} ${s.overflowY}`)&&(e.scrollWidth>e.clientWidth+2||e.scrollHeight>e.clientHeight+2))clipped.push(e.textContent.trim().slice(0,80));
+                  });
+                  return {root,overflow:Math.round(Math.max(0,overflow)),clipped};
+                });
+                if(scale.root!=='1.3')reasons.push(`escala esperada 1.3, encontrada ${scale.root}`);
+                if(scale.overflow>1)reasons.push(`overflow horizontal a 130%: ${scale.overflow}px`);
+                if(scale.clipped.length)reasons.push(`texto cortado a 130%: ${scale.clipped.length}`);
+
+                await page.screenshot({path:`real-a11y/screenshots/${size}-${label(path)}.png`,fullPage:true});
+                report.push({severity:'HIGH',size,path,contrast,scale,runtime,reasons,failed:reasons.length>0});
+              }else{
+                report.push({severity:'HIGH',size,path,runtime,reasons,failed:true});
+              }
+
+              if(reasons.length)failures.push({size,path,reasons});
+              await page.close();
+            }
+            await context.close();
+          }
+
+          await browser.close();
+          fs.writeFileSync('real-a11y/report.json',JSON.stringify(report,null,2));
+          fs.writeFileSync('real-a11y/high-severity-failures.json',JSON.stringify(failures,null,2));
+          const summary=`# QA acessibilidade real — HIGH\n\nPáginas: ${pages.length}\nCenários: ${report.length}\nFalhas HIGH: ${failures.length}\n\nCritérios: contraste real do menu >= 4.5:1, navegação visível em alto contraste, texto em 130% sem corte e sem rolagem horizontal.`;
+          fs.writeFileSync('real-a11y/summary.md',summary);
+          console.log(summary);
+          if(failures.length){console.error(JSON.stringify(failures.slice(0,30),null,2));process.exit(1)}
+          EOF
+          node real-a11y.mjs
+
+      - name: Resumo
+        if: always()
+        run: |
+          [ -f real-a11y/summary.md ] && cat real-a11y/summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Evidências
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-a11y-high-${{ github.run_id }}
+          path: real-a11y/
+          retention-days: 7
