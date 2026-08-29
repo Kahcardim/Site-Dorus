@@ -33,6 +33,7 @@
   }
 
   ensureStylesheet('accessibility.css');
+  ensureStylesheet('accessibility-contrast.css');
   ensureStylesheet('layout.css');
   ensureStylesheet('usability.css');
   ensureStylesheet('conversion-enhancements.css');
