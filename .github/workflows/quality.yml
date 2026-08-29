@@ -29,18 +29,25 @@ jobs:
       - name: Verificar sintaxe JavaScript
         run: |
           node --check site.js
+          node --check calendar-integration.js
           node --check brand-carousel.js
           node --check conversion-enhancements.js
           node --check accessibility-tools.js
           node --check privacy-consent.js
+          cp integrations/google-apps-script/Code.gs /tmp/dorus-apps-script.js
+          node --check /tmp/dorus-apps-script.js
 
       - name: Verificar sintaxe Python
         run: |
           python -m py_compile scripts/check_site.py
+          python -m py_compile scripts/check_backend.py
           python -m py_compile scripts/check_seo.py
           python -m py_compile scripts/enrich_meta.py
           python -m py_compile scripts/cache_bust.py
           python -m py_compile scripts/summarize_lighthouse.py
+
+      - name: Validar backend e regras da agenda
+        run: python scripts/check_backend.py
 
       - name: Validar favicons PNG
         shell: bash
