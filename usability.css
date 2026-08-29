@@ -1,5 +1,6 @@
 /*
  * D’orus — Real usability guardrails
+ * Revisão: 2026-08-29 / Home visual restore.
  * Severidade alta: conteúdo principal não pode depender de cortes acidentais.
  * Carrosséis explícitos são tratados como componentes interativos, não como overflow de layout.
  */
@@ -65,7 +66,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/* Títulos nunca podem partir uma palavra no meio e usam linhas visualmente equilibradas. */
 h1,h2,h3,h4{
   overflow-wrap:normal!important;
   word-break:normal!important;
@@ -73,7 +73,6 @@ h1,h2,h3,h4{
   text-wrap:balance;
 }
 
-/* Hero: mantém presença sem dominar a primeira dobra. */
 .hero-copy h1{
   max-width:620px!important;
   font-size:clamp(2.35rem,3.15vw,3.15rem)!important;
@@ -89,7 +88,6 @@ h1,h2,h3,h4{
   }
 }
 
-/* AVALIAÇÕES GOOGLE: cards sempre inteiros, sem corte lateral. */
 .reviews-section{
   overflow:visible!important;
 }
@@ -127,7 +125,6 @@ h1,h2,h3,h4{
   display:none!important;
 }
 
-/* MARCAS: carrossel horizontal intencional e funcional. */
 .brands-section{
   overflow:hidden!important;
 }
@@ -180,7 +177,6 @@ h1,h2,h3,h4{
   height:104px!important;
 }
 
-/* Páginas internas: quebra antes de o conteúdo ficar estreito demais. */
 .content-grid{
   grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
   gap:clamp(28px,4vw,52px)!important;
