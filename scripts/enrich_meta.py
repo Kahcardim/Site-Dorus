@@ -36,6 +36,34 @@ def set_meta(source: str, key: str, value: str, content: str) -> str:
     return source
 
 
+def normalize_structured_data(source: str, canonical: str) -> str:
+    """Normaliza JSON-LD legado antes de publicar.
+
+    ApplianceRepair não é um tipo Schema.org. Para uma assistência técnica
+    residencial, HomeAndConstructionBusiness é um subtipo válido de
+    LocalBusiness e mantém a semântica correta para o Google.
+
+    A nota agregada da própria empresa continua visível no HTML, mas não é
+    enviada como AggregateRating porque avaliações autoatribuídas de
+    LocalBusiness/Organization não são elegíveis a estrelas orgânicas.
+    """
+    source = re.sub(
+        r'("@type"\s*:\s*)"ApplianceRepair"',
+        r'\1"HomeAndConstructionBusiness"',
+        source,
+        flags=re.I,
+    )
+
+    if canonical == BASE_URL:
+        source = re.sub(
+            r',\s*"aggregateRating"\s*:\s*\{[^{}]*\}',
+            '',
+            source,
+            flags=re.I,
+        )
+    return source
+
+
 def relative_asset(rel: str, asset: str) -> str:
     depth = len(Path(rel).parent.parts)
     return '../' * depth + asset
@@ -176,6 +204,7 @@ def enrich(path: Path) -> bool:
     if not title or not description or not canonical or '</head>' not in source.lower():
         return False
 
+    source = normalize_structured_data(source, canonical)
     source = ensure_brand_icons(source, rel)
     source = ensure_final_ui(source, rel)
     source = ensure_compact_pages(source, rel)
