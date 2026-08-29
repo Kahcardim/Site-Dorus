@@ -18,6 +18,7 @@ SERVICE_SHARE_IMAGES = {
     '/servicos/micro-ondas/': ('assets/servicos/servico-microondas.webp', 'Micro-ondas atendido pela D’orus Assistência Técnica', 1254, 1254),
 }
 SITE_NAME = 'D’orus Assistência Técnica'
+LOCAL_BUSINESS_ID = BASE_URL + '#localbusiness'
 
 
 def first(pattern: str, source: str) -> str | None:
@@ -46,32 +47,57 @@ def set_meta(source: str, key: str, value: str, content: str) -> str:
     return source
 
 
+def normalize_schema_value(value):
+    if isinstance(value, list):
+        return [normalize_schema_value(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+
+    normalized = {key: normalize_schema_value(item) for key, item in value.items()}
+    schema_type = normalized.get('@type')
+
+    if isinstance(schema_type, str) and schema_type == 'ApplianceRepair':
+        schema_type = 'HomeAndConstructionBusiness'
+        normalized['@type'] = schema_type
+    elif isinstance(schema_type, list):
+        normalized['@type'] = [
+            'HomeAndConstructionBusiness' if item == 'ApplianceRepair' else item
+            for item in schema_type
+        ]
+        schema_type = normalized['@type']
+
+    types = {schema_type} if isinstance(schema_type, str) else set(schema_type or [])
+    if {'HomeAndConstructionBusiness', 'LocalBusiness'} & types:
+        normalized.setdefault('@id', LOCAL_BUSINESS_ID)
+        # Avaliação da própria empresa permanece visível na página, mas não é
+        # enviada como AggregateRating do LocalBusiness (self-serving review).
+        normalized.pop('aggregateRating', None)
+
+    return normalized
+
+
 def normalize_structured_data(source: str, canonical: str) -> str:
-    """Normaliza JSON-LD legado antes de publicar.
+    """Normaliza todos os blocos JSON-LD antes da publicação.
 
-    ApplianceRepair não é um tipo Schema.org. Para uma assistência técnica
-    residencial, HomeAndConstructionBusiness é um subtipo válido de
-    LocalBusiness e mantém a semântica correta para o Google.
-
-    A nota agregada da própria empresa continua visível no HTML, mas não é
-    enviada como AggregateRating porque avaliações autoatribuídas de
-    LocalBusiness/Organization não são elegíveis a estrelas orgânicas.
+    O código antigo utilizava ApplianceRepair, que não é um tipo Schema.org.
+    A normalização é feita após parsear o JSON para também cobrir providers
+    aninhados em Service e evitar estruturas inválidas no Search Console.
     """
-    source = re.sub(
-        r'("@type"\s*:\s*)"ApplianceRepair"',
-        r'\1"HomeAndConstructionBusiness"',
-        source,
-        flags=re.I,
+    pattern = re.compile(
+        r'(<script\s+type=["\']application/ld\+json["\'][^>]*>)(.*?)(</script>)',
+        flags=re.I | re.S,
     )
 
-    if canonical == BASE_URL:
-        source = re.sub(
-            r',\s*"aggregateRating"\s*:\s*\{[^{}]*\}',
-            '',
-            source,
-            flags=re.I,
-        )
-    return source
+    def replace(match: re.Match) -> str:
+        try:
+            data = json.loads(match.group(2))
+        except json.JSONDecodeError:
+            return match.group(0)
+        normalized = normalize_schema_value(data)
+        payload = json.dumps(normalized, ensure_ascii=False, separators=(',', ':'))
+        return match.group(1) + payload + match.group(3)
+
+    return pattern.sub(replace, source)
 
 
 def preferred_share_image(canonical: str) -> tuple[str, str, int, int]:
