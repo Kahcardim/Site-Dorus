@@ -105,7 +105,7 @@ jobs:
 
               const offscreen=[];
               const boxSelectors=[
-                'main .container','main .card','main .review-card','main .brand-logo','main .trust-card','main .step',
+                'main .container','main .card','main .review-card','main .trust-card','main .step',
                 'main .tip-card','main .service-card','main .contact-item','main .form','main .schedule-box',
                 'main .content-grid > *','main .values > *','main .cards > *','main .service-grid > *'
               ].join(',');
@@ -125,12 +125,34 @@ jobs:
                 }
               });
 
+              const brokenHeadingWords=[];
+              document.querySelectorAll('main h1,main h2,main h3').forEach(el=>{
+                if(!visible(el)) return;
+                const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+                let node;
+                while((node=walker.nextNode())){
+                  const text=node.nodeValue||'';
+                  const re=/\S+/g;
+                  let match;
+                  while((match=re.exec(text))){
+                    const word=match[0].replace(/[.,;:!?()]/g,'');
+                    if(word.length<7) continue;
+                    const range=document.createRange();
+                    range.setStart(node,match.index);
+                    range.setEnd(node,match.index+match[0].length);
+                    const rects=[...range.getClientRects()].filter(r=>r.width>0&&r.height>0);
+                    const lines=[...new Set(rects.map(r=>Math.round(r.top)))];
+                    if(lines.length>1) brokenHeadingWords.push(word);
+                  }
+                }
+              });
+
               const brokenImages=[...document.images]
                 .filter(i=>visible(i)&&i.complete&&i.naturalWidth===0)
                 .map(i=>i.currentSrc||i.src);
 
               const horizontalScroll=[];
-              document.querySelectorAll('.review-carousel,.logo-marquee,.content-grid,.values,.cards,.trust-grid,.steps,.service-grid,.contact-grid,.schedule-layout').forEach(e=>{
+              document.querySelectorAll('.review-carousel,.content-grid,.values,.cards,.trust-grid,.steps,.service-grid,.contact-grid,.schedule-layout').forEach(e=>{
                 if(!visible(e)) return;
                 if(e.scrollWidth>e.clientWidth+2) horizontalScroll.push({cls:e.className,client:e.clientWidth,scroll:e.scrollWidth});
               });
@@ -146,7 +168,16 @@ jobs:
               }
 
               const partialReviews=partialChildren('.review-carousel','.review-card');
-              const partialBrands=partialChildren('.logo-marquee','.brand-logo');
+
+              const marquee=document.querySelector('.logo-marquee');
+              const primarySet=document.querySelector('.logo-set:not([aria-hidden="true"])');
+              const brandCarousel=marquee?{
+                visible:visible(marquee),
+                cards:primarySet?[...primarySet.querySelectorAll('.brand-logo')].filter(visible).length:0,
+                scrollable:marquee.scrollWidth>marquee.clientWidth+20,
+                scrollLeft:Math.round(marquee.scrollLeft),
+                control:visible(document.querySelector('[data-logo-toggle]'))
+              }:null;
 
               const interactiveOffscreen=[];
               document.querySelectorAll('main button,main input,main select,main textarea,main .button,.mobile-nav summary').forEach(e=>{
@@ -157,7 +188,7 @@ jobs:
 
               const tinyTargets=[];
               if(vw<=480){
-                document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary,[data-a11y-launcher]').forEach(e=>{
+                document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary,[data-a11y-launcher],[data-logo-toggle]').forEach(e=>{
                   if(!visible(e)) return;
                   const r=e.getBoundingClientRect();
                   if(r.width<40||r.height<40) tinyTargets.push({tag:e.tagName,cls:e.className,w:Math.round(r.width),h:Math.round(r.height)});
@@ -169,9 +200,8 @@ jobs:
               const footer=visible(document.querySelector('.footer'));
               const main=visible(document.querySelector('main'));
               const reviewCount=[...document.querySelectorAll('.review-card')].filter(visible).length;
-              const brandCount=[...document.querySelectorAll('.brand-logo')].filter(visible).length;
 
-              return {overflowX,offscreen,clippedText,brokenImages,horizontalScroll,partialReviews,partialBrands,interactiveOffscreen,tinyTargets,h1s,header,footer,main,reviewCount,brandCount};
+              return {overflowX,offscreen,clippedText,brokenHeadingWords,brokenImages,horizontalScroll,partialReviews,interactiveOffscreen,tinyTargets,h1s,header,footer,main,reviewCount,brandCarousel};
             });
           }
 
@@ -185,8 +215,6 @@ jobs:
               page.on('console',m=>{
                 if(m.type()!=='error') return;
                 const text=m.text();
-                // A ponte do Google Apps Script é um backend externo já monitorado
-                // separadamente. Um 403 nela não pode mascarar a aprovação visual.
                 if(path==='/agendamento/'&&/403/.test(text)){
                   externalRuntime.push(`console: ${text}`);
                   return;
@@ -200,7 +228,14 @@ jobs:
                 await page.waitForTimeout(700);
                 const essential=page.locator('[data-cookie-essential]');
                 if(await essential.isVisible().catch(()=>false)) await essential.click();
-                await page.waitForTimeout(200);
+                if(path==='/'){
+                  const marquee=page.locator('.logo-marquee');
+                  if(await marquee.isVisible().catch(()=>false)){
+                    await marquee.scrollIntoViewIfNeeded();
+                    await page.waitForTimeout(700);
+                  }
+                }
+                await page.waitForTimeout(150);
               }catch(e){runtime.push(`navigation: ${e.message}`)}
 
               const metrics=await inspect(page);
@@ -210,14 +245,21 @@ jobs:
               if(metrics.overflowX>1) reasons.push(`overflow horizontal ${metrics.overflowX}px`);
               if(metrics.offscreen.length) reasons.push(`blocos fora da viewport: ${metrics.offscreen.length}`);
               if(metrics.clippedText.length) reasons.push(`texto cortado: ${metrics.clippedText.length}`);
+              if(metrics.brokenHeadingWords.length) reasons.push(`palavras quebradas em títulos: ${metrics.brokenHeadingWords.join(', ')}`);
               if(metrics.brokenImages.length) reasons.push(`imagens quebradas: ${metrics.brokenImages.length}`);
               if(metrics.horizontalScroll.length) reasons.push(`área principal exige rolagem horizontal: ${metrics.horizontalScroll.length}`);
               if(metrics.partialReviews.length) reasons.push(`avaliações parcialmente cortadas: ${metrics.partialReviews.length}`);
-              if(metrics.partialBrands.length) reasons.push(`marcas parcialmente cortadas: ${metrics.partialBrands.length}`);
               if(metrics.interactiveOffscreen.length) reasons.push(`controles fora da viewport: ${metrics.interactiveOffscreen.length}`);
               if(metrics.tinyTargets.length) reasons.push(`alvos de toque menores que 40px: ${metrics.tinyTargets.length}`);
               if(metrics.h1s!==1) reasons.push(`H1 visível esperado 1, encontrado ${metrics.h1s}`);
               if(!metrics.header||!metrics.footer||!metrics.main) reasons.push('estrutura principal invisível');
+              if(path==='/'){
+                if(!metrics.brandCarousel?.visible) reasons.push('carrossel de marcas invisível');
+                if((metrics.brandCarousel?.cards||0)<6) reasons.push(`carrossel com poucas marcas: ${metrics.brandCarousel?.cards||0}`);
+                if(!metrics.brandCarousel?.scrollable) reasons.push('carrossel de marcas não possui faixa navegável');
+                if(!metrics.brandCarousel?.control) reasons.push('controle do carrossel de marcas invisível');
+                if((metrics.brandCarousel?.scrollLeft||0)<=0) reasons.push('carrossel de marcas não iniciou movimento');
+              }
 
               const row={severity:'HIGH',size,width:w,height:h,path,status,runtime,externalRuntime,...metrics,failed:reasons.length>0,reasons};
               report.push(row);
@@ -228,18 +270,17 @@ jobs:
                 await page.screenshot({path:`real-usability/screenshots/${size}-${shortPath(path)}.png`,fullPage:true});
               }
 
-              // Valida o mesmo aumento máximo de texto oferecido pela ferramenta (130%).
               if(size==='mobile-390'||size==='desktop-1366'){
                 await page.evaluate(()=>document.documentElement.style.setProperty('--user-font-scale','1.3'));
-                await page.waitForTimeout(100);
+                await page.waitForTimeout(120);
                 const large=await inspect(page);
                 const largeReasons=[];
                 if(large.overflowX>1) largeReasons.push(`overflow com fonte ampliada ${large.overflowX}px`);
                 if(large.offscreen.length) largeReasons.push(`blocos fora da viewport com fonte ampliada: ${large.offscreen.length}`);
                 if(large.clippedText.length) largeReasons.push(`texto cortado com fonte ampliada: ${large.clippedText.length}`);
+                if(large.brokenHeadingWords.length) largeReasons.push(`palavras quebradas em títulos com fonte ampliada: ${large.brokenHeadingWords.join(', ')}`);
                 if(large.horizontalScroll.length) largeReasons.push(`rolagem horizontal com fonte ampliada: ${large.horizontalScroll.length}`);
                 if(large.partialReviews.length) largeReasons.push(`avaliações cortadas com fonte ampliada: ${large.partialReviews.length}`);
-                if(large.partialBrands.length) largeReasons.push(`marcas cortadas com fonte ampliada: ${large.partialBrands.length}`);
                 const largeRow={severity:'HIGH',mode:'130-percent-text',size,width:w,height:h,path,...large,failed:largeReasons.length>0,reasons:largeReasons};
                 report.push(largeRow);
                 if(largeRow.failed) failures.push(largeRow);
@@ -263,7 +304,7 @@ jobs:
             `Falhas HIGH de usabilidade: ${failures.length}`,
             `Sinais externos de backend: ${externalSignals.length}`,
             '',
-            'Critérios principais: conteúdo inteiro na viewport, zero rolagem horizontal em áreas principais, avaliações e marcas completas, texto sem corte, imagens válidas, controles acessíveis e fonte em 130% sem quebra.'
+            'Critérios: sem overflow acidental, avaliações inteiras, títulos sem palavras partidas, carrossel de marcas funcional, imagens válidas, controles acessíveis e fonte a 130% sem quebra.'
           ].join('\n');
           fs.writeFileSync('real-usability/summary.md',summary);
           console.log(summary);
