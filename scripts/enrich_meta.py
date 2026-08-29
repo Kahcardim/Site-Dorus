@@ -78,13 +78,12 @@ def ensure_brand_icons(source: str, rel: str) -> str:
 
     favicon_48 = relative_asset(rel, 'favicon-48x48.png')
     favicon_192 = relative_asset(rel, 'favicon-192x192.png')
-    apple = relative_asset(rel, 'apple-touch-icon.png')
     manifest = relative_asset(rel, 'site.webmanifest')
 
     block = '\n'.join([
         f'  <link rel="icon" type="image/png" sizes="48x48" href="{favicon_48}">',
         f'  <link rel="icon" type="image/png" sizes="192x192" href="{favicon_192}">',
-        f'  <link rel="apple-touch-icon" sizes="180x180" href="{apple}">',
+        f'  <link rel="apple-touch-icon" sizes="192x192" href="{favicon_192}">',
         f'  <link rel="manifest" href="{manifest}">',
         '  <meta name="msapplication-TileColor" content="#0d3b8e">',
         f'  <meta name="msapplication-TileImage" content="{favicon_192}">',
