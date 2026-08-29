@@ -60,6 +60,14 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
+/* Títulos podem quebrar entre palavras, mas nunca no meio delas. */
+h1,h2,h3,h4{
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+  text-wrap:balance;
+}
+
 .card,
 .step,
 .trust-card,
