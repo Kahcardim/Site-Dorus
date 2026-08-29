@@ -65,11 +65,12 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/* Títulos nunca podem partir uma palavra no meio. */
+/* Títulos nunca podem partir uma palavra no meio e usam linhas visualmente equilibradas. */
 h1,h2,h3,h4{
   overflow-wrap:normal!important;
   word-break:normal!important;
   hyphens:none!important;
+  text-wrap:balance;
 }
 
 /* Hero: mantém presença sem dominar a primeira dobra. */
