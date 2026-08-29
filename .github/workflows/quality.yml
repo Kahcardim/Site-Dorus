@@ -42,6 +42,57 @@ jobs:
           python -m py_compile scripts/cache_bust.py
           python -m py_compile scripts/summarize_lighthouse.py
 
+      - name: Validar favicons PNG
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import struct
+          import zlib
+
+          expected = {
+              'favicon-48x48.png': (48, 48),
+              'favicon-192x192.png': (192, 192),
+              'apple-touch-icon.png': (180, 180),
+          }
+
+          def validate_png(path, size):
+              data = Path(path).read_bytes()
+              if not data.startswith(b'\x89PNG\r\n\x1a\n'):
+                  raise SystemExit(f'{path}: assinatura PNG inválida.')
+              pos = 8
+              width = height = None
+              idat = bytearray()
+              saw_iend = False
+              while pos + 12 <= len(data):
+                  length = struct.unpack('>I', data[pos:pos + 4])[0]
+                  kind = data[pos + 4:pos + 8]
+                  chunk = data[pos + 8:pos + 8 + length]
+                  crc = struct.unpack('>I', data[pos + 8 + length:pos + 12 + length])[0]
+                  if zlib.crc32(kind + chunk) & 0xffffffff != crc:
+                      raise SystemExit(f'{path}: CRC inválido no chunk {kind.decode(errors="replace")}.')
+                  if kind == b'IHDR':
+                      width, height = struct.unpack('>II', chunk[:8])
+                  elif kind == b'IDAT':
+                      idat.extend(chunk)
+                  elif kind == b'IEND':
+                      saw_iend = True
+                      break
+                  pos += 12 + length
+              if (width, height) != size:
+                  raise SystemExit(f'{path}: tamanho {(width, height)} diferente de {size}.')
+              if not idat or not saw_iend:
+                  raise SystemExit(f'{path}: PNG incompleto.')
+              try:
+                  zlib.decompress(bytes(idat))
+              except zlib.error as exc:
+                  raise SystemExit(f'{path}: dados de imagem corrompidos ({exc}).')
+
+          for path, size in expected.items():
+              validate_png(path, size)
+          print('OK: favicons PNG íntegros e com dimensões corretas.')
+          PY
+
       - name: Validar identidade visual e logos locais
         shell: bash
         run: |
@@ -90,5 +141,8 @@ jobs:
       - name: Verificar HTML UX acessibilidade privacidade e segurança
         run: python scripts/check_site.py
 
-      - name: Validar SEO técnico sitemap e canonicals
+      - name: Preparar metadados como no deploy
+        run: python scripts/enrich_meta.py
+
+      - name: Validar SEO técnico sitemap canonicals e JSON-LD
         run: python scripts/check_seo.py
