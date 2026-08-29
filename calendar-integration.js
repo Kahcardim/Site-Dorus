@@ -132,6 +132,12 @@
     async function loadAvailability() {
       resetStatus();
       if (!bridgeReady || !dateInput.value) return;
+      if (!dateInput.checkValidity()) {
+        periodSelect.innerHTML = '<option value="">Escolha uma data válida</option>';
+        periodSelect.disabled = true;
+        setStatus(dateInput.validationMessage || 'Escolha uma data válida para consultar a agenda.', true);
+        return;
+      }
       setLoadingOptions();
 
       try {
