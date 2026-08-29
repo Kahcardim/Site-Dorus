@@ -170,6 +170,17 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   gap:clamp(30px,4vw,48px)!important;
 }
 
+/* Em telas muito largas o layout deixa de parecer pequeno no centro. */
+@media(min-width:1600px){
+  .container{
+    width:min(1280px,calc(100% - 64px))!important;
+    max-width:1280px!important;
+  }
+  .hero-media{max-width:585px!important}
+  .hero-copy h1{max-width:700px!important}
+  .review-card{min-height:180px!important}
+}
+
 @media(max-width:1050px){
   .content-grid{grid-template-columns:1fr!important;gap:28px!important}
   .values{grid-template-columns:repeat(2,minmax(0,1fr))!important}
