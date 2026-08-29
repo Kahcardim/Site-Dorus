@@ -1,4 +1,5 @@
 from pathlib import Path
+import json
 import re
 import xml.etree.ElementTree as ET
 
@@ -34,6 +35,15 @@ for page in sorted(ROOT.rglob('*.html')):
     if re.search(r'<meta\s+name=["\']robots["\'][^>]*content=["\'][^"\']*noindex', source, flags=re.I):
         errors.append(f'{rel}: pagina publica marcada como noindex.')
 
+    if '"@type":"ApplianceRepair"' in source or '"@type": "ApplianceRepair"' in source:
+        errors.append(f'{rel}: usa o tipo JSON-LD invalido ApplianceRepair.')
+
+    for block in re.findall(r'<script\s+type=["\']application/ld\+json["\']>(.*?)</script>', source, flags=re.I | re.S):
+        try:
+            json.loads(block)
+        except json.JSONDecodeError as exc:
+            errors.append(f'{rel}: JSON-LD invalido ({exc}).')
+
 sitemap = ROOT / 'sitemap.xml'
 if not sitemap.exists():
     errors.append('sitemap.xml ausente.')
@@ -59,4 +69,4 @@ if errors:
         print('-', error)
     raise SystemExit(1)
 
-print(f'OK: {len(canonicals)} paginas indexaveis validadas, sitemap e robots consistentes.')
+print(f'OK: {len(canonicals)} paginas indexaveis validadas, sitemap, robots e JSON-LD consistentes.')
