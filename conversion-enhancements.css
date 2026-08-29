@@ -75,6 +75,133 @@
 .related-service-copy strong{display:block;color:var(--dark);font-size:1.04rem}
 .related-service-copy span{display:block;margin-top:5px;color:var(--primary);font-size:.88rem;font-weight:800}
 
+/* Home visual polish: preserva a hierarquia original sem cortes. */
+body:has(.hero) .hero{
+  padding:52px 0 46px!important;
+}
+body:has(.hero) .hero-grid{
+  grid-template-columns:minmax(0,1.04fr) minmax(420px,.96fr)!important;
+  gap:46px!important;
+  align-items:center!important;
+}
+body:has(.hero) .hero-copy h1{
+  max-width:11.5ch!important;
+  font-size:clamp(2.75rem,3.45vw,3.55rem)!important;
+  line-height:1.035!important;
+  margin:12px 0 15px!important;
+}
+body:has(.hero) .hero-copy>p{
+  max-width:600px!important;
+  font-size:1.01rem!important;
+}
+body:has(.hero) .hero-media{
+  width:100%!important;
+  max-width:545px!important;
+  padding:12px!important;
+  overflow:hidden!important;
+}
+body:has(.hero) .hero-media picture{
+  aspect-ratio:1.82/1!important;
+  overflow:hidden!important;
+  border-radius:18px!important;
+}
+body:has(.hero) .hero-media picture>img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:cover!important;
+  object-position:center!important;
+}
+body:has(.hero) .hero-media figcaption{
+  position:absolute!important;
+  left:18px!important;
+  top:18px!important;
+  width:min(310px,calc(100% - 36px))!important;
+  margin:0!important;
+  padding:13px 15px!important;
+  border:1px solid rgba(255,255,255,.38)!important;
+  border-radius:16px!important;
+  background:rgba(7,35,72,.88)!important;
+  box-shadow:0 12px 28px rgba(3,24,56,.2)!important;
+  backdrop-filter:blur(8px)!important;
+}
+
+/* Carrossel de marcas: faixa compacta e visível, sem virar grade gigante. */
+.brands-section{overflow:hidden!important}
+.brands-section .section-head{margin-bottom:16px!important}
+.logo-marquee-shell{overflow:hidden!important}
+.logo-marquee{overflow-x:auto!important;overflow-y:hidden!important;padding:8px 4px 14px!important}
+.logo-track{display:flex!important;width:max-content!important;max-width:none!important}
+.logo-set{display:flex!important;gap:14px!important;padding-right:14px!important}
+.brand-logo{
+  flex:0 0 172px!important;
+  width:172px!important;
+  height:94px!important;
+  padding:17px 20px!important;
+  border-radius:18px!important;
+}
+.brand-logo img{max-width:132px!important;max-height:46px!important}
+
+/* Avaliações: mantém leitura completa sem poluir a página. */
+.reviews-section{overflow:hidden!important}
+.review-carousel{gap:14px!important}
+.review-card{min-height:210px!important;padding:21px!important}
+@media(min-width:1200px){.review-card{flex:0 0 calc((100% - 28px)/3)!important}}
+
+/* CTA final: compacto, equilibrado e sem vazio excessivo. */
+.final-cta{padding-top:34px!important}
+.final-cta .cta-panel{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:28px!important;
+  padding:30px 34px!important;
+  max-width:1120px!important;
+  margin-inline:auto!important;
+}
+.final-cta .cta-panel h2{
+  max-width:760px!important;
+  font-size:clamp(1.9rem,2.65vw,2.55rem)!important;
+  line-height:1.1!important;
+  margin:6px 0 10px!important;
+}
+.final-cta .cta-panel p{margin:0!important;max-width:760px!important}
+.final-cta .cta-panel .actions{
+  display:flex!important;
+  flex-direction:column!important;
+  width:auto!important;
+  min-width:205px!important;
+  margin:0!important;
+  gap:12px!important;
+}
+.final-cta .cta-panel .button{width:100%!important;white-space:nowrap!important}
+
+@media(max-width:1179px){
+  body:has(.hero) .hero-grid{grid-template-columns:1fr!important;gap:28px!important}
+  body:has(.hero) .hero-copy{max-width:780px!important;margin-inline:auto!important}
+  body:has(.hero) .hero-copy h1{max-width:13ch!important}
+  body:has(.hero) .hero-media{max-width:680px!important}
+}
+@media(max-width:900px){
+  body:has(.hero) .hero{padding:36px 0 38px!important}
+  body:has(.hero) .hero-media picture{aspect-ratio:1.55/1!important}
+  .final-cta .cta-panel{grid-template-columns:1fr!important;padding:28px!important}
+  .final-cta .cta-panel .actions{flex-direction:row!important;flex-wrap:wrap!important;min-width:0!important}
+  .final-cta .cta-panel .button{width:auto!important;white-space:normal!important}
+}
+@media(max-width:700px){
+  .brand-logo{flex-basis:150px!important;width:150px!important;height:88px!important;padding:15px!important}
+  .brand-logo img{max-width:118px!important;max-height:42px!important}
+  body:has(.hero) .hero-media figcaption{left:12px!important;top:12px!important;width:calc(100% - 24px)!important}
+  .final-cta .cta-panel{padding:24px 20px!important;gap:22px!important}
+  .final-cta .cta-panel .actions{display:grid!important;grid-template-columns:1fr!important;width:100%!important}
+  .final-cta .cta-panel .button{width:100%!important}
+}
+@media(max-width:520px){
+  body:has(.hero) .hero-copy h1{font-size:clamp(2rem,9.2vw,2.45rem)!important;max-width:none!important}
+  body:has(.hero) .hero-media{padding:7px!important}
+  body:has(.hero) .hero-media picture{aspect-ratio:1.28/1!important}
+}
+
 @media(max-width:900px){
   .related-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
