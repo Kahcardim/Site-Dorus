@@ -11,6 +11,7 @@ SOURCES = (
     'privacy.css',
     'ui-final.css',
     'compact-pages.css',
+    'home-ux.css',
     'accessibility-contrast.css',
 )
 OUTPUT = ROOT / 'site.css'
