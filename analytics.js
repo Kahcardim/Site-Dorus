@@ -85,6 +85,40 @@
     }
   }
 
+  function updateGoogleRating() {
+    var heroPoints = document.querySelector('.hero-points');
+    if (!heroPoints) return;
+
+    var ratingBlock = heroPoints.querySelector('div');
+    if (!ratingBlock) return;
+
+    var ratingValue = ratingBlock.querySelector('strong');
+    var reviewCount = ratingBlock.querySelector('span');
+    if (!ratingValue || !reviewCount) return;
+
+    function render(data) {
+      if (!data || typeof data.rating !== 'number' || typeof data.reviews !== 'number') return;
+      ratingValue.textContent = data.rating.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' ★';
+      reviewCount.textContent = data.reviews + (data.reviews === 1 ? ' avaliação no Google' : ' avaliações no Google');
+      ratingBlock.setAttribute('aria-label', data.rating.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' de 5 no Google, com ' + data.reviews + ' avaliações');
+    }
+
+    render({rating: 4.7, reviews: 14});
+
+    fetch(new URL('google-rating.json?v=' + Date.now(), window.location.origin + window.location.pathname), {
+      cache: 'no-store',
+      headers: {'Accept': 'application/json'}
+    })
+      .then(function (response) {
+        if (!response.ok) throw new Error('rating unavailable');
+        return response.json();
+      })
+      .then(render)
+      .catch(function () {
+        /* Mantém o último valor confiável sem afetar o layout. */
+      });
+  }
+
   window.addEventListener('dorus:consent', function (event) {
     var value = event && event.detail ? event.detail.value : null;
     window.gtag('consent', 'update', {
@@ -96,9 +130,14 @@
     if (value === 'all') loadGoogleTag();
   });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bindLeadTracking, {once: true});
-  } else {
+  function init() {
     bindLeadTracking();
+    updateGoogleRating();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, {once: true});
+  } else {
+    init();
   }
 })();
