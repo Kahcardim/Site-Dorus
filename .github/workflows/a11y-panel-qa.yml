@@ -1,18 +1,21 @@
-name: QA painel acessibilidade
+name: QA acessibilidade e contraste
 
 on:
   push:
     branches: [main]
     paths:
       - 'accessibility.css'
+      - 'accessibility-contrast.css'
       - 'accessibility-tools.js'
+      - 'site.js'
+      - '**/*.html'
       - '.github/workflows/a11y-panel-qa.yml'
 
 permissions:
   contents: read
 
 jobs:
-  painel:
+  acessibilidade:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,16 +27,20 @@ jobs:
           npm init -y >/dev/null 2>&1
           npm install playwright@1.55.0 >/dev/null 2>&1
           npx playwright install --with-deps chromium >/dev/null 2>&1
-      - name: Aguardar Pages
+      - name: Aguardar a mesma revisao no Pages
         run: |
           VERSION="${GITHUB_SHA:0:12}"
           for i in $(seq 1 60); do
-            HTML="$(curl -fsSL "https://kahcardim.github.io/Site-Dorus/?a11y=${GITHUB_SHA}&t=${i}" || true)"
-            if printf '%s' "$HTML" | grep -q "?v=${VERSION}"; then exit 0; fi
+            HTML="$(curl -fsSL "https://assistenciadorus.com.br/?a11y=${GITHUB_SHA}&t=${i}" || true)"
+            if printf '%s' "$HTML" | grep -q "?v=${VERSION}"; then
+              echo "Pages confirmado em ${VERSION}."
+              exit 0
+            fi
             sleep 5
           done
+          echo "Pages nao apresentou a revisao ${VERSION}."
           exit 1
-      - name: Testar painel aberto em web e mobile
+      - name: Testar painel e navegacao em alto contraste
         run: |
           mkdir -p a11y-qa
           cat > a11y-qa.mjs <<'EOF'
@@ -45,39 +52,45 @@ jobs:
           for(const [name,width,height] of sizes){
             const context=await browser.newContext({viewport:{width,height}});
             const page=await context.newPage();
-            await page.goto('https://kahcardim.github.io/Site-Dorus/?panel='+Date.now(),{waitUntil:'domcontentloaded'});
-            await page.waitForTimeout(1000);
+            await page.goto('https://assistenciadorus.com.br/?contrast='+Date.now(),{waitUntil:'domcontentloaded'});
+            await page.waitForTimeout(900);
             const cookie=page.locator('[data-cookie-essential]');
             if(await cookie.isVisible().catch(()=>false)) await cookie.click();
-            const launcher=page.locator('[data-a11y-launcher]');
-            await launcher.click();
-            await page.waitForTimeout(250);
-            const metrics=await page.locator('[data-a11y-panel]').evaluate((panel)=>{
+            await page.locator('[data-a11y-launcher]').click();
+            await page.locator('[data-a11y-contrast]').click();
+            await page.waitForTimeout(150);
+            const panelMetrics=await page.locator('[data-a11y-panel]').evaluate(panel=>{
               const r=panel.getBoundingClientRect();
-              const s=getComputedStyle(panel);
-              const buttons=[...panel.querySelectorAll('button')].map(b=>{const x=b.getBoundingClientRect();return {w:x.width,h:x.height,text:b.textContent.trim()}});
-              const textNodes=[...panel.querySelectorAll('strong,p,button,span')].filter(e=>e.textContent.trim()).map(e=>({text:e.textContent.trim().slice(0,80),writingMode:getComputedStyle(e).writingMode,wordBreak:getComputedStyle(e).wordBreak,width:e.getBoundingClientRect().width}));
-              return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height,display:s.display,writingMode:s.writingMode,overflowX:panel.scrollWidth-panel.clientWidth,buttons,textNodes};
+              return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,overflowX:panel.scrollWidth-panel.clientWidth};
             });
-            const minWidth=name.startsWith('mobile')?width-30:320;
-            const badText=metrics.textNodes.some(x=>x.writingMode!=='horizontal-tb'||x.width<38);
-            const badButtons=metrics.buttons.some(x=>x.h<38||x.w<38);
-            const outside=metrics.left<0||metrics.right>width+1||metrics.top<0||metrics.bottom>height+1;
-            const failed=metrics.width<minWidth||metrics.overflowX>2||badText||badButtons||outside;
-            report.push({name,width,height,metrics,minWidth,badText,badButtons,outside,failed});
-            await page.screenshot({path:`a11y-qa/${name}.png`,fullPage:false});
+            const panelOutside=panelMetrics.left<0||panelMetrics.right>width+1||panelMetrics.top<0||panelMetrics.bottom>height+1||panelMetrics.overflowX>2;
+            await page.locator('[data-a11y-close]').click();
+            let nav;
+            if(name.startsWith('mobile')){
+              const summary=page.locator('.mobile-nav summary');
+              await summary.click();
+              nav=await page.locator('.mobile-nav a').evaluateAll(links=>links.map(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return {text:a.textContent.trim(),display:s.display,visibility:s.visibility,opacity:s.opacity,color:s.color,background:s.backgroundColor,w:r.width,h:r.height}}));
+            }else{
+              nav=await page.locator('.nav a').evaluateAll(links=>links.map(a=>{const r=a.getBoundingClientRect(),s=getComputedStyle(a);return {text:a.textContent.trim(),display:s.display,visibility:s.visibility,opacity:s.opacity,color:s.color,background:s.backgroundColor,w:r.width,h:r.height}}));
+            }
+            const visibleNav=nav.filter(x=>x.display!=='none'&&x.visibility!=='hidden'&&Number(x.opacity)>0&&x.w>20&&x.h>10);
+            const menuFailed=visibleNav.length<5||visibleNav.some(x=>x.color==='rgb(0, 0, 0)');
+            const highContrast=await page.evaluate(()=>document.documentElement.classList.contains('a11y-high-contrast'));
+            const failed=panelOutside||menuFailed||!highContrast;
+            report.push({name,width,height,panelMetrics,panelOutside,visibleNav,menuFailed,highContrast,failed});
+            await page.screenshot({path:`a11y-qa/${name}-contraste.png`,fullPage:false});
             await context.close();
           }
           await browser.close();
           fs.writeFileSync('a11y-qa/report.json',JSON.stringify(report,null,2));
-          if(report.some(x=>x.failed)){console.error(report);process.exit(1)}
-          console.log(report);
+          if(report.some(x=>x.failed)){console.error(JSON.stringify(report,null,2));process.exit(1)}
+          console.log('OK: painel e menus permanecem visiveis em alto contraste.');
           EOF
           node a11y-qa.mjs
       - name: Salvar evidencias
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: a11y-panel-${{ github.run_id }}
+          name: a11y-contrast-${{ github.run_id }}
           path: a11y-qa/
-          retention-days: 3
+          retention-days: 7

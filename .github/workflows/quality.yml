@@ -15,76 +15,91 @@ jobs:
     steps:
       - name: Baixar repositório
         uses: actions/checkout@v4
-
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-
       - name: Verificar sintaxe JavaScript
         run: |
           node --check site.js
+          node --check calendar-integration.js
           node --check brand-carousel.js
           node --check conversion-enhancements.js
           node --check accessibility-tools.js
           node --check privacy-consent.js
-
+          cp integrations/google-calendar/Code.gs /tmp/dorus-apps-script.js
+          node --check /tmp/dorus-apps-script.js
       - name: Verificar sintaxe Python
         run: |
           python -m py_compile scripts/check_site.py
+          python -m py_compile scripts/check_backend.py
+          python -m py_compile scripts/check_seo.py
+          python -m py_compile scripts/check_brand_consistency.py
           python -m py_compile scripts/enrich_meta.py
           python -m py_compile scripts/cache_bust.py
           python -m py_compile scripts/summarize_lighthouse.py
-
+      - name: Validar backend e regras da agenda
+        run: python scripts/check_backend.py
+      - name: Validar consistência do remap
+        run: python scripts/check_brand_consistency.py
+      - name: Validar favicons PNG
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import struct, zlib
+          expected={'favicon-48x48.png':(48,48),'favicon-192x192.png':(192,192)}
+          def validate_png(path,size):
+              data=Path(path).read_bytes()
+              if not data.startswith(b'\x89PNG\r\n\x1a\n'): raise SystemExit(f'{path}: assinatura PNG inválida.')
+              pos=8;width=height=None;idat=bytearray();saw_iend=False
+              while pos+12<=len(data):
+                  length=struct.unpack('>I',data[pos:pos+4])[0];kind=data[pos+4:pos+8];chunk=data[pos+8:pos+8+length];crc=struct.unpack('>I',data[pos+8+length:pos+12+length])[0]
+                  if zlib.crc32(kind+chunk)&0xffffffff!=crc: raise SystemExit(f'{path}: CRC inválido.')
+                  if kind==b'IHDR': width,height=struct.unpack('>II',chunk[:8])
+                  elif kind==b'IDAT': idat.extend(chunk)
+                  elif kind==b'IEND': saw_iend=True;break
+                  pos+=12+length
+              if (width,height)!=size: raise SystemExit(f'{path}: tamanho incorreto.')
+              if not idat or not saw_iend: raise SystemExit(f'{path}: PNG incompleto.')
+              zlib.decompress(bytes(idat))
+          for path,size in expected.items(): validate_png(path,size)
+          print('OK: favicons íntegros.')
+          PY
       - name: Validar identidade visual e logos locais
         shell: bash
         run: |
           set -euo pipefail
           test -s assets/dorus-logo-3d.webp || { echo 'Logo 3D ausente.'; exit 1; }
-          test ! -e assets/dorus-logo.webp || { echo 'Logo antiga duplicada voltou ao repositório.'; exit 1; }
-          if grep -R --include='*.html' -nE 'assets/dorus-logo\.webp|dorus-menu-digital' .; then
-            echo 'Foi encontrada referência à identidade visual antiga.'
-            exit 1
-          fi
-
+          test ! -e assets/dorus-logo.webp || { echo 'Logo antiga duplicada voltou.'; exit 1; }
+          if grep -R --include='*.html' -nE 'assets/dorus-logo\.webp|dorus-menu-digital' .; then echo 'Identidade visual antiga encontrada.'; exit 1; fi
           for marca in brastemp consul electrolux samsung lg continental atlas midea mueller philco panasonic ge-appliances; do
-            test -s "assets/marcas/${marca}.webp" || { echo "Logo ausente: ${marca}"; exit 1; }
+            test -s "assets/brands/${marca}.webp" || { echo "Logo ausente: ${marca}"; exit 1; }
           done
-          if grep -Eq 'upload\.wikimedia\.org|images\.seeklogo\.com' index.html; then
-            echo 'A Home voltou a depender de logos externas.'
-            exit 1
-          fi
-          echo 'OK: logo 3D atual, 12 marcas locais e sem dependências visuais antigas.'
-
+          if grep -Eq 'upload\.wikimedia\.org|images\.seeklogo\.com' index.html; then echo 'Home depende de logos externas.'; exit 1; fi
+          echo 'OK: identidade atual e 12 marcas locais.'
       - name: Proteger arquitetura responsiva da Home
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
           import re
-
-          layout = Path('layout.css').read_text(encoding='utf-8')
-
-          if re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*grid', layout, re.S | re.I):
-              raise SystemExit('layout.css não pode transformar o carrossel de avaliações em grid.')
-          if not re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*flex\s*!important', layout, re.S | re.I):
-              raise SystemExit('layout.css perdeu o layout flex das avaliações.')
-          if not re.search(r'\.container\s*\{[^}]*padding-inline\s*:\s*0\s*!important', layout, re.S | re.I):
-              raise SystemExit('layout.css perdeu a largura final dos containers.')
-          if 'max-height:850px' not in layout:
-              raise SystemExit('Home perdeu o breakpoint para notebooks com pouca altura.')
-          if not re.search(r'\.hero-media\s+picture>img\s*\{[^}]*object-fit\s*:\s*contain', layout, re.S | re.I):
-              raise SystemExit('Banner da Home perdeu o enquadramento completo.')
-          if '.logo-marquee' not in layout:
-              raise SystemExit('Estilos do carrossel de marcas não estão na camada final.')
-
-          print('OK: layout responsivo, banner, avaliações e carrossel de marcas protegidos.')
+          layout=Path('layout.css').read_text(encoding='utf-8')
+          if re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*grid',layout,re.S|re.I): raise SystemExit('Avaliações não podem virar grid.')
+          if not re.search(r'\.review-carousel\s*\{[^}]*display\s*:\s*flex\s*!important',layout,re.S|re.I): raise SystemExit('Layout flex das avaliações ausente.')
+          if not re.search(r'\.container\s*\{[^}]*padding-inline\s*:\s*0\s*!important',layout,re.S|re.I): raise SystemExit('Largura final dos containers ausente.')
+          if 'max-height:850px' not in layout: raise SystemExit('Breakpoint de notebook baixo ausente.')
+          if not re.search(r'\.hero-media\s+picture>img\s*\{[^}]*object-fit\s*:\s*contain',layout,re.S|re.I): raise SystemExit('Banner perdeu object-fit contain.')
+          if '.logo-marquee' not in layout: raise SystemExit('Estilos do carrossel de marcas ausentes.')
+          print('OK: layout responsivo protegido.')
           PY
-
       - name: Verificar HTML UX acessibilidade privacidade e segurança
         run: python scripts/check_site.py
+      - name: Preparar metadados como no deploy
+        run: python scripts/enrich_meta.py
+      - name: Validar SEO técnico sitemap canonicals e JSON-LD
+        run: python scripts/check_seo.py

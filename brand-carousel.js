@@ -149,3 +149,55 @@
     setTimeout(init,1200);
   }
 })();
+
+(function(){
+  'use strict';
+
+  var carousel=document.querySelector('.review-carousel');
+  if(!carousel) return;
+  var section=carousel.closest('.reviews-section');
+  var head=section&&section.querySelector('.section-head');
+  if(!head) return;
+
+  var controls=document.createElement('div');
+  controls.className='carousel-controls review-controls';
+  controls.setAttribute('aria-label','Navegação das avaliações');
+  controls.innerHTML='<button class="carousel-button" type="button" data-review-prev aria-label="Avaliação anterior">‹</button><button class="carousel-button" type="button" data-review-next aria-label="Próxima avaliação">›</button>';
+  head.appendChild(controls);
+
+  var prev=controls.querySelector('[data-review-prev]');
+  var next=controls.querySelector('[data-review-next]');
+
+  function step(){
+    var card=carousel.querySelector('.review-card');
+    if(!card) return carousel.clientWidth;
+    var gap=parseFloat(getComputedStyle(carousel).gap)||0;
+    return card.getBoundingClientRect().width+gap;
+  }
+
+  function maxScroll(){return Math.max(0,carousel.scrollWidth-carousel.clientWidth);}
+
+  function update(){
+    var max=maxScroll();
+    var hasOverflow=max>3;
+    controls.hidden=!hasOverflow;
+    prev.disabled=!hasOverflow||carousel.scrollLeft<=2;
+    next.disabled=!hasOverflow||carousel.scrollLeft>=max-2;
+    prev.setAttribute('aria-disabled',prev.disabled?'true':'false');
+    next.setAttribute('aria-disabled',next.disabled?'true':'false');
+  }
+
+  function move(direction){
+    carousel.scrollBy({left:direction*step(),behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+  }
+
+  prev.addEventListener('click',function(){move(-1);});
+  next.addEventListener('click',function(){move(1);});
+  carousel.addEventListener('scroll',function(){window.requestAnimationFrame(update);},{passive:true});
+  carousel.addEventListener('keydown',function(event){
+    if(event.key==='ArrowLeft'){event.preventDefault();move(-1);}
+    if(event.key==='ArrowRight'){event.preventDefault();move(1);}
+  });
+  window.addEventListener('resize',update,{passive:true});
+  update();
+})();

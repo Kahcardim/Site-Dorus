@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://kahcardim.github.io/Site-Dorus/sitemap.xml
+Sitemap: https://assistenciadorus.com.br/sitemap.xml

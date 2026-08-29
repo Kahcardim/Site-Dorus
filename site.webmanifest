@@ -1,16 +1,17 @@
 {
   "name": "D’orus Assistência Técnica",
   "short_name": "D’orus",
-  "start_url": "/Site-Dorus/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#0d3b8e",
   "icons": [
     {
-      "src": "/Site-Dorus/assets/dorus-logo-3d.webp",
-      "sizes": "any",
-      "type": "image/webp",
-      "purpose": "any"
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
