@@ -29,6 +29,15 @@
     });
   }
 
+  function ensureBrandCarousel(){
+    if(!document.querySelector('[data-logo-marquee]'))return;
+    if(document.querySelector('script[src*="brand-carousel.js"]'))return;
+    var extra=document.createElement('script');
+    extra.src=new URL('brand-carousel.js?v=20260829-homevisual',siteRoot).href;
+    extra.defer=true;
+    document.head.appendChild(extra);
+  }
+
   function currentService(){
     var path=window.location.pathname.replace(/\/+$/,'');
     return services.find(function(item){return path.endsWith('/servicos/'+item.slug);});
@@ -86,6 +95,7 @@
   }
 
   optimizeImages();
+  ensureBrandCarousel();
 
   var current=currentService();
   if(current){
