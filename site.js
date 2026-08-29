@@ -113,8 +113,32 @@
       var status = scheduleForm.querySelector('[data-schedule-status]');
       var calendarLink = scheduleForm.querySelector('[data-calendar-link]');
       var today = new Date();
-      var localToday = new Date(today.getTime() - today.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-      if (dateInput) dateInput.min = localToday;
+      var localTodayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      var maxScheduleDate = new Date(localTodayDate.getTime());
+      maxScheduleDate.setDate(maxScheduleDate.getDate() + 60);
+
+      function dateValue(date) {
+        var local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+        return local.toISOString().slice(0, 10);
+      }
+
+      function validateScheduleDate() {
+        if (!dateInput || !dateInput.value) return true;
+        var parts = dateInput.value.split('-').map(Number);
+        var selected = parts.length === 3 ? new Date(parts[0], parts[1] - 1, parts[2]) : null;
+        var message = '';
+        if (!selected || Number.isNaN(selected.getTime())) message = 'Escolha uma data válida.';
+        else if (selected.getDay() === 0) message = 'A D’orus não atende aos domingos. Escolha uma data de segunda a sábado.';
+        dateInput.setCustomValidity(message);
+        return !message;
+      }
+
+      if (dateInput) {
+        dateInput.min = dateValue(localTodayDate);
+        dateInput.max = dateValue(maxScheduleDate);
+        dateInput.addEventListener('change', validateScheduleDate);
+        dateInput.addEventListener('input', validateScheduleDate);
+      }
 
       function fieldValue(data, name) { return String(data.get(name) || '').trim(); }
       function displayDate(value) { var parts = value.split('-'); return parts.length === 3 ? parts[2] + '/' + parts[1] + '/' + parts[0] : value; }
@@ -126,6 +150,7 @@
 
       scheduleForm.addEventListener('submit', function (event) {
         event.preventDefault();
+        validateScheduleDate();
         if (!scheduleForm.reportValidity()) return;
         var data = new FormData(scheduleForm);
         var periodSelect = scheduleForm.querySelector('select[name="periodo"]');
