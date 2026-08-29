@@ -44,12 +44,8 @@ jobs:
         shell: bash
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 >/tmp/dorus-http.log 2>&1 &
-          echo $! > /tmp/dorus-http.pid
           for i in $(seq 1 20); do
-            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then
-              echo 'Site local pronto.'
-              exit 0
-            fi
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
             sleep 1
           done
           cat /tmp/dorus-http.log || true
@@ -66,185 +62,143 @@ jobs:
           const base='http://127.0.0.1:4173';
           const sitemap=fs.readFileSync('sitemap.xml','utf8');
           const paths=[...sitemap.matchAll(/<loc>https:\/\/assistenciadorus\.com\.br([^<]*)<\/loc>/g)]
-            .map(m=>m[1]||'/')
-            .map(p=>p.startsWith('/')?p:'/'+p);
+            .map(m=>m[1]||'/').map(p=>p.startsWith('/')?p:'/'+p);
           if(!paths.includes('/')) paths.unshift('/');
           const pages=[...new Set(paths)];
-
           const sizes=[
-            ['mobile-360',360,800],
-            ['mobile-390',390,844],
-            ['tablet-768',768,1024],
-            ['tablet-landscape-1024',1024,768],
-            ['laptop-1280',1280,720],
-            ['desktop-1366',1366,768],
-            ['desktop-1920',1920,1080]
+            ['mobile-360',360,800],['mobile-390',390,844],['tablet-768',768,1024],
+            ['tablet-landscape-1024',1024,768],['laptop-1280',1280,720],
+            ['desktop-1366',1366,768],['desktop-1920',1920,1080]
           ];
-          const screenshotSizes=new Set(['mobile-390','tablet-768','desktop-1366']);
+          const screenshotSizes=new Set(['mobile-390','tablet-768','desktop-1366','desktop-1920']);
           const browser=await chromium.launch({headless:true});
-          const report=[];
-          const failures=[];
-          const externalSignals=[];
+          const report=[],failures=[],externalSignals=[];
 
-          function shortPath(path){
-            if(path==='/') return 'home';
-            return path.replace(/^\//,'').replace(/\/$/,'').replace(/\//g,'--')||'home';
-          }
+          const shortPath=p=>p==='/'?'home':p.replace(/^\//,'').replace(/\/$/,'').replace(/\//g,'--');
 
-          async function inspect(page){
-            return page.evaluate(()=>{
-              const visible=e=>{
-                if(!e) return false;
-                const s=getComputedStyle(e),r=e.getBoundingClientRect();
-                return s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)!==0&&r.width>0&&r.height>0;
-              };
-              const rect=e=>{const r=e.getBoundingClientRect();return{left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
+          async function inspect(page,path){
+            return page.evaluate(({path})=>{
+              const visible=e=>{if(!e)return false;const s=getComputedStyle(e),r=e.getBoundingClientRect();return s.display!=='none'&&s.visibility!=='hidden'&&+s.opacity!==0&&r.width>0&&r.height>0};
               const vw=innerWidth;
               const docWidth=Math.max(document.documentElement.scrollWidth,document.body.scrollWidth);
               const overflowX=Math.max(0,Math.round(docWidth-vw));
+              const intentional=e=>!!e.closest('.review-carousel,.logo-marquee');
 
               const offscreen=[];
-              const boxSelectors=[
-                'main .container','main .card','main .review-card','main .brand-logo','main .trust-card','main .step',
-                'main .tip-card','main .service-card','main .contact-item','main .form','main .schedule-box',
-                'main .content-grid > *','main .values > *','main .cards > *','main .service-grid > *'
-              ].join(',');
-              document.querySelectorAll(boxSelectors).forEach(e=>{
-                if(!visible(e)) return;
-                const r=rect(e);
-                if(r.left < -1 || r.right > vw+1) offscreen.push({tag:e.tagName,cls:e.className,left:Math.round(r.left),right:Math.round(r.right),vw});
+              document.querySelectorAll('main .container,main .card,main .trust-card,main .step,main .tip-card,main .service-card,main .contact-item,main .form,main .schedule-box,main .content-grid > *,main .values > *,main .cards > *,main .service-grid > *').forEach(e=>{
+                if(!visible(e)||intentional(e))return;
+                const r=e.getBoundingClientRect();
+                if(r.left<-1||r.right>vw+1)offscreen.push({tag:e.tagName,cls:e.className,left:Math.round(r.left),right:Math.round(r.right)});
               });
 
               const clippedText=[];
               document.querySelectorAll('main h1,main h2,main h3,main h4,main p,main a,main strong,main small,main label,main summary,main button').forEach(e=>{
-                if(!visible(e)||!e.textContent.trim()) return;
-                const s=getComputedStyle(e);
-                const clips=/(hidden|clip)/.test(`${s.overflow} ${s.overflowX} ${s.overflowY}`);
-                if(clips&&(e.scrollWidth>e.clientWidth+2||e.scrollHeight>e.clientHeight+2)){
-                  clippedText.push(e.textContent.trim().replace(/\s+/g,' ').slice(0,100));
-                }
+                if(!visible(e)||!e.textContent.trim())return;
+                const s=getComputedStyle(e),clips=/(hidden|clip)/.test(`${s.overflow} ${s.overflowX} ${s.overflowY}`);
+                if(clips&&(e.scrollWidth>e.clientWidth+2||e.scrollHeight>e.clientHeight+2))clippedText.push(e.textContent.trim().replace(/\s+/g,' ').slice(0,90));
               });
 
-              const brokenImages=[...document.images]
-                .filter(i=>visible(i)&&i.complete&&i.naturalWidth===0)
-                .map(i=>i.currentSrc||i.src);
-
-              const horizontalScroll=[];
-              document.querySelectorAll('.review-carousel,.logo-marquee,.content-grid,.values,.cards,.trust-grid,.steps,.service-grid,.contact-grid,.schedule-layout').forEach(e=>{
-                if(!visible(e)) return;
-                if(e.scrollWidth>e.clientWidth+2) horizontalScroll.push({cls:e.className,client:e.clientWidth,scroll:e.scrollWidth});
+              const brokenImages=[...document.images].filter(i=>visible(i)&&i.complete&&i.naturalWidth===0).map(i=>i.currentSrc||i.src);
+              const accidentalScroll=[];
+              document.querySelectorAll('.content-grid,.values,.cards,.trust-grid,.steps,.service-grid,.contact-grid,.schedule-layout').forEach(e=>{
+                if(visible(e)&&e.scrollWidth>e.clientWidth+2)accidentalScroll.push({cls:e.className,client:e.clientWidth,scroll:e.scrollWidth});
               });
-
-              function partialChildren(parentSelector,childSelector){
-                const parent=document.querySelector(parentSelector);
-                if(!visible(parent)) return [];
-                const pr=parent.getBoundingClientRect();
-                return [...parent.querySelectorAll(childSelector)].filter(visible).map(e=>{
-                  const r=e.getBoundingClientRect();
-                  return {text:(e.textContent||'').trim().replace(/\s+/g,' ').slice(0,60),left:Math.round(r.left),right:Math.round(r.right),parentLeft:Math.round(pr.left),parentRight:Math.round(pr.right)};
-                }).filter(x=>x.left<pr.left-1||x.right>pr.right+1);
-              }
-
-              const partialReviews=partialChildren('.review-carousel','.review-card');
-              const partialBrands=partialChildren('.logo-marquee','.brand-logo');
 
               const interactiveOffscreen=[];
               document.querySelectorAll('main button,main input,main select,main textarea,main .button,.mobile-nav summary').forEach(e=>{
-                if(!visible(e)) return;
-                const r=e.getBoundingClientRect();
-                if(r.left < -1 || r.right > vw+1) interactiveOffscreen.push({tag:e.tagName,cls:e.className,left:Math.round(r.left),right:Math.round(r.right)});
+                if(!visible(e))return;const r=e.getBoundingClientRect();if(r.left<-1||r.right>vw+1)interactiveOffscreen.push({tag:e.tagName,cls:e.className});
               });
 
               const tinyTargets=[];
-              if(vw<=480){
-                document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary,[data-a11y-launcher]').forEach(e=>{
-                  if(!visible(e)) return;
-                  const r=e.getBoundingClientRect();
-                  if(r.width<40||r.height<40) tinyTargets.push({tag:e.tagName,cls:e.className,w:Math.round(r.width),h:Math.round(r.height)});
-                });
+              if(vw<=480)document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary,[data-a11y-launcher]').forEach(e=>{
+                if(!visible(e))return;const r=e.getBoundingClientRect();if(r.width<40||r.height<40)tinyTargets.push({tag:e.tagName,cls:e.className,w:Math.round(r.width),h:Math.round(r.height)});
+              });
+
+              let brandCarousel=null,reviewPresentation=null;
+              if(path==='/'){
+                const shell=document.querySelector('.logo-marquee-shell');
+                const marquee=document.querySelector('[data-logo-marquee]');
+                const track=document.querySelector('.logo-track');
+                const toggle=document.querySelector('[data-logo-toggle]');
+                const firstSet=document.querySelector('.logo-set:not([aria-hidden="true"])');
+                const brands=firstSet?[...firstSet.querySelectorAll('.brand-logo')].filter(visible):[];
+                brandCarousel={
+                  shell:visible(shell),marquee:visible(marquee),track:visible(track),toggle:visible(toggle),
+                  brandCount:brands.length,
+                  scrollable:!!marquee&&marquee.scrollWidth>marquee.clientWidth+10,
+                  flexTrack:!!track&&getComputedStyle(track).display==='flex',
+                  shellWithinViewport:!!shell&&shell.getBoundingClientRect().left>=-1&&shell.getBoundingClientRect().right<=vw+1
+                };
+
+                const reviews=document.querySelector('.review-carousel');
+                const reviewCards=reviews?[...reviews.querySelectorAll('.review-card')].filter(visible):[];
+                const rr=reviews?.getBoundingClientRect();
+                const fullyVisible=reviewCards.filter(c=>{const r=c.getBoundingClientRect();return r.right>rr.left&&r.left<rr.right&&r.left>=rr.left-1&&r.right<=rr.right+1}).length;
+                reviewPresentation={exists:visible(reviews),count:reviewCards.length,fullyVisible,withinViewport:!!rr&&rr.left>=-1&&rr.right<=vw+1};
               }
 
-              const h1s=[...document.querySelectorAll('main h1')].filter(visible).length;
-              const header=visible(document.querySelector('.header'));
-              const footer=visible(document.querySelector('.footer'));
-              const main=visible(document.querySelector('main'));
-              const reviewCount=[...document.querySelectorAll('.review-card')].filter(visible).length;
-              const brandCount=[...document.querySelectorAll('.brand-logo')].filter(visible).length;
-
-              return {overflowX,offscreen,clippedText,brokenImages,horizontalScroll,partialReviews,partialBrands,interactiveOffscreen,tinyTargets,h1s,header,footer,main,reviewCount,brandCount};
-            });
+              return {
+                overflowX,offscreen,clippedText,brokenImages,accidentalScroll,interactiveOffscreen,tinyTargets,
+                h1s:[...document.querySelectorAll('main h1')].filter(visible).length,
+                header:visible(document.querySelector('.header')),footer:visible(document.querySelector('.footer')),main:visible(document.querySelector('main')),
+                brandCarousel,reviewPresentation
+              };
+            },{path});
           }
 
           for(const [size,w,h] of sizes){
             const context=await browser.newContext({viewport:{width:w,height:h}});
             for(const path of pages){
               const page=await context.newPage();
-              const runtime=[];
-              const externalRuntime=[];
+              const runtime=[],externalRuntime=[];
               page.on('pageerror',e=>runtime.push(`pageerror: ${e.message}`));
               page.on('console',m=>{
-                if(m.type()!=='error') return;
-                const text=m.text();
-                // A ponte do Google Apps Script é um backend externo já monitorado
-                // separadamente. Um 403 nela não pode mascarar a aprovação visual.
-                if(path==='/agendamento/'&&/403/.test(text)){
-                  externalRuntime.push(`console: ${text}`);
-                  return;
-                }
-                runtime.push(`console: ${text}`);
+                if(m.type()!=='error')return;const text=m.text();
+                if(path==='/agendamento/'&&/403/.test(text)){externalRuntime.push(text);return;}
+                runtime.push(text);
               });
               let status=0;
               try{
-                const res=await page.goto(base+path+'?realux='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});
-                status=res?.status()||0;
-                await page.waitForTimeout(700);
-                const essential=page.locator('[data-cookie-essential]');
-                if(await essential.isVisible().catch(()=>false)) await essential.click();
-                await page.waitForTimeout(200);
+                const res=await page.goto(base+path+'?realux='+Date.now(),{waitUntil:'domcontentloaded',timeout:20000});status=res?.status()||0;
+                await page.waitForTimeout(800);
+                const essential=page.locator('[data-cookie-essential]');if(await essential.isVisible().catch(()=>false))await essential.click();
+                if(path==='/'){
+                  const toggle=page.locator('[data-logo-toggle]');if(await toggle.isVisible().catch(()=>false))await toggle.click();
+                }
+                await page.waitForTimeout(150);
               }catch(e){runtime.push(`navigation: ${e.message}`)}
 
-              const metrics=await inspect(page);
-              const reasons=[];
-              if(status!==200) reasons.push(`HTTP ${status}`);
-              if(runtime.length) reasons.push(`runtime ${runtime.join(' | ')}`);
-              if(metrics.overflowX>1) reasons.push(`overflow horizontal ${metrics.overflowX}px`);
-              if(metrics.offscreen.length) reasons.push(`blocos fora da viewport: ${metrics.offscreen.length}`);
-              if(metrics.clippedText.length) reasons.push(`texto cortado: ${metrics.clippedText.length}`);
-              if(metrics.brokenImages.length) reasons.push(`imagens quebradas: ${metrics.brokenImages.length}`);
-              if(metrics.horizontalScroll.length) reasons.push(`área principal exige rolagem horizontal: ${metrics.horizontalScroll.length}`);
-              if(metrics.partialReviews.length) reasons.push(`avaliações parcialmente cortadas: ${metrics.partialReviews.length}`);
-              if(metrics.partialBrands.length) reasons.push(`marcas parcialmente cortadas: ${metrics.partialBrands.length}`);
-              if(metrics.interactiveOffscreen.length) reasons.push(`controles fora da viewport: ${metrics.interactiveOffscreen.length}`);
-              if(metrics.tinyTargets.length) reasons.push(`alvos de toque menores que 40px: ${metrics.tinyTargets.length}`);
-              if(metrics.h1s!==1) reasons.push(`H1 visível esperado 1, encontrado ${metrics.h1s}`);
-              if(!metrics.header||!metrics.footer||!metrics.main) reasons.push('estrutura principal invisível');
-
-              const row={severity:'HIGH',size,width:w,height:h,path,status,runtime,externalRuntime,...metrics,failed:reasons.length>0,reasons};
-              report.push(row);
-              if(row.failed) failures.push(row);
-              if(externalRuntime.length) externalSignals.push({size,path,externalRuntime});
-
-              if(screenshotSizes.has(size)){
-                await page.screenshot({path:`real-usability/screenshots/${size}-${shortPath(path)}.png`,fullPage:true});
+              const m=await inspect(page,path),reasons=[];
+              if(status!==200)reasons.push(`HTTP ${status}`);
+              if(runtime.length)reasons.push(`runtime ${runtime.join(' | ')}`);
+              if(m.overflowX>1)reasons.push(`overflow horizontal ${m.overflowX}px`);
+              if(m.offscreen.length)reasons.push(`blocos fora da viewport: ${m.offscreen.length}`);
+              if(m.clippedText.length)reasons.push(`texto cortado: ${m.clippedText.length}`);
+              if(m.brokenImages.length)reasons.push(`imagens quebradas: ${m.brokenImages.length}`);
+              if(m.accidentalScroll.length)reasons.push(`rolagem horizontal acidental: ${m.accidentalScroll.length}`);
+              if(m.interactiveOffscreen.length)reasons.push(`controles fora da viewport: ${m.interactiveOffscreen.length}`);
+              if(m.tinyTargets.length)reasons.push(`alvos de toque menores que 40px: ${m.tinyTargets.length}`);
+              if(m.h1s!==1)reasons.push(`H1 visível esperado 1, encontrado ${m.h1s}`);
+              if(!m.header||!m.footer||!m.main)reasons.push('estrutura principal invisível');
+              if(path==='/'){
+                const b=m.brandCarousel;
+                if(!b?.shell||!b?.marquee||!b?.track||!b?.toggle||b.brandCount<8||!b.scrollable||!b.flexTrack||!b.shellWithinViewport)reasons.push('carrossel de marcas ausente, substituído ou fora do padrão');
+                const r=m.reviewPresentation;
+                if(!r?.exists||r.count<3||r.fullyVisible<1||!r.withinViewport)reasons.push('avaliações sem apresentação utilizável');
               }
 
-              // Valida o mesmo aumento máximo de texto oferecido pela ferramenta (130%).
+              const row={severity:'HIGH',size,width:w,height:h,path,status,runtime,externalRuntime,...m,failed:reasons.length>0,reasons};report.push(row);if(row.failed)failures.push(row);if(externalRuntime.length)externalSignals.push({size,path,externalRuntime});
+              if(screenshotSizes.has(size))await page.screenshot({path:`real-usability/screenshots/${size}-${shortPath(path)}.png`,fullPage:true});
+
               if(size==='mobile-390'||size==='desktop-1366'){
-                await page.evaluate(()=>document.documentElement.style.setProperty('--user-font-scale','1.3'));
-                await page.waitForTimeout(100);
-                const large=await inspect(page);
-                const largeReasons=[];
-                if(large.overflowX>1) largeReasons.push(`overflow com fonte ampliada ${large.overflowX}px`);
-                if(large.offscreen.length) largeReasons.push(`blocos fora da viewport com fonte ampliada: ${large.offscreen.length}`);
-                if(large.clippedText.length) largeReasons.push(`texto cortado com fonte ampliada: ${large.clippedText.length}`);
-                if(large.horizontalScroll.length) largeReasons.push(`rolagem horizontal com fonte ampliada: ${large.horizontalScroll.length}`);
-                if(large.partialReviews.length) largeReasons.push(`avaliações cortadas com fonte ampliada: ${large.partialReviews.length}`);
-                if(large.partialBrands.length) largeReasons.push(`marcas cortadas com fonte ampliada: ${large.partialBrands.length}`);
-                const largeRow={severity:'HIGH',mode:'130-percent-text',size,width:w,height:h,path,...large,failed:largeReasons.length>0,reasons:largeReasons};
-                report.push(largeRow);
-                if(largeRow.failed) failures.push(largeRow);
+                await page.evaluate(()=>document.documentElement.style.setProperty('--user-font-scale','1.3'));await page.waitForTimeout(100);
+                const large=await inspect(page,path),largeReasons=[];
+                if(large.overflowX>1)largeReasons.push(`overflow com fonte ampliada ${large.overflowX}px`);
+                if(large.offscreen.length)largeReasons.push(`blocos fora da viewport com fonte ampliada: ${large.offscreen.length}`);
+                if(large.clippedText.length)largeReasons.push(`texto cortado com fonte ampliada: ${large.clippedText.length}`);
+                if(large.accidentalScroll.length)largeReasons.push(`rolagem horizontal acidental com fonte ampliada: ${large.accidentalScroll.length}`);
+                const lr={severity:'HIGH',mode:'130-percent-text',size,width:w,height:h,path,...large,failed:largeReasons.length>0,reasons:largeReasons};report.push(lr);if(lr.failed)failures.push(lr);
               }
-
               await page.close();
             }
             await context.close();
@@ -254,33 +208,15 @@ jobs:
           fs.writeFileSync('real-usability/report.json',JSON.stringify(report,null,2));
           fs.writeFileSync('real-usability/high-severity-failures.json',JSON.stringify(failures,null,2));
           fs.writeFileSync('real-usability/external-backend-signals.json',JSON.stringify(externalSignals,null,2));
-
-          const summary=[
-            '# QA de usabilidade real — severidade alta',
-            '',
-            `Páginas no sitemap: ${pages.length}`,
-            `Cenários executados: ${report.length}`,
-            `Falhas HIGH de usabilidade: ${failures.length}`,
-            `Sinais externos de backend: ${externalSignals.length}`,
-            '',
-            'Critérios principais: conteúdo inteiro na viewport, zero rolagem horizontal em áreas principais, avaliações e marcas completas, texto sem corte, imagens válidas, controles acessíveis e fonte em 130% sem quebra.'
-          ].join('\n');
-          fs.writeFileSync('real-usability/summary.md',summary);
-          console.log(summary);
-          if(externalSignals.length) console.warn(`Backend externo sinalizado em ${externalSignals.length} cenário(s); não altera o resultado visual.`);
-          if(failures.length){
-            console.error('\nFalhas HIGH:');
-            failures.slice(0,40).forEach(f=>console.error(`${f.size} ${f.path}: ${f.reasons.join('; ')}`));
-            process.exit(1);
-          }
+          const summary=`# QA de usabilidade real — severidade alta\n\nPáginas no sitemap: ${pages.length}\nCenários executados: ${report.length}\nFalhas HIGH: ${failures.length}\nSinais externos de backend: ${externalSignals.length}\n\nCarrosséis intencionais são aceitos; overflow acidental, componentes substituídos e conteúdo quebrado continuam reprovando.`;
+          fs.writeFileSync('real-usability/summary.md',summary);console.log(summary);
+          if(failures.length){failures.slice(0,40).forEach(f=>console.error(`${f.size} ${f.path}: ${f.reasons.join('; ')}`));process.exit(1);}
           EOF
           node real-usability.mjs
 
       - name: Publicar resumo no job
         if: always()
-        shell: bash
-        run: |
-          if [ -f real-usability/summary.md ]; then cat real-usability/summary.md >> "$GITHUB_STEP_SUMMARY"; fi
+        run: cat real-usability/summary.md >> "$GITHUB_STEP_SUMMARY" || true
 
       - name: Salvar evidências visuais
         if: always()
