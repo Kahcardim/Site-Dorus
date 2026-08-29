@@ -101,7 +101,8 @@ jobs:
           CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
           export CHROME_PATH
           for tentativa in {1..18}; do
-            curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}" | grep -q "?v=${GITHUB_SHA:0:12}" && break
+            HTML="$(curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}")"
+            grep -q "?v=${GITHUB_SHA:0:12}" <<< "$HTML" && break
             test "$tentativa" -lt 18 || { echo 'A revisao publicada nao foi confirmada.'; exit 1; }
             sleep 5
           done
