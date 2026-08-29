@@ -1,7 +1,7 @@
 /*
  * D’orus — Real usability guardrails
- * Severidade alta: nenhum conteúdo principal pode depender de corte horizontal.
- * Este arquivo carrega após layout.css em todas as páginas via site.js.
+ * Severidade alta: conteúdo principal não pode depender de cortes acidentais.
+ * Carrosséis explícitos são tratados como componentes interativos, não como overflow de layout.
  */
 
 html{
@@ -26,7 +26,6 @@ section,
   overflow:visible!important;
 }
 
-/* Conteúdo textual e grids nunca podem ser mascarados por overflow lateral. */
 .content-grid,
 .contact-grid,
 .schedule-layout,
@@ -66,11 +65,30 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/*
- * AVALIAÇÕES GOOGLE
- * Não usamos mais uma faixa horizontal que esconde cartões nas bordas.
- * Todos os depoimentos ficam inteiros e legíveis em qualquer viewport.
- */
+/* Títulos nunca podem partir uma palavra no meio. */
+h1,h2,h3,h4{
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+}
+
+/* Hero: mantém presença sem dominar a primeira dobra. */
+.hero-copy h1{
+  max-width:620px!important;
+  font-size:clamp(2.35rem,3.15vw,3.15rem)!important;
+  line-height:1.04!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+  hyphens:none!important;
+}
+
+@media(min-width:1180px){
+  .hero-grid{
+    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;
+  }
+}
+
+/* AVALIAÇÕES GOOGLE: cards sempre inteiros, sem corte lateral. */
 .reviews-section{
   overflow:visible!important;
 }
@@ -108,57 +126,57 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   display:none!important;
 }
 
-/*
- * MARCAS
- * Em vez de cards parcialmente escondidos, apresenta um grid real.
- * O conjunto duplicado do marquee fica oculto visualmente.
- */
+/* MARCAS: carrossel horizontal intencional e funcional. */
 .brands-section{
-  overflow:visible!important;
+  overflow:hidden!important;
 }
 .brands-section .section-head{
-  align-items:flex-end!important;
+  align-items:center!important;
 }
 .logo-carousel-tools{
-  display:none!important;
+  display:flex!important;
+  flex:0 0 auto!important;
 }
-.logo-marquee-shell,
+.logo-marquee-shell{
+  position:relative!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+}
 .logo-marquee{
   width:100%!important;
   max-width:100%!important;
-  overflow:visible!important;
-  padding:0!important;
-  cursor:default!important;
-  touch-action:auto!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  padding:10px 4px 18px!important;
+  cursor:grab!important;
+  touch-action:pan-x pan-y!important;
+  overscroll-behavior-inline:contain!important;
+  scrollbar-width:none!important;
 }
-.logo-marquee-shell::before,
-.logo-marquee-shell::after{
+.logo-marquee::-webkit-scrollbar{
   display:none!important;
 }
 .logo-track{
-  display:block!important;
-  width:100%!important;
-  max-width:100%!important;
-  transform:none!important;
-  will-change:auto!important;
+  display:flex!important;
+  width:max-content!important;
+  max-width:none!important;
+  will-change:transform!important;
 }
-.logo-set{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  width:100%!important;
-  max-width:100%!important;
-  gap:14px!important;
-  padding:0!important;
-}
+.logo-set,
 .logo-set[aria-hidden="true"]{
-  display:none!important;
+  display:flex!important;
+  width:max-content!important;
+  max-width:none!important;
+  gap:18px!important;
+  padding-right:18px!important;
 }
 .brand-logo{
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
+  flex:0 0 190px!important;
+  width:190px!important;
+  max-width:none!important;
+  min-width:190px!important;
   height:104px!important;
-  flex:none!important;
 }
 
 /* Páginas internas: quebra antes de o conteúdo ficar estreito demais. */
@@ -167,7 +185,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   gap:clamp(28px,4vw,52px)!important;
 }
 
-/* Cards nunca recebem altura fixa que corte texto em zoom ou fonte aumentada. */
 .card,
 .step,
 .trust-card,
@@ -182,7 +199,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-height:none!important;
 }
 
-/* Inputs e CTAs não ultrapassam a coluna. */
 .form,
 .form input,
 .form select,
@@ -194,7 +210,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/* Responsividade conservadora: prioriza leitura e toque em vez de densidade. */
 @media(max-width:1050px){
   .content-grid{
     grid-template-columns:1fr!important;
@@ -203,8 +218,10 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   .review-carousel{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
-  .logo-set{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  .brand-logo{
+    flex-basis:172px!important;
+    width:172px!important;
+    min-width:172px!important;
   }
 }
 
@@ -214,40 +231,54 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
     gap:14px!important;
     padding-inline:0!important;
   }
-  .logo-set{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:12px!important;
-  }
-  .brand-logo{
-    height:96px!important;
-  }
   .section-head{
     align-items:flex-start!important;
+  }
+  .brands-section .section-head{
+    align-items:flex-start!important;
+  }
+  .brand-logo{
+    flex-basis:min(160px,44vw)!important;
+    width:min(160px,44vw)!important;
+    min-width:min(160px,44vw)!important;
+    height:96px!important;
+  }
+  .logo-set,
+  .logo-set[aria-hidden="true"]{
+    gap:12px!important;
+    padding-right:12px!important;
+  }
+}
+
+@media(max-width:520px){
+  .hero-copy h1{
+    font-size:clamp(2rem,9vw,2.4rem)!important;
+    line-height:1.06!important;
+    max-width:100%!important;
   }
 }
 
 @media(max-width:480px){
-  .logo-set{
-    grid-template-columns:1fr 1fr!important;
-    gap:10px!important;
-  }
   .brand-logo{
+    flex-basis:min(148px,44vw)!important;
+    width:min(148px,44vw)!important;
+    min-width:min(148px,44vw)!important;
     height:90px!important;
     padding:14px!important;
+  }
+  .logo-set,
+  .logo-set[aria-hidden="true"]{
+    gap:10px!important;
+    padding-right:10px!important;
   }
   .review-card{
     padding:20px!important;
   }
 }
 
-/* Alto contraste e fonte ampliada continuam obedecendo às mesmas garantias. */
 html.a11y-large-text .review-carousel,
 html.a11y-larger-text .review-carousel{
   grid-template-columns:1fr!important;
-}
-html.a11y-large-text .logo-set,
-html.a11y-larger-text .logo-set{
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
 }
 
 @media(prefers-reduced-motion:reduce){
