@@ -3,10 +3,11 @@ const CALENDAR_ID =
 
 const TIMEZONE = 'America/Sao_Paulo';
 const MAX_BOOKINGS_PER_SLOT = 2;
+const BRIDGE_SESSION_TTL_SECONDS = 600;
+const DUPLICATE_REQUEST_TTL_SECONDS = 600;
 const ALLOWED_ORIGINS = [
   'https://assistenciadorus.com.br',
-  'https://www.assistenciadorus.com.br',
-  'https://kahcardim.github.io'
+  'https://www.assistenciadorus.com.br'
 ];
 
 function doGet(e) {
@@ -27,31 +28,30 @@ function doGet(e) {
       calendar: 'Agendamento'
     });
   } catch (error) {
-    return jsonResponse({ ok: false, error: error.message });
+    return jsonResponse({ ok: false, error: safeErrorMessage(error) });
   }
 }
 
-function doPost(e) {
-  try {
-    const data = JSON.parse((e && e.postData && e.postData.contents) || '{}');
-    if (data.action !== 'create') {
-      return jsonResponse({ ok: false, error: 'Ação inválida' });
-    }
-    return jsonResponse(createAppointment(data));
-  } catch (error) {
-    return jsonResponse({ ok: false, error: error.message });
-  }
+// O site usa exclusivamente a ponte HtmlService + google.script.run.
+// O endpoint POST antigo não é necessário e não deve criar eventos diretamente.
+function doPost() {
+  return jsonResponse({
+    ok: false,
+    error: 'Envio direto desativado. Use o formulário oficial da D’orus.'
+  });
 }
 
 function bridgePage() {
   const origins = JSON.stringify(ALLOWED_ORIGINS);
+  const bridgeSession = issueBridgeSession();
   const html = `<!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><title>Dorus Agenda Bridge</title></head>
+<head><meta charset="utf-8"><meta name="robots" content="noindex,nofollow"><title>Dorus Agenda Bridge</title></head>
 <body>
 <script>
 (function () {
   const allowedOrigins = new Set(${origins});
+  const bridgeSession = ${JSON.stringify(bridgeSession)};
 
   function reply(target, origin, requestId, ok, data, error) {
     target.postMessage({
@@ -64,6 +64,7 @@ function bridgePage() {
   }
 
   window.addEventListener('message', function (event) {
+    if (event.source !== window.parent) return;
     if (!allowedOrigins.has(event.origin)) return;
     const message = event.data || {};
     if (message.source !== 'dorus-site' || !message.requestId) return;
@@ -79,7 +80,7 @@ function bridgePage() {
       google.script.run
         .withSuccessHandler(success)
         .withFailureHandler(failure)
-        .getAvailabilityClient(message.payload || {});
+        .getAvailabilityClient(message.payload || {}, bridgeSession);
       return;
     }
 
@@ -87,7 +88,7 @@ function bridgePage() {
       google.script.run
         .withSuccessHandler(success)
         .withFailureHandler(failure)
-        .createAppointmentClient(message.payload || {});
+        .createAppointmentClient(message.payload || {}, bridgeSession);
       return;
     }
 
@@ -108,11 +109,26 @@ function bridgePage() {
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
-function getAvailabilityClient(payload) {
+function issueBridgeSession() {
+  const token = Utilities.getUuid() + Utilities.getUuid();
+  CacheService.getScriptCache().put('bridge:' + token, 'valid', BRIDGE_SESSION_TTL_SECONDS);
+  return token;
+}
+
+function validateBridgeSession(token) {
+  const normalized = String(token || '').trim();
+  if (!normalized || CacheService.getScriptCache().get('bridge:' + normalized) !== 'valid') {
+    throw new Error('Sessão da agenda inválida ou expirada. Recarregue a página e tente novamente.');
+  }
+}
+
+function getAvailabilityClient(payload, bridgeSession) {
+  validateBridgeSession(bridgeSession);
   return getAvailabilityByDate(String((payload && payload.date) || ''));
 }
 
-function createAppointmentClient(data) {
+function createAppointmentClient(data, bridgeSession) {
+  validateBridgeSession(bridgeSession);
   return createAppointment(data || {});
 }
 
@@ -138,10 +154,29 @@ function createAppointment(data) {
   const slot = getSlot(data.date, data.time);
   if (!slot) throw new Error('Horário inválido.');
 
+  const duplicateKey = appointmentFingerprint(data);
+  const cache = CacheService.getScriptCache();
+  if (cache.get(duplicateKey)) {
+    return {
+      ok: false,
+      duplicate: true,
+      error: 'Esta solicitação já foi recebida. Aguarde a confirmação pelo WhatsApp.'
+    };
+  }
+
   const lock = LockService.getScriptLock();
   lock.waitLock(5000);
 
   try {
+    // Repete a validação dentro do lock para evitar duas criações simultâneas.
+    if (cache.get(duplicateKey)) {
+      return {
+        ok: false,
+        duplicate: true,
+        error: 'Esta solicitação já foi recebida. Aguarde a confirmação pelo WhatsApp.'
+      };
+    }
+
     const conflicts = calendar.getEvents(slot.start, slot.end);
     if (conflicts.length >= MAX_BOOKINGS_PER_SLOT) {
       return {
@@ -171,6 +206,7 @@ function createAppointment(data) {
       location: location
     });
     event.setTransparency(CalendarApp.EventTransparency.OPAQUE);
+    cache.put(duplicateKey, event.getId() || 'created', DUPLICATE_REQUEST_TTL_SECONDS);
 
     return {
       ok: true,
@@ -182,6 +218,14 @@ function createAppointment(data) {
   } finally {
     lock.releaseLock();
   }
+}
+
+function appointmentFingerprint(data) {
+  const phone = String(data.phone || '').replace(/\D/g, '').slice(-11);
+  const raw = [phone, data.date, data.time, sanitize(data.equipment), sanitize(data.name)].join('|').toLowerCase();
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw, Utilities.Charset.UTF_8);
+  const hex = digest.map(byte => ('0' + ((byte + 256) % 256).toString(16)).slice(-2)).join('');
+  return 'appointment:' + hex;
 }
 
 function generateSlots(date) {
@@ -232,13 +276,23 @@ function validateRequired(data) {
     if (!String(data[field] || '').trim()) throw new Error('Campo obrigatório ausente: ' + field);
   });
 
+  const phoneDigits = String(data.phone || '').replace(/\D/g, '');
   if (String(data.name).length > 100) throw new Error('Nome inválido.');
-  if (String(data.phone).length > 30) throw new Error('Telefone inválido.');
+  if (phoneDigits.length < 10 || phoneDigits.length > 13) throw new Error('Telefone inválido.');
+  if (String(data.neighborhood).length > 120) throw new Error('Bairro inválido.');
+  if (String(data.address).length > 250) throw new Error('Endereço inválido.');
+  if (String(data.equipment).length > 100) throw new Error('Equipamento inválido.');
+  if (String(data.brand || '').length > 120) throw new Error('Marca/modelo inválido.');
   if (String(data.problem).length > 1500) throw new Error('Descrição muito longa.');
 }
 
 function sanitize(value) {
   return String(value || '').replace(/[<>]/g, '').trim();
+}
+
+function safeErrorMessage(error) {
+  const message = String((error && error.message) || 'Não foi possível processar a solicitação.');
+  return message.slice(0, 300);
 }
 
 function jsonResponse(object) {
