@@ -5,285 +5,37 @@
  * Carrosséis explícitos são tratados como componentes interativos, não como overflow de layout.
  */
 
-html{
-  overflow-x:hidden!important;
-}
-body{
-  max-width:100%!important;
-  overflow-x:hidden!important;
-}
-
-main,
-section,
-.internal,
-.section,
-.hero,
-.container{
-  min-width:0!important;
-  max-width:100%;
-}
-
-.container{
-  overflow:visible!important;
-}
-
-.content-grid,
-.contact-grid,
-.schedule-layout,
-.service-grid,
-.cards,
-.steps,
-.trust-grid,
-.tips-grid,
-.values,
-.services,
-.stats-grid,
-.faq,
-.prose,
-.contact-list,
-.schedule-sidebar{
-  min-width:0!important;
-  max-width:100%!important;
-  overflow:visible!important;
-}
-
-.content-grid > *,
-.contact-grid > *,
-.schedule-layout > *,
-.service-grid > *,
-.cards > *,
-.steps > *,
-.trust-grid > *,
-.tips-grid > *,
-.values > *,
-.services > *,
-.stats-grid > *{
-  min-width:0!important;
-  max-width:100%!important;
-}
-
-h1,h2,h3,h4,p,a,strong,small,label,summary,button{
-  max-width:100%!important;
-}
-
-h1,h2,h3,h4{
-  overflow-wrap:normal!important;
-  word-break:normal!important;
-  hyphens:none!important;
-  text-wrap:balance;
-}
-
-.hero-copy h1{
-  max-width:620px!important;
-  font-size:clamp(2.35rem,3.15vw,3.15rem)!important;
-  line-height:1.04!important;
-  overflow-wrap:normal!important;
-  word-break:normal!important;
-  hyphens:none!important;
-}
-
-@media(min-width:1180px){
-  .hero-grid{
-    grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important;
-  }
-}
-
-.reviews-section{
-  overflow:visible!important;
-}
-.reviews-section .section-head{
-  align-items:flex-end!important;
-}
-.reviews-section .google-score{
-  max-width:100%!important;
-  flex-wrap:wrap!important;
-}
-.review-carousel{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  width:100%!important;
-  max-width:100%!important;
-  gap:16px!important;
-  overflow:visible!important;
-  scroll-snap-type:none!important;
-  scroll-behavior:auto!important;
-  padding:6px 2px 20px!important;
-}
-.review-card{
-  display:block!important;
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  height:auto!important;
-  flex:none!important;
-  overflow:visible!important;
-  scroll-snap-align:none!important;
-  scroll-snap-stop:normal!important;
-}
-.reviews-section .carousel-controls{
-  display:none!important;
-}
-
-.brands-section{
-  overflow:hidden!important;
-}
-.brands-section .section-head{
-  align-items:center!important;
-}
-.logo-carousel-tools{
-  display:flex!important;
-  flex:0 0 auto!important;
-}
-.logo-marquee-shell{
-  position:relative!important;
-  width:100%!important;
-  max-width:100%!important;
-  overflow:hidden!important;
-}
-.logo-marquee{
-  width:100%!important;
-  max-width:100%!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  padding:10px 4px 18px!important;
-  cursor:grab!important;
-  touch-action:pan-x pan-y!important;
-  overscroll-behavior-inline:contain!important;
-  scrollbar-width:none!important;
-}
-.logo-marquee::-webkit-scrollbar{
-  display:none!important;
-}
-.logo-track{
-  display:flex!important;
-  width:max-content!important;
-  max-width:none!important;
-  will-change:transform!important;
-}
-.logo-set,
-.logo-set[aria-hidden="true"]{
-  display:flex!important;
-  width:max-content!important;
-  max-width:none!important;
-  gap:18px!important;
-  padding-right:18px!important;
-}
-.brand-logo{
-  flex:0 0 190px!important;
-  width:190px!important;
-  max-width:none!important;
-  min-width:190px!important;
-  height:104px!important;
-}
-
-.content-grid{
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
-  gap:clamp(28px,4vw,52px)!important;
-}
-
-.card,
-.step,
-.trust-card,
-.tip-card,
-.schedule-box,
-.service-box,
-.contact-card,
-.mini-card,
-.stat-card,
-.contact-item{
-  height:auto!important;
-  max-height:none!important;
-}
-
-.form,
-.form input,
-.form select,
-.form textarea,
-.form button,
-.button,
-.whatsapp-mini{
-  min-width:0!important;
-  max-width:100%!important;
-}
-
-@media(max-width:1050px){
-  .content-grid{
-    grid-template-columns:1fr!important;
-    gap:28px!important;
-  }
-  .review-carousel{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  }
-  .brand-logo{
-    flex-basis:172px!important;
-    width:172px!important;
-    min-width:172px!important;
-  }
-}
-
-@media(max-width:760px){
-  .review-carousel{
-    grid-template-columns:1fr!important;
-    gap:14px!important;
-    padding-inline:0!important;
-  }
-  .section-head{
-    align-items:flex-start!important;
-  }
-  .brands-section .section-head{
-    align-items:flex-start!important;
-  }
-  .brand-logo{
-    flex-basis:min(160px,44vw)!important;
-    width:min(160px,44vw)!important;
-    min-width:min(160px,44vw)!important;
-    height:96px!important;
-  }
-  .logo-set,
-  .logo-set[aria-hidden="true"]{
-    gap:12px!important;
-    padding-right:12px!important;
-  }
-}
-
-@media(max-width:520px){
-  .hero-copy h1{
-    font-size:clamp(2rem,9vw,2.4rem)!important;
-    line-height:1.06!important;
-    max-width:100%!important;
-  }
-}
-
-@media(max-width:480px){
-  .brand-logo{
-    flex-basis:min(148px,44vw)!important;
-    width:min(148px,44vw)!important;
-    min-width:min(148px,44vw)!important;
-    height:90px!important;
-    padding:14px!important;
-  }
-  .logo-set,
-  .logo-set[aria-hidden="true"]{
-    gap:10px!important;
-    padding-right:10px!important;
-  }
-  .review-card{
-    padding:20px!important;
-  }
-}
-
-html.a11y-large-text .review-carousel,
-html.a11y-larger-text .review-carousel{
-  grid-template-columns:1fr!important;
-}
-
-@media(prefers-reduced-motion:reduce){
-  .review-carousel,
-  .logo-track,
-  .brand-logo{
-    scroll-behavior:auto!important;
-    animation:none!important;
-    transition:none!important;
-  }
-}
+html{overflow-x:hidden!important}
+body{max-width:100%!important;overflow-x:hidden!important}
+main,section,.internal,.section,.hero,.container{min-width:0!important;max-width:100%}
+.container{overflow:visible!important}
+.content-grid,.contact-grid,.schedule-layout,.service-grid,.cards,.steps,.trust-grid,.tips-grid,.values,.services,.stats-grid,.faq,.prose,.contact-list,.schedule-sidebar{min-width:0!important;max-width:100%!important;overflow:visible!important}
+.content-grid>*,.contact-grid>*,.schedule-layout>*,.service-grid>*,.cards>*,.steps>*,.trust-grid>*,.tips-grid>*,.values>*,.services>*,.stats-grid>*{min-width:0!important;max-width:100%!important}
+h1,h2,h3,h4,p,a,strong,small,label,summary,button{max-width:100%!important}
+h1,h2,h3,h4{overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important;text-wrap:balance}
+.hero-copy h1{max-width:620px!important;font-size:clamp(2.35rem,3.15vw,3.15rem)!important;line-height:1.04!important;overflow-wrap:normal!important;word-break:normal!important;hyphens:none!important}
+@media(min-width:1180px){.hero-grid{grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr)!important}}
+.reviews-section{overflow:visible!important}
+.reviews-section .section-head{align-items:flex-end!important}
+.reviews-section .google-score{max-width:100%!important;flex-wrap:wrap!important}
+.review-carousel{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important;max-width:100%!important;gap:16px!important;overflow:visible!important;scroll-snap-type:none!important;scroll-behavior:auto!important;padding:6px 2px 20px!important}
+.review-card{display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;flex:none!important;overflow:visible!important;scroll-snap-align:none!important;scroll-snap-stop:normal!important}
+.reviews-section .carousel-controls{display:none!important}
+.brands-section{overflow:hidden!important}
+.brands-section .section-head{align-items:center!important}
+.logo-carousel-tools{display:flex!important;flex:0 0 auto!important}
+.logo-marquee-shell{position:relative!important;width:100%!important;max-width:100%!important;overflow:hidden!important}
+.logo-marquee{width:100%!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;padding:10px 4px 18px!important;cursor:grab!important;touch-action:pan-x pan-y!important;overscroll-behavior-inline:contain!important;scrollbar-width:none!important}
+.logo-marquee::-webkit-scrollbar{display:none!important}
+.logo-track{display:flex!important;width:max-content!important;max-width:none!important;will-change:transform!important}
+.logo-set,.logo-set[aria-hidden="true"]{display:flex!important;width:max-content!important;max-width:none!important;gap:18px!important;padding-right:18px!important}
+.brand-logo{flex:0 0 190px!important;width:190px!important;max-width:none!important;min-width:190px!important;height:104px!important}
+.content-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;gap:clamp(28px,4vw,52px)!important}
+.card,.step,.trust-card,.tip-card,.schedule-box,.service-box,.contact-card,.mini-card,.stat-card,.contact-item{height:auto!important;max-height:none!important}
+.form,.form input,.form select,.form textarea,.form button,.button,.whatsapp-mini{min-width:0!important;max-width:100%!important}
+@media(max-width:1050px){.content-grid{grid-template-columns:1fr!important;gap:28px!important}.review-carousel{grid-template-columns:repeat(2,minmax(0,1fr))!important}.brand-logo{flex-basis:172px!important;width:172px!important;min-width:172px!important}}
+@media(max-width:760px){.review-carousel{grid-template-columns:1fr!important;gap:14px!important;padding-inline:0!important}.section-head{align-items:flex-start!important}.brands-section .section-head{align-items:flex-start!important}.brand-logo{flex-basis:min(160px,44vw)!important;width:min(160px,44vw)!important;min-width:min(160px,44vw)!important;height:96px!important}.logo-set,.logo-set[aria-hidden="true"]{gap:12px!important;padding-right:12px!important}}
+@media(max-width:520px){.hero-copy h1{font-size:clamp(2rem,9vw,2.4rem)!important;line-height:1.06!important;max-width:100%!important}}
+@media(max-width:480px){.brand-logo{flex-basis:min(148px,44vw)!important;width:min(148px,44vw)!important;min-width:min(148px,44vw)!important;height:90px!important;padding:14px!important}.logo-set,.logo-set[aria-hidden="true"]{gap:10px!important;padding-right:10px!important}.review-card{padding:20px!important}}
+html.a11y-large-text .review-carousel,html.a11y-larger-text .review-carousel{grid-template-columns:1fr!important}
+@media(prefers-reduced-motion:reduce){.review-carousel,.logo-track,.brand-logo{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
