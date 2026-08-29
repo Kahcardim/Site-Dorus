@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]
 code = (ROOT / 'integrations/google-apps-script/Code.gs').read_text(encoding='utf-8')
 calendar = (ROOT / 'calendar-integration.js').read_text(encoding='utf-8')
 site = (ROOT / 'site.js').read_text(encoding='utf-8')
+form_html = (ROOT / 'agendamento/index.html').read_text(encoding='utf-8')
 
 errors = []
 
@@ -58,15 +59,24 @@ for marker in (
 for marker in (
     'dateInput.checkValidity()',
     'result.duplicate',
-    "result.conflict",
-    "data-calendar-mode",
+    'result.conflict',
 ):
-    if marker == 'data-calendar-mode':
-        # O modo é armazenado via dataset, não como literal de atributo.
-        if 'dataset.calendarMode' not in calendar:
-            errors.append('calendar-integration.js: controle de modo da agenda ausente.')
-    elif marker not in calendar:
+    if marker not in calendar:
         errors.append(f'calendar-integration.js: tratamento obrigatório ausente: {marker}')
+if 'dataset.calendarMode' not in calendar:
+    errors.append('calendar-integration.js: controle de modo da agenda ausente.')
+
+# Formulário: campos essenciais e consentimento não podem perder o required.
+if 'data-schedule-form' not in form_html:
+    errors.append('agendamento/index.html: formulário principal da agenda ausente.')
+for name in ('nome', 'telefone', 'bairro', 'endereco', 'equipamento', 'data', 'periodo', 'problema', 'consentimento'):
+    pattern = rf'<(?:input|select|textarea)\b[^>]*name=["\']{re.escape(name)}["\'][^>]*\brequired\b'
+    if not re.search(pattern, form_html, flags=re.I):
+        errors.append(f'agendamento/index.html: campo obrigatório sem required: {name}')
+if 'data-schedule-status' not in form_html or 'aria-live="polite"' not in form_html:
+    errors.append('agendamento/index.html: feedback acessível do formulário ausente.')
+if 'calendar-integration.js' not in form_html:
+    errors.append('agendamento/index.html: integração da agenda não está carregada.')
 
 if errors:
     print('Falhas de backend/agenda encontradas:')
@@ -74,4 +84,4 @@ if errors:
         print('-', error)
     raise SystemExit(1)
 
-print('OK: backend da agenda, limites, sessão do bridge, duplicidade e validações do frontend protegidos.')
+print('OK: backend, formulário, limites, sessão do bridge, duplicidade e validações da agenda protegidos.')
