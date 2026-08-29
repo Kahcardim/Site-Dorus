@@ -187,8 +187,10 @@ def check_accessibility_and_privacy(errors):
             errors.append(f'privacy-consent.js: requisito de privacidade ausente: {marker}')
     if not (ROOT / 'privacidade/index.html').exists():
         errors.append('privacidade/index.html: política de privacidade ausente')
-    if 'assets/dorus-logo-3d.webp' not in enrich or 'og:image' not in enrich:
-        errors.append('scripts/enrich_meta.py: compartilhamento não está padronizado com a logo D’orus')
+    if 'GENERAL_SHARE_IMAGE' not in enrich or 'assets/banner-principal-dorus.webp' not in enrich or 'og:image' not in enrich:
+        errors.append('scripts/enrich_meta.py: compartilhamento não está padronizado com uma imagem representativa da D’orus')
+    if 'SERVICE_SHARE_IMAGES' not in enrich:
+        errors.append('scripts/enrich_meta.py: páginas de serviço não possuem imagens sociais específicas')
 
 
 def main():
