@@ -222,6 +222,12 @@
             await loadAvailability();
             return;
           }
+          if (result && result.duplicate) {
+            var duplicateUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, slotLabel, true));
+            setStatus('Essa solicitação já foi registrada. Continue pelo WhatsApp para confirmar o atendimento.', false);
+            showWhatsappLink(duplicateUrl);
+            return;
+          }
           throw new Error(result && result.error ? result.error : 'Não foi possível registrar a solicitação.');
         }
 
