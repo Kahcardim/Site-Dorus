@@ -1,0 +1,84 @@
+/* Correcoes de alto contraste — preserva navegacao, painel e foco. */
+html.a11y-high-contrast body,
+html.a11y-high-contrast .topbar,
+html.a11y-high-contrast .header,
+html.a11y-high-contrast .header .container,
+html.a11y-high-contrast .nav,
+html.a11y-high-contrast .mobile-nav,
+html.a11y-high-contrast .mobile-nav summary,
+html.a11y-high-contrast .mobile-nav div,
+html.a11y-high-contrast .hero,
+html.a11y-high-contrast .internal,
+html.a11y-high-contrast .section,
+html.a11y-high-contrast .section-soft,
+html.a11y-high-contrast .section-blue,
+html.a11y-high-contrast .card,
+html.a11y-high-contrast .trust-card,
+html.a11y-high-contrast .service-card,
+html.a11y-high-contrast .review-card,
+html.a11y-high-contrast .form,
+html.a11y-high-contrast .contact-item,
+html.a11y-high-contrast .schedule-box,
+html.a11y-high-contrast .cta-panel,
+html.a11y-high-contrast .footer,
+html.a11y-high-contrast .a11y-panel,
+html.a11y-high-contrast .a11y-launcher{
+  background:#000!important;
+  color:#fff!important;
+  border-color:#fff!important;
+  box-shadow:none!important;
+}
+html.a11y-high-contrast .nav a,
+html.a11y-high-contrast .mobile-nav a,
+html.a11y-high-contrast .mobile-nav summary,
+html.a11y-high-contrast .footer a,
+html.a11y-high-contrast h1,
+html.a11y-high-contrast h2,
+html.a11y-high-contrast h3,
+html.a11y-high-contrast h4,
+html.a11y-high-contrast p,
+html.a11y-high-contrast span,
+html.a11y-high-contrast strong,
+html.a11y-high-contrast small,
+html.a11y-high-contrast label,
+html.a11y-high-contrast .eyebrow,
+html.a11y-high-contrast .kicker,
+html.a11y-high-contrast .text-link{
+  color:#fff!important;
+}
+html.a11y-high-contrast .nav a,
+html.a11y-high-contrast .mobile-nav a{
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  background:#000!important;
+}
+html.a11y-high-contrast .mobile-nav div{
+  border:1px solid #fff!important;
+}
+html.a11y-high-contrast input,
+html.a11y-high-contrast select,
+html.a11y-high-contrast textarea,
+html.a11y-high-contrast button,
+html.a11y-high-contrast .button,
+html.a11y-high-contrast .whatsapp-mini,
+html.a11y-high-contrast .a11y-action,
+html.a11y-high-contrast .a11y-reset{
+  background:#000!important;
+  color:#fff!important;
+  border-color:#fff!important;
+}
+html.a11y-high-contrast a{text-decoration:underline!important;text-decoration-thickness:2px!important}
+html.a11y-high-contrast a:focus-visible,
+html.a11y-high-contrast button:focus-visible,
+html.a11y-high-contrast input:focus-visible,
+html.a11y-high-contrast select:focus-visible,
+html.a11y-high-contrast textarea:focus-visible,
+html.a11y-high-contrast summary:focus-visible{
+  outline:3px solid #ff0!important;
+  outline-offset:3px!important;
+}
+html.a11y-high-contrast .hero-media,
+html.a11y-high-contrast .service-hero-media,
+html.a11y-high-contrast .service-card-media{background:#000!important;border-color:#fff!important}
+html.a11y-high-contrast .hero-media figcaption{background:#000!important;color:#fff!important;border-color:#fff!important}
