@@ -231,7 +231,7 @@ def main():
 
         if OLD_REPO_MARKER in source:
             errors.append(f'{rel}: ainda depende do repositório antigo ({OLD_REPO_MARKER})')
-        if RESPONSIVE_CSS not in source:
+        if RESPONSIVE_CSS not in source and 'site.css' not in source:
             errors.append(f'{rel}: não carrega a camada responsiva {RESPONSIVE_CSS}')
         if page.name != '404.html' and SHARED_JS not in source:
             errors.append(f'{rel}: não carrega o JavaScript compartilhado {SHARED_JS}')

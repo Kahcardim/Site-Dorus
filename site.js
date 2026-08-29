@@ -32,12 +32,14 @@
     document.head.appendChild(extraScript);
   }
 
-  ensureStylesheet('accessibility.css');
-  ensureStylesheet('accessibility-contrast.css');
-  ensureStylesheet('layout.css');
-  ensureStylesheet('usability.css');
-  ensureStylesheet('conversion-enhancements.css');
-  ensureStylesheet('privacy.css');
+  if (!hasLoadedAsset('link[rel="stylesheet"]', 'site.css')) {
+    ensureStylesheet('accessibility.css');
+    ensureStylesheet('accessibility-contrast.css');
+    ensureStylesheet('layout.css');
+    ensureStylesheet('usability.css');
+    ensureStylesheet('conversion-enhancements.css');
+    ensureStylesheet('privacy.css');
+  }
   ensureScript('analytics.js');
   ensureScript('conversion-enhancements.js');
   ensureScript('accessibility-tools.js');

@@ -71,10 +71,14 @@ def normalize_structured_data(source):
     return pattern.sub(replace, source)
 
 
-def ensure_stylesheet(source, rel, filename):
-    if re.search(rf'<link\s+[^>]*href=["\'][^"\']*{re.escape(filename)}', source, re.I):
-        return source
-    href = relative_asset(rel, filename)
+def consolidate_stylesheets(source, rel):
+    source = re.sub(
+        r'\s*<link\s+[^>]*rel=["\']stylesheet["\'][^>]*href=["\'][^"\']+\.css(?:\?[^"\']*)?["\'][^>]*>',
+        '',
+        source,
+        flags=re.I,
+    )
+    href = relative_asset(rel, 'site.css')
     return re.sub(r'</head>', f'  <link rel="stylesheet" href="{href}">\n</head>', source, count=1, flags=re.I)
 
 
@@ -147,8 +151,7 @@ def enrich(path):
         return False
     source = normalize_structured_data(source)
     source = ensure_icons(source, rel)
-    for css in ('ui-final.css', 'compact-pages.css', 'accessibility-contrast.css'):
-        source = ensure_stylesheet(source, rel, css)
+    source = consolidate_stylesheets(source, rel)
     source = ensure_alternate(source, canonical)
     source = ensure_breadcrumb(source, canonical)
     asset, alt, width, height = preferred_share_image(canonical)

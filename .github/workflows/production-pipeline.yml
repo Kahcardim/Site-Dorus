@@ -45,8 +45,9 @@ jobs:
           set -euo pipefail
           python scripts/check_backend.py
           python scripts/check_brand_consistency.py
-          python scripts/check_site.py
+          python scripts/build_css.py
           python scripts/enrich_meta.py
+          python scripts/check_site.py
           python scripts/check_seo.py
 
   deploy:
@@ -66,6 +67,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python scripts/build_css.py
           python scripts/enrich_meta.py
           python scripts/cache_bust.py "${GITHUB_SHA:0:12}"
       - uses: actions/configure-pages@v5

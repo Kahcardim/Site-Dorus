@@ -17,12 +17,6 @@
 
   window.gtag = window.gtag || gtag;
 
-  var googleTag = document.createElement('script');
-  googleTag.async = true;
-  googleTag.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
-  googleTag.setAttribute('data-dorus-ga4', MEASUREMENT_ID);
-  document.head.appendChild(googleTag);
-
   var consentGranted = readConsent() === 'all';
 
   window.gtag('consent', 'default', {
@@ -32,8 +26,18 @@
     ad_personalization: 'denied'
   });
 
-  window.gtag('js', new Date());
-  window.gtag('config', MEASUREMENT_ID);
+  function loadGoogleTag() {
+    if (document.querySelector('script[data-dorus-ga4]')) return;
+    var googleTag = document.createElement('script');
+    googleTag.async = true;
+    googleTag.src = 'https://www.googletagmanager.com/gtag/js?id=' + MEASUREMENT_ID;
+    googleTag.setAttribute('data-dorus-ga4', MEASUREMENT_ID);
+    document.head.appendChild(googleTag);
+    window.gtag('js', new Date());
+    window.gtag('config', MEASUREMENT_ID);
+  }
+
+  if (consentGranted) loadGoogleTag();
 
   function sendLeadEvent(name, params) {
     if (readConsent() !== 'all') return;
@@ -89,6 +93,7 @@
       ad_user_data: 'denied',
       ad_personalization: 'denied'
     });
+    if (value === 'all') loadGoogleTag();
   });
 
   if (document.readyState === 'loading') {

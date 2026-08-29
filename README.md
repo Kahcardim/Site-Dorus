@@ -1,86 +1,41 @@
 # D’orus Assistência Técnica
 
-Site institucional e plataforma de geração de contatos locais da **D’orus Assistência Técnica**, empresa de área de serviço especializada em manutenção de eletrodomésticos de linha branca.
+Plataforma institucional e de aquisição local para uma assistência técnica de eletrodomésticos de linha branca com atendimento em domicílio na região de Guarulhos.
 
-## Objetivo
+[Acessar o site](https://assistenciadorus.com.br/)
 
-Transformar pesquisas locais e dúvidas sobre defeitos em contatos qualificados por WhatsApp ou solicitação de visita, mantendo uma experiência rápida, acessível e consistente com o Perfil da Empresa no Google.
+## Produto
 
-## Área de atendimento
+O projeto transforma buscas locais e dúvidas sobre defeitos em jornadas claras de atendimento. A experiência reúne páginas comerciais por equipamento, conteúdo educativo, contato por WhatsApp e solicitação de visita.
 
-- Guarulhos
-- Arujá
-- Itaquaquecetuba
-- São Paulo, conforme disponibilidade
+## Destaques
 
-O endereço residencial usado como base operacional **não é publicado no site, metadados ou dados estruturados**.
+- arquitetura responsiva para celular, tablet e desktop;
+- SEO técnico com URLs canônicas, sitemap e dados estruturados Schema.org;
+- páginas de serviço e guias conectadas por links internos;
+- acessibilidade com navegação por teclado, contraste, ajuste de texto e redução de movimento;
+- consentimento de cookies e métricas de conversão;
+- imagens responsivas e entrega otimizada para Core Web Vitals;
+- integração de agendamento com fallback seguro para WhatsApp;
+- pipeline contínuo de qualidade, publicação e auditoria Lighthouse.
 
-## Estrutura pública
+## Tecnologias
 
-- `/` — página inicial e conversão
-- `/sobre/` — história e posicionamento
-- `/servicos/` — catálogo de serviços
-- `/servicos/<equipamento>/` — páginas comerciais por equipamento
-- `/curiosidades/` — central editorial de guias
-- `/curiosidades/<guia>/` — conteúdo ligado aos serviços
-- `/agendamento/` — solicitação de visita
-- `/fale-conosco/` — contato
-- `/privacidade/` — privacidade e cookies
+HTML semântico, CSS responsivo, JavaScript, Python, Google Apps Script, GitHub Actions e GitHub Pages.
 
-Os diretórios públicos permanecem em português porque fazem parte das URLs canônicas já publicadas. Renomeá-los sem redirecionamentos seria uma regressão de SEO.
+## Qualidade
 
-## Estrutura técnica
+Cada publicação valida sintaxe, backend, identidade, acessibilidade, SEO e integridade das páginas antes do deploy. Após a publicação, o pipeline executa uma auditoria Lighthouse no domínio de produção.
 
-- `assets/brands/` — logos locais das marcas atendidas
-- `assets/servicos/` — imagens responsivas dos equipamentos
-- `integrations/google-calendar/` — backend de referência da agenda em Google Apps Script
-- `scripts/` — validações, enriquecimento de metadados e preparação de deploy
-- `.github/workflows/` — CI, QA visual, acessibilidade e GitHub Pages
+## Estrutura
 
-A nomenclatura técnica foi padronizada sem alterar URLs públicas indexáveis.
+- `servicos/` — páginas comerciais por equipamento;
+- `curiosidades/` — guias relacionados aos principais sintomas;
+- `assets/` — identidade visual e imagens responsivas;
+- `integrations/` — integração de agenda;
+- `scripts/` — validações e preparação da publicação;
+- `.github/workflows/` — integração e entrega contínuas.
 
-## SEO
+## Resultado
 
-A fonte usa Schema.org compatível com o modelo atual do negócio:
-
-- `Organization` e `WebSite` na Home
-- `Service` nas páginas de serviço, com `provider: Organization`
-- `Article` nos guias
-- `BreadcrumbList` adicionado na publicação
-
-O pipeline rejeita endereço residencial, `ApplianceRepair`, avaliação autoatribuída no Schema, serviços comerciais não aprovados e inconsistências entre sitemap e canonicals.
-
-## Conteúdo e links internos
-
-Os guias respondem a dúvidas reais como “geladeira não gela”, “máquina não centrifuga” e “micro-ondas não aquece”. Cada guia direciona para a página comercial adequada e para os canais de contato, criando o fluxo **pesquisa → orientação → serviço → conversão**.
-
-## Acessibilidade
-
-O site possui skip link, foco visível, ajuste de texto, redução de movimento, leitura em voz alta, navegação por voz e alto contraste. `accessibility-contrast.css` protege explicitamente menus desktop e mobile para que o contraste não esconda a navegação.
-
-## Privacidade e métricas
-
-Google Analytics 4 é carregado conforme consentimento. Eventos de conversão incluem WhatsApp, telefone e agendamento. Dados de clientes e endereço residencial não devem ser versionados.
-
-## Agendamento
-
-O formulário prepara a solicitação e possui fallback para WhatsApp. A disponibilidade online depende de integração externa com Google Apps Script e deve degradar sem quebrar a jornada.
-
-## Qualidade e publicação
-
-Fluxo recomendado:
-
-1. branch curta;
-2. Pull Request para `main`;
-3. checks de qualidade, SEO e consistência;
-4. **squash merge**;
-5. GitHub Pages;
-6. smoke pós-deploy.
-
-## Regras do repositório
-
-- não versionar credenciais, dados pessoais de clientes ou endereço residencial;
-- manter URLs públicas estáveis;
-- mudanças de Schema devem passar pelos validadores em `scripts/`;
-- mudanças visuais precisam preservar responsividade e acessibilidade;
-- conteúdo deve refletir somente serviços realmente oferecidos pela D’orus.
+Uma presença digital rápida, acessível e orientada à conversão, preparada para descoberta orgânica local e evolução contínua do negócio.
