@@ -1,12 +1,10 @@
 /*
- * D’orus — Real usability guardrails
- * Severidade alta: nenhum conteúdo principal pode depender de corte horizontal.
- * Este arquivo carrega após layout.css em todas as páginas via site.js.
+ * D’orus — guardrails de usabilidade real
+ * Protege leitura, viewport, formulários e acessibilidade sem substituir
+ * componentes intencionais como carrosséis por grids artificiais.
  */
 
-html{
-  overflow-x:hidden!important;
-}
+html,
 body{
   max-width:100%!important;
   overflow-x:hidden!important;
@@ -22,11 +20,8 @@ section,
   max-width:100%;
 }
 
-.container{
-  overflow:visible!important;
-}
+.container{overflow:visible!important}
 
-/* Conteúdo textual e grids nunca podem ser mascarados por overflow lateral. */
 .content-grid,
 .contact-grid,
 .schedule-layout,
@@ -44,7 +39,6 @@ section,
 .schedule-sidebar{
   min-width:0!important;
   max-width:100%!important;
-  overflow:visible!important;
 }
 
 .content-grid > *,
@@ -66,108 +60,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/*
- * AVALIAÇÕES GOOGLE
- * Não usamos mais uma faixa horizontal que esconde cartões nas bordas.
- * Todos os depoimentos ficam inteiros e legíveis em qualquer viewport.
- */
-.reviews-section{
-  overflow:visible!important;
-}
-.reviews-section .section-head{
-  align-items:flex-end!important;
-}
-.reviews-section .google-score{
-  max-width:100%!important;
-  flex-wrap:wrap!important;
-}
-.review-carousel{
-  display:grid!important;
-  grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  width:100%!important;
-  max-width:100%!important;
-  gap:16px!important;
-  overflow:visible!important;
-  scroll-snap-type:none!important;
-  scroll-behavior:auto!important;
-  padding:6px 2px 20px!important;
-}
-.review-card{
-  display:block!important;
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  min-height:0!important;
-  height:auto!important;
-  flex:none!important;
-  overflow:visible!important;
-  scroll-snap-align:none!important;
-  scroll-snap-stop:normal!important;
-}
-.reviews-section .carousel-controls{
-  display:none!important;
-}
-
-/*
- * MARCAS
- * Em vez de cards parcialmente escondidos, apresenta um grid real.
- * O conjunto duplicado do marquee fica oculto visualmente.
- */
-.brands-section{
-  overflow:visible!important;
-}
-.brands-section .section-head{
-  align-items:flex-end!important;
-}
-.logo-carousel-tools{
-  display:none!important;
-}
-.logo-marquee-shell,
-.logo-marquee{
-  width:100%!important;
-  max-width:100%!important;
-  overflow:visible!important;
-  padding:0!important;
-  cursor:default!important;
-  touch-action:auto!important;
-}
-.logo-marquee-shell::before,
-.logo-marquee-shell::after{
-  display:none!important;
-}
-.logo-track{
-  display:block!important;
-  width:100%!important;
-  max-width:100%!important;
-  transform:none!important;
-  will-change:auto!important;
-}
-.logo-set{
-  display:grid!important;
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  width:100%!important;
-  max-width:100%!important;
-  gap:14px!important;
-  padding:0!important;
-}
-.logo-set[aria-hidden="true"]{
-  display:none!important;
-}
-.brand-logo{
-  width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
-  height:104px!important;
-  flex:none!important;
-}
-
-/* Páginas internas: quebra antes de o conteúdo ficar estreito demais. */
-.content-grid{
-  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
-  gap:clamp(28px,4vw,52px)!important;
-}
-
-/* Cards nunca recebem altura fixa que corte texto em zoom ou fonte aumentada. */
 .card,
 .step,
 .trust-card,
@@ -182,7 +74,6 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-height:none!important;
 }
 
-/* Inputs e CTAs não ultrapassam a coluna. */
 .form,
 .form input,
 .form select,
@@ -194,60 +85,125 @@ h1,h2,h3,h4,p,a,strong,small,label,summary,button{
   max-width:100%!important;
 }
 
-/* Responsividade conservadora: prioriza leitura e toque em vez de densidade. */
+/* Densidade visual: evita seções excessivamente altas em telas grandes. */
+.section{
+  padding-top:clamp(48px,5vw,64px)!important;
+  padding-bottom:clamp(48px,5vw,64px)!important;
+}
+.internal + .section{padding-top:clamp(30px,3.2vw,44px)!important}
+.section-head{margin-bottom:clamp(20px,2.3vw,28px)!important}
+
+/*
+ * Avaliações: mantém a apresentação horizontal definida em layout.css.
+ * A largura é calculada para mostrar cartões inteiros: 3 no desktop,
+ * 2 no tablet e 1 no celular. Nada de grid forçado.
+ */
+.reviews-section{overflow:hidden!important}
+.reviews-section .google-score{max-width:100%!important;flex-wrap:wrap!important}
+.review-carousel{
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.review-card{
+  box-sizing:border-box!important;
+  height:auto!important;
+  max-height:none!important;
+  min-height:190px!important;
+  padding:21px!important;
+}
+.review-card p{line-height:1.55!important;font-size:.95rem!important}
+.review-top{margin-bottom:13px!important}
+.review-card .stars{margin-bottom:11px!important}
+
+/*
+ * Marcas: o marquee é um componente intencional. Mantemos movimento,
+ * controle de pausa, swipe e logos com dimensões previsíveis.
+ */
+.brands-section{overflow:hidden!important}
+.logo-carousel-tools{display:flex!important}
+.logo-marquee-shell{
+  width:100%!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+.logo-marquee{
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+}
+.logo-track{display:flex!important;width:max-content!important;max-width:none!important}
+.logo-set{display:flex!important;width:max-content!important;max-width:none!important}
+.logo-set[aria-hidden="true"]{display:flex!important}
+.brand-logo{
+  flex:0 0 180px!important;
+  width:180px!important;
+  max-width:180px!important;
+  height:102px!important;
+}
+
+/* Sobre: quatro valores compactos no desktop; leitura progressiva nas menores telas. */
+.values{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:16px!important;
+}
+.values .card{padding:22px!important}
+
+/* Rodapé: preserva hierarquia sem criar um bloco escuro desproporcional. */
+.footer{
+  margin-top:0!important;
+  padding-top:32px!important;
+  padding-bottom:24px!important;
+}
+.footer-grid{gap:18px!important}
+.footer img{height:68px!important;margin-bottom:8px!important}
+.footer-bottom{margin-top:18px!important;padding-top:15px!important}
+.footer > .footer-bottom:first-child{
+  margin-top:0!important;
+  padding-top:0!important;
+  border-top:0!important;
+}
+
+.content-grid{
+  grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
+  gap:clamp(30px,4vw,48px)!important;
+}
+
 @media(max-width:1050px){
-  .content-grid{
-    grid-template-columns:1fr!important;
-    gap:28px!important;
-  }
-  .review-carousel{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  }
-  .logo-set{
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  }
+  .content-grid{grid-template-columns:1fr!important;gap:28px!important}
+  .values{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
 @media(max-width:760px){
-  .review-carousel{
-    grid-template-columns:1fr!important;
-    gap:14px!important;
-    padding-inline:0!important;
+  .section{
+    padding-top:clamp(40px,8vw,52px)!important;
+    padding-bottom:clamp(40px,8vw,52px)!important;
   }
-  .logo-set{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:12px!important;
-  }
+  .section-head{align-items:flex-start!important}
+  .review-card{min-height:0!important;padding:20px!important}
   .brand-logo{
+    flex-basis:min(164px,44vw)!important;
+    width:min(164px,44vw)!important;
+    max-width:min(164px,44vw)!important;
     height:96px!important;
   }
-  .section-head{
-    align-items:flex-start!important;
-  }
 }
 
-@media(max-width:480px){
-  .logo-set{
-    grid-template-columns:1fr 1fr!important;
-    gap:10px!important;
-  }
-  .brand-logo{
-    height:90px!important;
-    padding:14px!important;
-  }
-  .review-card{
-    padding:20px!important;
-  }
+@media(max-width:560px){
+  .values{grid-template-columns:1fr!important;gap:12px!important}
+  .values .card{padding:19px!important}
+  .footer{padding-top:26px!important;padding-bottom:20px!important}
 }
 
-/* Alto contraste e fonte ampliada continuam obedecendo às mesmas garantias. */
-html.a11y-large-text .review-carousel,
-html.a11y-larger-text .review-carousel{
-  grid-template-columns:1fr!important;
-}
-html.a11y-large-text .logo-set,
-html.a11y-larger-text .logo-set{
+html.a11y-large-text .values,
+html.a11y-larger-text .values{
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+}
+
+@media(max-width:760px){
+  html.a11y-large-text .values,
+  html.a11y-larger-text .values{grid-template-columns:1fr!important}
 }
 
 @media(prefers-reduced-motion:reduce){
