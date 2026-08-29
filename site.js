@@ -1,7 +1,7 @@
 (function () {
   var script = document.currentScript;
   var siteRoot = script && script.src ? new URL('.', script.src) : new URL('./', window.location.href);
-  var assetVersion = '20260828-ga4';
+  var assetVersion = '20260829-uxhotfix';
 
   function hasLoadedAsset(selector, fileName) {
     return Array.from(document.querySelectorAll(selector)).some(function (node) {
@@ -34,6 +34,7 @@
 
   ensureStylesheet('accessibility.css');
   ensureStylesheet('layout.css');
+  ensureStylesheet('usability.css');
   ensureStylesheet('conversion-enhancements.css');
   ensureStylesheet('privacy.css');
   ensureScript('analytics.js');
