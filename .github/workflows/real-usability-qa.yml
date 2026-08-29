@@ -84,6 +84,7 @@ jobs:
           const browser=await chromium.launch({headless:true});
           const report=[];
           const failures=[];
+          const externalSignals=[];
 
           function shortPath(path){
             if(path==='/') return 'home';
@@ -179,11 +180,17 @@ jobs:
             for(const path of pages){
               const page=await context.newPage();
               const runtime=[];
+              const externalRuntime=[];
               page.on('pageerror',e=>runtime.push(`pageerror: ${e.message}`));
               page.on('console',m=>{
                 if(m.type()!=='error') return;
                 const text=m.text();
-                if(/403/.test(text)&&/script\.google|googleusercontent|macros/.test(text)) return;
+                // A ponte do Google Apps Script é um backend externo já monitorado
+                // separadamente. Um 403 nela não pode mascarar a aprovação visual.
+                if(path==='/agendamento/'&&/403/.test(text)){
+                  externalRuntime.push(`console: ${text}`);
+                  return;
+                }
                 runtime.push(`console: ${text}`);
               });
               let status=0;
@@ -212,17 +219,18 @@ jobs:
               if(metrics.h1s!==1) reasons.push(`H1 visível esperado 1, encontrado ${metrics.h1s}`);
               if(!metrics.header||!metrics.footer||!metrics.main) reasons.push('estrutura principal invisível');
 
-              const row={severity:'HIGH',size,width:w,height:h,path,status,runtime,...metrics,failed:reasons.length>0,reasons};
+              const row={severity:'HIGH',size,width:w,height:h,path,status,runtime,externalRuntime,...metrics,failed:reasons.length>0,reasons};
               report.push(row);
               if(row.failed) failures.push(row);
+              if(externalRuntime.length) externalSignals.push({size,path,externalRuntime});
 
               if(screenshotSizes.has(size)){
                 await page.screenshot({path:`real-usability/screenshots/${size}-${shortPath(path)}.png`,fullPage:true});
               }
 
-              // Fonte ampliada é parte da usabilidade real, não teste cosmético.
+              // Valida o mesmo aumento máximo de texto oferecido pela ferramenta (130%).
               if(size==='mobile-390'||size==='desktop-1366'){
-                await page.evaluate(()=>document.documentElement.classList.add('a11y-large-text'));
+                await page.evaluate(()=>document.documentElement.style.setProperty('--user-font-scale','1.3'));
                 await page.waitForTimeout(100);
                 const large=await inspect(page);
                 const largeReasons=[];
@@ -232,7 +240,7 @@ jobs:
                 if(large.horizontalScroll.length) largeReasons.push(`rolagem horizontal com fonte ampliada: ${large.horizontalScroll.length}`);
                 if(large.partialReviews.length) largeReasons.push(`avaliações cortadas com fonte ampliada: ${large.partialReviews.length}`);
                 if(large.partialBrands.length) largeReasons.push(`marcas cortadas com fonte ampliada: ${large.partialBrands.length}`);
-                const largeRow={severity:'HIGH',mode:'large-text',size,width:w,height:h,path,...large,failed:largeReasons.length>0,reasons:largeReasons};
+                const largeRow={severity:'HIGH',mode:'130-percent-text',size,width:w,height:h,path,...large,failed:largeReasons.length>0,reasons:largeReasons};
                 report.push(largeRow);
                 if(largeRow.failed) failures.push(largeRow);
               }
@@ -245,18 +253,21 @@ jobs:
           await browser.close();
           fs.writeFileSync('real-usability/report.json',JSON.stringify(report,null,2));
           fs.writeFileSync('real-usability/high-severity-failures.json',JSON.stringify(failures,null,2));
+          fs.writeFileSync('real-usability/external-backend-signals.json',JSON.stringify(externalSignals,null,2));
 
           const summary=[
             '# QA de usabilidade real — severidade alta',
             '',
             `Páginas no sitemap: ${pages.length}`,
             `Cenários executados: ${report.length}`,
-            `Falhas HIGH: ${failures.length}`,
+            `Falhas HIGH de usabilidade: ${failures.length}`,
+            `Sinais externos de backend: ${externalSignals.length}`,
             '',
-            'Critérios principais: conteúdo inteiro na viewport, zero rolagem horizontal em áreas principais, avaliações e marcas completas, texto sem corte, imagens válidas, controles acessíveis e fonte ampliada sem quebra.'
+            'Critérios principais: conteúdo inteiro na viewport, zero rolagem horizontal em áreas principais, avaliações e marcas completas, texto sem corte, imagens válidas, controles acessíveis e fonte em 130% sem quebra.'
           ].join('\n');
           fs.writeFileSync('real-usability/summary.md',summary);
           console.log(summary);
+          if(externalSignals.length) console.warn(`Backend externo sinalizado em ${externalSignals.length} cenário(s); não altera o resultado visual.`);
           if(failures.length){
             console.error('\nFalhas HIGH:');
             failures.slice(0,40).forEach(f=>console.error(`${f.size} ${f.path}: ${f.reasons.join('; ')}`));
