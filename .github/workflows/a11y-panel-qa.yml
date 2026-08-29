@@ -1,15 +1,7 @@
 name: QA acessibilidade e contraste
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'accessibility.css'
-      - 'accessibility-contrast.css'
-      - 'accessibility-tools.js'
-      - 'site.js'
-      - '**/*.html'
-      - '.github/workflows/a11y-panel-qa.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read

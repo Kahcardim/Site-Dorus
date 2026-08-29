@@ -1,0 +1,116 @@
+name: Pipeline de producao
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: production-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualidade:
+    name: Qualidade, SEO e marca
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verificar sintaxe JavaScript
+        shell: bash
+        run: |
+          set -euo pipefail
+          for file in site.js calendar-integration.js brand-carousel.js conversion-enhancements.js accessibility-tools.js privacy-consent.js; do
+            node --check "$file"
+          done
+          cp integrations/google-calendar/Code.gs /tmp/dorus-apps-script.js
+          node --check /tmp/dorus-apps-script.js
+      - name: Verificar sintaxe Python
+        run: python -m compileall -q scripts
+      - name: Validar site, backend, marca e SEO
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/check_backend.py
+          python scripts/check_brand_consistency.py
+          python scripts/check_site.py
+          python scripts/enrich_meta.py
+          python scripts/check_seo.py
+
+  deploy:
+    name: Publicar GitHub Pages
+    if: github.event_name != 'pull_request'
+    needs: qualidade
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preparar metadados e invalidar cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/enrich_meta.py
+          python scripts/cache_bust.py "${GITHUB_SHA:0:12}"
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  lighthouse:
+    name: Auditoria Lighthouse pos-deploy
+    if: github.event_name != 'pull_request'
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar Lighthouse
+        run: npm install --global lighthouse@12
+      - name: Auditar site publicado
+        shell: bash
+        run: |
+          set -euo pipefail
+          CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          export CHROME_PATH
+          for tentativa in {1..18}; do
+            curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}" | grep -q "?v=${GITHUB_SHA:0:12}" && break
+            test "$tentativa" -lt 18 || { echo 'A revisao publicada nao foi confirmada.'; exit 1; }
+            sleep 5
+          done
+          lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-mobile.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
+          lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --preset=desktop --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-desktop.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
+          python scripts/summarize_lighthouse.py
+      - name: Salvar relatorios Lighthouse
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-${{ github.run_id }}
+          path: |
+            lighthouse-mobile.json
+            lighthouse-desktop.json
+          retention-days: 14

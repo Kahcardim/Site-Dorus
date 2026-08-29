@@ -1,24 +1,7 @@
 name: QA usabilidade real - severidade alta
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - '**/*.html'
-      - '**/*.css'
-      - '**/*.js'
-      - 'assets/**'
-      - 'sitemap.xml'
-      - '.github/workflows/real-usability-qa.yml'
-  push:
-    branches: [main]
-    paths:
-      - '**/*.html'
-      - '**/*.css'
-      - '**/*.js'
-      - 'assets/**'
-      - 'sitemap.xml'
-      - '.github/workflows/real-usability-qa.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
