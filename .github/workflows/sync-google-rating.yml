@@ -1,0 +1,47 @@
+name: Sincronizar avaliações Google
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-google-rating
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Consultar Google Places
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          GOOGLE_PLACE_ID: ${{ secrets.GOOGLE_PLACE_ID }}
+        run: python scripts/sync_google_rating.py
+
+      - name: Publicar atualização quando houver mudança
+        shell: bash
+        run: |
+          if git diff --quiet -- google-rating.json; then
+            echo "Nenhuma alteração na nota/quantidade."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add google-rating.json
+          git commit -m "chore: sync Google rating"
+          git push
