@@ -127,8 +127,33 @@
         serviceHeroContainer.appendChild(warranty);
       }
       var serviceCapture = document.querySelector('.cta-panel');
-      serviceCapture = serviceCapture && serviceCapture.closest('.section');
-      if (serviceCapture) serviceCapture.classList.add('service-capture');
+      if (serviceCapture) {
+        serviceCapture.classList.add('service-cta-professional');
+        serviceCapture.innerHTML = [
+          '<div class="service-cta-copy">',
+            '<span class="kicker">Atendimento sob consulta</span>',
+            '<h2>Não encontrou seu equipamento?</h2>',
+            '<p>Envie marca, modelo e uma descrição do defeito. A equipe confirma a possibilidade de atendimento antes da visita.</p>',
+            '<div class="service-cta-trust"><span>Atendimento em domicílio</span><span>Garantia mínima de 90 dias</span></div>',
+          '</div>',
+          '<div class="actions service-cta-actions">',
+            '<a class="button button-white" href="' + new URL('agendamento/', siteRoot).href + '">Agendar visita</a>',
+            '<a class="button button-green" href="https://wa.me/5511913573932?text=Ol%C3%A1%2C%20gostaria%20de%20consultar%20o%20atendimento%20para%20outro%20equipamento." target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>',
+          '</div>'
+        ].join('');
+        var serviceCaptureSection = serviceCapture.closest('.section');
+        if (serviceCaptureSection) serviceCaptureSection.classList.add('service-capture');
+      }
+    }
+
+    if (pagePath.indexOf('/servicos/') === 0) {
+      var serviceDetailCopy = document.querySelector('.service-hero-copy');
+      if (serviceDetailCopy && !serviceDetailCopy.querySelector('.service-warranty')) {
+        var detailWarranty = document.createElement('p');
+        detailWarranty.className = 'service-warranty service-warranty-detail';
+        detailWarranty.innerHTML = '<strong>Garantia mínima de 90 dias</strong> nos serviços executados, conforme a ordem de serviço.';
+        serviceDetailCopy.appendChild(detailWarranty);
+      }
     }
 
     function addJourneySwitch(currentPage) {
