@@ -28,43 +28,29 @@
   function init() {
     if (!document.querySelector('[data-google-rating]')) return;
 
-    var iframe = document.createElement('iframe');
+    var callbackName = '__dorusGoogleReviews' + Date.now() + Math.random().toString(36).slice(2);
+    var script = document.createElement('script');
     var timer;
-    iframe.src = WEB_APP_URL + '?action=bridge';
-    iframe.hidden = true;
-    iframe.tabIndex = -1;
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.setAttribute('title', 'Atualização segura das avaliações do Google');
-    document.body.appendChild(iframe);
+    var finished = false;
 
     function cleanup() {
+      if (finished) return;
+      finished = true;
       window.clearTimeout(timer);
-      window.removeEventListener('message', receiveMessage);
-      iframe.remove();
+      try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
     }
 
-    function receiveMessage(event) {
-      if (event.source !== iframe.contentWindow) return;
-      var message = event.data || {};
-      if (message.source !== 'dorus-calendar-bridge') return;
+    window[callbackName] = function (data) {
+      applyReviews(data);
+      cleanup();
+    };
 
-      if (message.type === 'ready') {
-        iframe.contentWindow.postMessage({
-          source: 'dorus-site',
-          requestId: 'dorus-reviews-' + Date.now(),
-          type: 'reviews',
-          payload: {}
-        }, '*');
-        return;
-      }
+    script.src = WEB_APP_URL + '?action=reviews&callback=' + encodeURIComponent(callbackName) + '&_=' + Date.now();
+    script.async = true;
+    script.onerror = cleanup;
+    document.head.appendChild(script);
 
-      if (message.requestId && message.requestId.indexOf('dorus-reviews-') === 0) {
-        if (message.ok) applyReviews(message.data);
-        cleanup();
-      }
-    }
-
-    window.addEventListener('message', receiveMessage);
     timer = window.setTimeout(cleanup, REQUEST_TIMEOUT);
   }
 
