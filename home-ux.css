@@ -251,3 +251,51 @@
     min-width:0!important;
   }
 }
+
+/* Revisão QA: captadores finais compactos e consistentes em todas as páginas. */
+.section:has(> .cta-panel){
+  padding-top:24px!important;
+  padding-bottom:24px!important;
+}
+.section > .cta-panel{
+  width:min(1080px,calc(100% - 64px))!important;
+  max-width:1080px!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:24px!important;
+  padding:20px 24px!important;
+  border-radius:18px!important;
+}
+.section > .cta-panel > div:first-child{max-width:680px!important}
+.section > .cta-panel h2{
+  max-width:680px!important;
+  margin:4px 0 6px!important;
+  font-size:clamp(1.55rem,2.2vw,2.15rem)!important;
+  line-height:1.12!important;
+  letter-spacing:-.025em!important;
+}
+.section > .cta-panel p{font-size:.98rem!important;line-height:1.45!important}
+.section > .cta-panel .button{
+  min-height:46px!important;
+  padding:12px 20px!important;
+  font-size:.96rem!important;
+}
+@media(max-width:900px){
+  .section > .cta-panel{
+    width:min(760px,calc(100% - 40px))!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+    padding:20px!important;
+  }
+}
+@media(max-width:560px){
+  .section:has(> .cta-panel){padding-top:18px!important;padding-bottom:18px!important}
+  .section > .cta-panel{width:calc(100% - 28px)!important;padding:18px 16px!important}
+}
+
+.overview-hero .container{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+.overview-hero h1,.overview-hero p{margin-left:auto!important;margin-right:auto!important}

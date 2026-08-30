@@ -57,6 +57,112 @@
       document.body.insertBefore(skip, document.body.firstChild);
     }
 
+    var footerInstagramIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></svg>';
+    var footerWhatsappIcon = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.52 3.48A11.86 11.86 0 0 0 12.07 0C5.5 0 .16 5.34.16 11.91c0 2.09.55 4.13 1.58 5.93L0 24l6.35-1.67a11.9 11.9 0 0 0 5.72 1.46h.01C18.66 23.79 24 18.45 24 11.88c0-3.18-1.24-6.16-3.48-8.4Zm-8.44 18.3h-.01a9.9 9.9 0 0 1-5.04-1.38l-.36-.21-3.77.99 1.01-3.67-.24-.38a9.86 9.86 0 0 1-1.51-5.24C2.16 6.43 6.59 2 12.07 2c2.64 0 5.12 1.03 6.98 2.89a9.78 9.78 0 0 1 2.89 6.98c0 5.48-4.44 9.91-9.92 9.91Zm5.44-7.44c-.3-.15-1.78-.88-2.06-.98-.28-.1-.48-.15-.68.15-.2.3-.78.98-.95 1.18-.18.2-.35.23-.65.08-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.76-1.67-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.53.15-.18.2-.3.3-.5.1-.2.05-.38-.03-.53-.08-.15-.68-1.64-.93-2.24-.25-.6-.5-.5-.68-.5h-.58c-.2 0-.53.08-.8.38-.28.3-1.05 1.02-1.05 2.48s1.08 2.88 1.23 3.08c.15.2 2.13 3.26 5.16 4.57.72.31 1.28.49 1.72.63.72.23 1.37.2 1.89.12.58-.09 1.78-.73 2.03-1.43.25-.7.25-1.31.18-1.43-.08-.13-.28-.2-.58-.35Z"/></svg>';
+    var footer = document.querySelector('.footer');
+    if (footer) {
+      var footerUrl = function (path) { return new URL(path, siteRoot).href; };
+      footer.innerHTML = [
+        '<div class="container footer-grid footer-grid-professional">',
+          '<div class="footer-company">',
+            '<a class="footer-brand" href="' + footerUrl('./') + '" aria-label="D’orus Assistência Técnica - início">',
+              '<img src="' + footerUrl('assets/dorus-logo-3d.webp') + '" alt="D’orus Assistência Técnica" loading="lazy" decoding="async">',
+            '</a>',
+            '<p>Assistência técnica de linha branca com atendimento em domicílio em Guarulhos e região.</p>',
+            '<p class="footer-company-data"><strong>D’orus Assistência Técnica</strong><span data-company-document>CNPJ 30.204.892/0001-03</span><span>Garantia mínima de 90 dias nos serviços executados</span></p>',
+          '</div>',
+          '<div class="footer-links">',
+            '<h3>Atendimento</h3>',
+            '<a href="' + footerUrl('agendamento/') + '">Agendar uma visita</a>',
+            '<a href="' + footerUrl('fale-conosco/') + '">Fale conosco</a>',
+            '<a href="tel:+5511913573932">(11) 91357-3932</a>',
+            '<span>Guarulhos, Arujá, Itaquaquecetuba e São Paulo</span>',
+          '</div>',
+          '<div class="footer-links">',
+            '<h3>Institucional</h3>',
+            '<a href="' + footerUrl('sobre/') + '">Sobre a D’orus</a>',
+            '<a href="' + footerUrl('servicos/') + '">Serviços</a>',
+            '<a href="' + footerUrl('curiosidades/') + '">Guias</a>',
+            '<a href="' + footerUrl('privacidade/') + '">Política de privacidade</a>',
+          '</div>',
+          '<div class="footer-social">',
+            '<h3>Acompanhe e fale conosco</h3>',
+            '<div class="footer-social-links">',
+              '<a href="https://instagram.com/assistenciadorus" target="_blank" rel="noopener noreferrer" aria-label="Instagram da D’orus"><span class="footer-social-icon">' + footerInstagramIcon + '</span> Instagram</a>',
+              '<a href="https://wa.me/5511913573932" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da D’orus"><span class="footer-social-icon">' + footerWhatsappIcon + '</span> WhatsApp</a>',
+            '</div>',
+          '</div>',
+        '</div>',
+        '<div class="container footer-bottom">',
+          '<span>© D’orus Assistência Técnica</span>',
+          '<span>Desenvolvido por Kauan Cardim</span>',
+        '</div>'
+      ].join('');
+    }
+
+    var pagePath = window.location.pathname.replace(/\/+$/, '') || '/';
+    var overviewPaths = ['/sobre', '/servicos', '/curiosidades'];
+    if (overviewPaths.indexOf(pagePath) !== -1) {
+      var overviewHero = document.querySelector('.internal');
+      if (overviewHero) overviewHero.classList.add('overview-hero');
+    }
+
+    if (pagePath === '/sobre') {
+      var valuesGrid = document.querySelector('.values');
+      var valuesSection = valuesGrid && valuesGrid.closest('.section');
+      var storySection = document.querySelector('.content-grid');
+      storySection = storySection && storySection.closest('.section');
+      if (valuesSection && storySection) {
+        valuesSection.classList.add('about-values');
+        storySection.parentNode.insertBefore(valuesSection, storySection);
+      }
+    }
+
+    if (pagePath === '/servicos') {
+      var serviceHeroContainer = document.querySelector('.internal > .container');
+      if (serviceHeroContainer && !serviceHeroContainer.querySelector('.service-warranty')) {
+        var warranty = document.createElement('p');
+        warranty.className = 'service-warranty';
+        warranty.innerHTML = '<strong>Garantia mínima de 90 dias</strong> nos serviços executados, conforme as condições da ordem de serviço.';
+        serviceHeroContainer.appendChild(warranty);
+      }
+      var serviceCapture = document.querySelector('.cta-panel');
+      serviceCapture = serviceCapture && serviceCapture.closest('.section');
+      if (serviceCapture) serviceCapture.classList.add('service-capture');
+    }
+
+    function addJourneySwitch(currentPage) {
+      var heroContainer = document.querySelector('.internal > .container');
+      if (!heroContainer || heroContainer.querySelector('.journey-switch')) return;
+      var switcher = document.createElement('nav');
+      switcher.className = 'journey-switch';
+      switcher.setAttribute('aria-label', 'Escolha como deseja falar com a D’orus');
+      var scheduleItem = currentPage === 'schedule'
+        ? '<span aria-current="page">Escolher data <small>Solicitar uma visita técnica</small></span>'
+        : '<a href="' + new URL('agendamento/', siteRoot).href + '">Escolher data <small>Solicitar uma visita técnica</small></a>';
+      var contactItem = currentPage === 'contact'
+        ? '<span aria-current="page">Falar com a equipe <small>Tirar dúvidas e explicar o problema</small></span>'
+        : '<a href="' + new URL('fale-conosco/', siteRoot).href + '">Falar com a equipe <small>Tirar dúvidas e explicar o problema</small></a>';
+      switcher.innerHTML = scheduleItem + contactItem;
+      heroContainer.appendChild(switcher);
+    }
+
+    if (pagePath === '/agendamento') {
+      addJourneySwitch('schedule');
+      var scheduleTitle = document.querySelector('.internal h1');
+      var scheduleLead = document.querySelector('.internal p');
+      if (scheduleTitle) scheduleTitle.textContent = 'Escolha uma data e solicite uma visita técnica.';
+      if (scheduleLead) scheduleLead.textContent = 'Use esta página quando já quiser informar endereço, equipamento e uma data preferida para o atendimento.';
+    }
+
+    if (pagePath === '/fale-conosco') {
+      addJourneySwitch('contact');
+      var contactTitle = document.querySelector('.internal h1');
+      var contactLead = document.querySelector('.internal p');
+      if (contactTitle) contactTitle.textContent = 'Tire dúvidas ou descreva o problema pelo WhatsApp.';
+      if (contactLead) contactLead.textContent = 'Use esta página para conversar primeiro com a equipe, sem precisar escolher uma data.';
+    }
+
     var localLogo = new URL('assets/dorus-logo-3d.webp?v=' + assetVersion, siteRoot).href;
     document.querySelectorAll('img.logo, .footer img').forEach(function (img) {
       var src = img.getAttribute('src') || '';

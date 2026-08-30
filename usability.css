@@ -234,3 +234,123 @@ html.a11y-larger-text .values{
     transition:none!important;
   }
 }
+
+/* Revisão QA: títulos internos usam melhor a largura útil sem criar vazios artificiais. */
+.overview-hero .container{max-width:1280px!important;text-align:center}
+.overview-hero h1{
+  max-width:none!important;
+  font-size:clamp(2.35rem,3.2vw,3.35rem)!important;
+  line-height:1.08!important;
+  text-wrap:balance;
+}
+.overview-hero .eyebrow{justify-content:center}
+.overview-hero p{max-width:940px!important;margin-left:auto!important;margin-right:auto!important}
+.service-warranty{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:auto;
+  margin:18px auto 0!important;
+  padding:10px 15px;
+  border:1px solid rgba(15,139,67,.26);
+  border-radius:999px;
+  background:#f1fbf5;
+  color:#285a3d!important;
+  font-size:.94rem!important;
+}
+@media(min-width:1180px){
+  .overview-hero h1{white-space:nowrap}
+}
+
+/* Sobre: os valores funcionam como navegação visual logo após a apresentação. */
+.about-values{
+  padding-top:clamp(24px,3vw,38px)!important;
+  padding-bottom:clamp(24px,3vw,38px)!important;
+}
+.about-values .card{min-height:0!important}
+
+/* Serviços: CTA final deliberadamente menor para não competir com a grade principal. */
+.service-capture{
+  padding-top:28px!important;
+  padding-bottom:28px!important;
+}
+.service-capture > .cta-panel{
+  padding:22px 28px!important;
+  border-radius:20px!important;
+}
+.service-capture > .cta-panel h2{
+  font-size:clamp(1.75rem,2.35vw,2.4rem)!important;
+  margin:5px 0 7px!important;
+}
+
+/* Agendamento e contato deixam explícito qual caminho atende cada necessidade. */
+.journey-switch{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:24px;
+  max-width:860px;
+}
+.journey-switch a,
+.journey-switch span{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:13px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  color:var(--dark);
+  font-weight:800;
+  box-shadow:0 8px 24px rgba(12,37,72,.06);
+}
+.journey-switch span[aria-current="page"]{
+  border-color:rgba(15,139,67,.38);
+  background:#f1fbf5;
+  color:#087134;
+}
+.journey-switch small{display:block;color:var(--muted);font-weight:600}
+
+/* Rodapé institucional consistente em todas as rotas. */
+.footer-grid-professional{
+  grid-template-columns:minmax(240px,1.25fr) repeat(3,minmax(150px,.75fr))!important;
+  gap:clamp(22px,3vw,42px)!important;
+  align-items:start;
+}
+.footer-company p{margin:4px 0 14px!important}
+.footer-company-data{display:grid;gap:4px;color:#d5e4ff!important;font-size:.9rem}
+.footer-company-data span{color:#a9bfd3}
+.footer-links span{color:#a9bfd3;line-height:1.5}
+.footer-social h3{margin-top:0;color:#fff}
+.footer-social-links{display:grid;gap:10px}
+.footer-social-links a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  color:#fff;
+  font-weight:800;
+}
+.footer-social-icon{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#0f8b43;
+  color:#fff;
+  font-size:1.15rem;
+}
+.footer-social-icon svg{width:20px;height:20px;display:block}
+
+@media(max-width:1050px){
+  .footer-grid-professional{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .footer-grid-professional > :first-child{grid-column:auto!important}
+}
+@media(max-width:680px){
+  .overview-hero h1{white-space:normal;font-size:clamp(2rem,9vw,2.45rem)!important}
+  .journey-switch{grid-template-columns:1fr}
+  .service-capture > .cta-panel{padding:20px 18px!important}
+  .footer-grid-professional{grid-template-columns:1fr!important}
+}
