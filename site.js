@@ -146,7 +146,7 @@
       }
     }
 
-    if (pagePath.indexOf('/servicos/') === 0) {
+    if (pagePath.indexOf('/servicos/') === 0 && pagePath !== '/servicos/') {
       var serviceDetailCopy = document.querySelector('.service-hero-copy');
       if (serviceDetailCopy && !serviceDetailCopy.querySelector('.service-warranty')) {
         var detailWarranty = document.createElement('p');
@@ -154,6 +154,34 @@
         detailWarranty.innerHTML = '<strong>Garantia mínima de 90 dias</strong> nos serviços executados, conforme a ordem de serviço.';
         serviceDetailCopy.appendChild(detailWarranty);
       }
+
+      var detailCapture = document.querySelector('.cta-panel');
+      if (detailCapture) {
+        var detailCaptureTitle = detailCapture.querySelector('h2');
+        var equipmentLabel = document.querySelector('.service-hero-copy .eyebrow');
+        equipmentLabel = equipmentLabel ? equipmentLabel.textContent.trim().toLowerCase() : 'meu equipamento';
+        var detailMessage = encodeURIComponent('Olá, gostaria de solicitar atendimento para ' + equipmentLabel + '.');
+        detailCapture.classList.add('service-detail-cta-professional');
+        detailCapture.innerHTML = [
+          '<div class="service-detail-cta-copy">',
+            '<span class="kicker">Atendimento em domicílio</span>',
+            '<h2>' + (detailCaptureTitle ? detailCaptureTitle.textContent.trim() : 'Conte o problema do seu equipamento.') + '</h2>',
+            '<p>Envie marca, modelo e uma breve descrição do defeito para a equipe orientar o próximo passo.</p>',
+            '<div class="service-detail-cta-trust"><span>Atendimento em domicílio</span><span>Garantia mínima de 90 dias</span></div>',
+          '</div>',
+          '<div class="actions service-detail-cta-actions">',
+            '<a class="button button-white" href="' + new URL('agendamento/', siteRoot).href + '">Agendar visita</a>',
+            '<a class="button button-green" href="https://wa.me/5511913573932?text=' + detailMessage + '" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>',
+          '</div>'
+        ].join('');
+      }
+
+      document.querySelectorAll('main .section-soft').forEach(function (section) {
+        var relatedGuideCards = section.querySelectorAll('.card');
+        if (!relatedGuideCards.length) return;
+        section.classList.add('service-related-guides');
+        if (relatedGuideCards.length === 1) section.classList.add('is-single');
+      });
     }
 
     function addJourneySwitch(currentPage) {
