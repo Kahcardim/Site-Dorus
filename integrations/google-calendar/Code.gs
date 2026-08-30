@@ -12,9 +12,10 @@ const ALLOWED_ORIGINS = [
 ];
 
 function doGet(e) {
-  try {
-    const action = String((e && e.parameter && e.parameter.action) || 'status');
+  const action = String((e && e.parameter && e.parameter.action) || 'status');
+  const callback = String((e && e.parameter && e.parameter.callback) || '').trim();
 
+  try {
     if (action === 'bridge') {
       return bridgePage();
     }
@@ -25,8 +26,9 @@ function doGet(e) {
 
     if (action === 'reviews') {
       const result = getGoogleReviewsSummary();
-      const callback = String((e && e.parameter && e.parameter.callback) || '').trim();
-      if (callback) return jsonpResponse(callback, result);
+      if (callback) {
+        return jsonpResponse(callback, { ok: true, data: result });
+      }
       return jsonResponse({ ok: true, data: result });
     }
 
@@ -36,7 +38,11 @@ function doGet(e) {
       calendar: 'Agendamento'
     });
   } catch (error) {
-    return jsonResponse({ ok: false, error: safeErrorMessage(error) });
+    const failure = { ok: false, error: safeErrorMessage(error) };
+    if (action === 'reviews' && callback) {
+      return jsonpResponse(callback, failure);
+    }
+    return jsonResponse(failure);
   }
 }
 
@@ -154,7 +160,15 @@ function getGoogleReviewsSummary() {
   );
 
   if (response.getResponseCode() !== 200) {
-    throw new Error('Não foi possível consultar as avaliações do Google.');
+    let detail = '';
+    try {
+      const errorPayload = JSON.parse(response.getContentText());
+      detail = String((errorPayload && errorPayload.error && errorPayload.error.message) || '');
+    } catch (ignore) {}
+    throw new Error(
+      'Places API HTTP ' + response.getResponseCode() +
+      (detail ? ': ' + detail : '')
+    );
   }
 
   const place = JSON.parse(response.getContentText());
