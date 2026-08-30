@@ -3,6 +3,9 @@
 
   var MEASUREMENT_ID = 'G-480Q4RXYNC';
   var CONSENT_COOKIE = 'dorus_consent';
+  var GOOGLE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec';
+  var GOOGLE_BRIDGE_URL = GOOGLE_WEB_APP_URL + '?action=bridge';
+  var GOOGLE_REVIEWS_TIMEOUT = 10000;
   window.dataLayer = window.dataLayer || [];
 
   function readConsent() {
@@ -84,30 +87,76 @@
     return new URL(file + '?v=' + Date.now(), window.location.origin + window.location.pathname);
   }
 
+  function requestGoogleReviewsSummary(onSuccess) {
+    var iframe = document.createElement('iframe');
+    var finished = false;
+    var requestId = 'dorus-reviews-' + Date.now() + '-' + Math.random().toString(36).slice(2);
+    var timer;
+
+    iframe.src = GOOGLE_BRIDGE_URL;
+    iframe.hidden = true;
+    iframe.tabIndex = -1;
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.setAttribute('title', 'Integração segura com avaliações Google D’orus');
+
+    function cleanup() {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(timer);
+      window.removeEventListener('message', onMessage);
+      if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+    }
+
+    function onMessage(event) {
+      if (event.source !== iframe.contentWindow) return;
+      var message = event.data || {};
+      if (message.source !== 'dorus-calendar-bridge') return;
+
+      if (message.type === 'ready') {
+        iframe.contentWindow.postMessage({
+          source: 'dorus-site',
+          requestId: requestId,
+          type: 'reviews',
+          payload: {}
+        }, '*');
+        return;
+      }
+
+      if (message.requestId !== requestId) return;
+      if (message.ok && message.data) onSuccess(message.data);
+      cleanup();
+    }
+
+    window.addEventListener('message', onMessage);
+    document.body.appendChild(iframe);
+    timer = window.setTimeout(cleanup, GOOGLE_REVIEWS_TIMEOUT);
+  }
+
   function updateGoogleRating() {
-    var heroPoints = document.querySelector('.hero-points');
-    var ratingBlock = heroPoints ? heroPoints.querySelector('div') : null;
-    var heroRating = ratingBlock ? ratingBlock.querySelector('strong') : null;
-    var heroCount = ratingBlock ? ratingBlock.querySelector('span') : null;
+    var heroRating = document.querySelector('[data-google-rating]');
+    var heroCount = document.querySelector('[data-google-review-count]');
     var score = document.querySelector('.google-score');
     var scoreRating = score ? score.querySelector('strong') : null;
     var scoreCount = score ? score.querySelector('small') : null;
+    var ratingBlock = heroRating ? heroRating.closest('.hero-points > div') : null;
+
+    if (!heroRating && !heroCount && !scoreRating && !scoreCount) return;
 
     function render(data) {
-      if (!data || typeof data.rating !== 'number' || typeof data.reviews !== 'number') return;
-      var ratingText = data.rating.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
-      if (heroRating) heroRating.textContent = ratingText + ' ★';
-      if (heroCount) heroCount.textContent = data.reviews + (data.reviews === 1 ? ' avaliação no Google' : ' avaliações no Google');
+      var rating = Number(data && data.rating);
+      var reviews = Number(data && (data.userRatingCount != null ? data.userRatingCount : data.reviews));
+      if (!Number.isFinite(rating) || !Number.isFinite(reviews)) return;
+
+      reviews = Math.max(0, Math.round(reviews));
+      var ratingText = rating.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1});
+      if (heroRating) heroRating.textContent = ratingText;
+      if (heroCount) heroCount.textContent = String(reviews);
       if (scoreRating) scoreRating.textContent = ratingText;
-      if (scoreCount) scoreCount.textContent = data.reviews + (data.reviews === 1 ? ' avaliação' : ' avaliações');
-      if (ratingBlock) ratingBlock.setAttribute('aria-label', ratingText + ' de 5 no Google, com ' + data.reviews + ' avaliações');
+      if (scoreCount) scoreCount.textContent = reviews + (reviews === 1 ? ' avaliação' : ' avaliações');
+      if (ratingBlock) ratingBlock.setAttribute('aria-label', ratingText + ' de 5 no Google, com ' + reviews + ' avaliações');
     }
 
-    render({rating: 4.7, reviews: 14});
-    fetch(dataUrl('google-rating.json'), {cache: 'no-store', headers: {'Accept': 'application/json'}})
-      .then(function (response) { if (!response.ok) throw new Error('rating unavailable'); return response.json(); })
-      .then(render)
-      .catch(function () {});
+    requestGoogleReviewsSummary(render);
   }
 
   function updateGoogleReviews() {
