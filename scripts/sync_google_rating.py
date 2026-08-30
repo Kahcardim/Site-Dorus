@@ -16,6 +16,26 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
+def safe_payload_summary(payload: object) -> str:
+    if not isinstance(payload, dict):
+        return f"tipo={type(payload).__name__}"
+
+    summary = {"keys": sorted(payload.keys())}
+    display_name = payload.get("displayName")
+    if isinstance(display_name, dict):
+        summary["displayName"] = display_name.get("text")
+
+    error = payload.get("error")
+    if isinstance(error, dict):
+        summary["error"] = {
+            "code": error.get("code"),
+            "status": error.get("status"),
+            "message": error.get("message"),
+        }
+
+    return json.dumps(summary, ensure_ascii=False)
+
+
 def main() -> None:
     api_key = os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
     place_id = os.environ.get("GOOGLE_PLACE_ID", "").strip()
@@ -42,7 +62,7 @@ def main() -> None:
             payload = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as error:
         detail = error.read().decode("utf-8", errors="replace")
-        fail(f"Places API HTTP {error.code}: {detail[:500]}")
+        fail(f"Places API HTTP {error.code}: {detail[:1000]}")
     except Exception as error:
         fail(f"Falha ao consultar Places API: {error}")
 
@@ -50,7 +70,10 @@ def main() -> None:
         rating = float(payload["rating"])
         reviews = int(payload["userRatingCount"])
     except (KeyError, TypeError, ValueError) as error:
-        fail(f"Resposta inválida da Places API: {error}")
+        fail(
+            "Resposta sem rating/userRatingCount. "
+            f"Detalhes seguros: {safe_payload_summary(payload)}; erro={error}"
+        )
 
     if not 1 <= rating <= 5:
         fail(f"Nota fora do intervalo esperado: {rating}")
