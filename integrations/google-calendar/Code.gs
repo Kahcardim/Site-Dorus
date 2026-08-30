@@ -5,6 +5,7 @@ const TIMEZONE = 'America/Sao_Paulo';
 const MAX_BOOKINGS_PER_SLOT = 2;
 const BRIDGE_SESSION_TTL_SECONDS = 600;
 const DUPLICATE_REQUEST_TTL_SECONDS = 600;
+const REVIEWS_CACHE_TTL_SECONDS = 21600;
 const ALLOWED_ORIGINS = [
   'https://assistenciadorus.com.br',
   'https://www.assistenciadorus.com.br'
@@ -92,6 +93,14 @@ function bridgePage() {
       return;
     }
 
+    if (message.type === 'reviews') {
+      google.script.run
+        .withSuccessHandler(success)
+        .withFailureHandler(failure)
+        .getGoogleReviewsSummaryClient(bridgeSession);
+      return;
+    }
+
     failure(new Error('Ação inválida'));
   });
 
@@ -107,6 +116,49 @@ function bridgePage() {
     .createHtmlOutput(html)
     .setTitle('Dorus Agenda Bridge')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function getGoogleReviewsSummaryClient(bridgeSession) {
+  validateBridgeSession(bridgeSession);
+
+  const cache = CacheService.getScriptCache();
+  const cached = cache.get('google-reviews-summary');
+  if (cached) return JSON.parse(cached);
+
+  const properties = PropertiesService.getScriptProperties();
+  const apiKey = String(properties.getProperty('GOOGLE_PLACES_API_KEY') || '').trim();
+  const placeId = String(properties.getProperty('GOOGLE_PLACE_ID') || '').trim();
+  if (!apiKey || !placeId) throw new Error('Integração de avaliações ainda não configurada.');
+  if (!/^[A-Za-z0-9_-]+$/.test(placeId)) throw new Error('Place ID inválido.');
+
+  const response = UrlFetchApp.fetch(
+    'https://places.googleapis.com/v1/places/' + encodeURIComponent(placeId),
+    {
+      method: 'get',
+      headers: {
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'rating,userRatingCount'
+      },
+      muteHttpExceptions: true
+    }
+  );
+
+  if (response.getResponseCode() !== 200) {
+    throw new Error('Não foi possível consultar as avaliações do Google.');
+  }
+
+  const place = JSON.parse(response.getContentText());
+  const result = {
+    rating: Number(place.rating),
+    userRatingCount: Number(place.userRatingCount)
+  };
+  if (!Number.isFinite(result.rating) || result.rating < 1 || result.rating > 5 ||
+      !Number.isInteger(result.userRatingCount) || result.userRatingCount < 0) {
+    throw new Error('Resposta inválida da Places API.');
+  }
+
+  cache.put('google-reviews-summary', JSON.stringify(result), REVIEWS_CACHE_TTL_SECONDS);
+  return result;
 }
 
 function issueBridgeSession() {

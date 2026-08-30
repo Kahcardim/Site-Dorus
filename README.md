@@ -36,6 +36,22 @@ Cada publicação valida sintaxe, backend, identidade, acessibilidade, SEO e int
 - `scripts/` — validações e preparação da publicação;
 - `.github/workflows/` — integração e entrega contínuas.
 
+## Avaliações do Google
+
+A home mantém `4,5` e `8 avaliações` como fallback visual e tenta atualizar esses dois valores pelo mesmo Google Apps Script usado pela agenda. A chave da API nunca é enviada ao navegador.
+
+Para ativar a atualização automática:
+
+1. No Google Cloud, ative **Places API (New)** no projeto e crie uma chave de API restrita a essa API.
+2. Obtenha o Place ID correto da D’orus.
+3. No projeto do Apps Script, abra **Configurações do projeto > Propriedades do script** e crie:
+   - `GOOGLE_PLACES_API_KEY`: a chave criada no Google Cloud;
+   - `GOOGLE_PLACE_ID`: o Place ID da D’orus.
+4. Atualize a implantação existente do Web App para uma nova versão, mantendo a execução como proprietário e o acesso público já utilizado pelo agendamento.
+5. Abra a home e confirme que os dois pontos exibem a mesma nota e quantidade do perfil no Google.
+
+O resultado fica em cache por 6 horas para reduzir custo e tráfego. Se a configuração estiver ausente, a API falhar ou a resposta for inválida, o JavaScript não modifica o HTML e o fallback permanece visível.
+
 ## Resultado
 
 Uma presença digital rápida, acessível e orientada à conversão, preparada para descoberta orgânica local e evolução contínua do negócio.
