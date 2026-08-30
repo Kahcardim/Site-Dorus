@@ -41,17 +41,32 @@
       if (script.parentNode) script.parentNode.removeChild(script);
     }
 
-    window[callbackName] = function (data) {
-      applyReviews(data);
+    window[callbackName] = function (payload) {
+      if (payload && payload.ok === false) {
+        console.error('[Dorus Google Reviews]', payload.error || 'Erro desconhecido ao consultar avaliações.');
+        cleanup();
+        return;
+      }
+
+      var data = payload && payload.data ? payload.data : payload;
+      if (!applyReviews(data)) {
+        console.error('[Dorus Google Reviews] Resposta inválida recebida do Apps Script.', payload);
+      }
       cleanup();
     };
 
     script.src = WEB_APP_URL + '?action=reviews&callback=' + encodeURIComponent(callbackName) + '&_=' + Date.now();
     script.async = true;
-    script.onerror = cleanup;
+    script.onerror = function () {
+      console.error('[Dorus Google Reviews] Falha ao carregar o endpoint de avaliações.');
+      cleanup();
+    };
     document.head.appendChild(script);
 
-    timer = window.setTimeout(cleanup, REQUEST_TIMEOUT);
+    timer = window.setTimeout(function () {
+      console.error('[Dorus Google Reviews] Tempo limite excedido ao consultar avaliações.');
+      cleanup();
+    }, REQUEST_TIMEOUT);
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
