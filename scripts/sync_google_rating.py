@@ -9,6 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "google-rating.json"
+SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
 
 
 def fail(message: str) -> None:
@@ -34,6 +35,61 @@ def safe_payload_summary(payload: object) -> str:
         }
 
     return json.dumps(summary, ensure_ascii=False)
+
+
+def discover_candidates(api_key: str) -> list[dict]:
+    url = "https://places.googleapis.com/v1/places:searchText"
+    body = json.dumps(
+        {
+            "textQuery": SEARCH_QUERY,
+            "languageCode": "pt-BR",
+            "regionCode": "BR",
+        }
+    ).encode("utf-8")
+
+    request = urllib.request.Request(
+        url,
+        data=body,
+        headers={
+            "X-Goog-Api-Key": api_key,
+            "X-Goog-FieldMask": (
+                "places.id,places.displayName,places.formattedAddress,"
+                "places.nationalPhoneNumber,places.rating,places.userRatingCount"
+            ),
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": "Dorus-GitHub-Actions/1.0",
+        },
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(request, timeout=20) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as error:
+        detail = error.read().decode("utf-8", errors="replace")
+        fail(f"Text Search HTTP {error.code}: {detail[:1000]}")
+    except Exception as error:
+        fail(f"Falha ao pesquisar ficha da D'orus: {error}")
+
+    places = payload.get("places", []) if isinstance(payload, dict) else []
+    candidates = []
+    for place in places[:5]:
+        display_name = place.get("displayName") or {}
+        candidates.append(
+            {
+                "id": place.get("id"),
+                "name": display_name.get("text") if isinstance(display_name, dict) else None,
+                "address": place.get("formattedAddress"),
+                "phone": place.get("nationalPhoneNumber"),
+                "rating": place.get("rating"),
+                "reviews": place.get("userRatingCount"),
+            }
+        )
+
+    print("[google-rating] candidatos Text Search:")
+    print(json.dumps(candidates, ensure_ascii=False, indent=2))
+    return candidates
 
 
 def main() -> None:
@@ -70,10 +126,12 @@ def main() -> None:
         rating = float(payload["rating"])
         reviews = int(payload["userRatingCount"])
     except (KeyError, TypeError, ValueError) as error:
-        fail(
-            "Resposta sem rating/userRatingCount. "
+        print(
+            "[google-rating] Place ID atual não possui rating/userRatingCount. "
             f"Detalhes seguros: {safe_payload_summary(payload)}; erro={error}"
         )
+        discover_candidates(api_key)
+        fail("Place ID atual não corresponde à ficha comercial avaliada. Use um dos candidatos acima após validação.")
 
     if not 1 <= rating <= 5:
         fail(f"Nota fora do intervalo esperado: {rating}")
