@@ -23,6 +23,13 @@ function doGet(e) {
       return jsonResponse(getAvailabilityByDate(String(e.parameter.date || '')));
     }
 
+    if (action === 'reviews') {
+      const result = getGoogleReviewsSummary();
+      const callback = String((e && e.parameter && e.parameter.callback) || '').trim();
+      if (callback) return jsonpResponse(callback, result);
+      return jsonResponse({ ok: true, data: result });
+    }
+
     return jsonResponse({
       ok: true,
       service: 'Dorus Agendamento',
@@ -33,8 +40,8 @@ function doGet(e) {
   }
 }
 
-// O site usa exclusivamente a ponte HtmlService + google.script.run.
-// O endpoint POST antigo não é necessário e não deve criar eventos diretamente.
+// O endpoint POST antigo não cria eventos diretamente.
+// Criações continuam protegidas pela ponte HtmlService + google.script.run.
 function doPost() {
   return jsonResponse({
     ok: false,
@@ -120,7 +127,10 @@ function bridgePage() {
 
 function getGoogleReviewsSummaryClient(bridgeSession) {
   validateBridgeSession(bridgeSession);
+  return getGoogleReviewsSummary();
+}
 
+function getGoogleReviewsSummary() {
   const cache = CacheService.getScriptCache();
   const cached = cache.get('google-reviews-summary');
   if (cached) return JSON.parse(cached);
@@ -159,6 +169,15 @@ function getGoogleReviewsSummaryClient(bridgeSession) {
 
   cache.put('google-reviews-summary', JSON.stringify(result), REVIEWS_CACHE_TTL_SECONDS);
   return result;
+}
+
+function jsonpResponse(callback, object) {
+  if (!/^[A-Za-z_$][0-9A-Za-z_$\.]*$/.test(callback)) {
+    throw new Error('Callback inválido.');
+  }
+  return ContentService
+    .createTextOutput(callback + '(' + JSON.stringify(object) + ');')
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
 function issueBridgeSession() {
@@ -220,7 +239,6 @@ function createAppointment(data) {
   lock.waitLock(5000);
 
   try {
-    // Repete a validação dentro do lock para evitar duas criações simultâneas.
     if (cache.get(duplicateKey)) {
       return {
         ok: false,
