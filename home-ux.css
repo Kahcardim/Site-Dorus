@@ -153,6 +153,16 @@
   }
 }
 
+/* Mantém os valores dinâmicos de avaliações na mesma linha do texto do card. */
+.hero-points [data-google-rating],
+.hero-points [data-google-review-count]{
+  display:inline!important;
+  margin:0!important;
+  color:inherit!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+}
+
 /* CTAs finais — compactação e alinhamento consistente em todas as páginas */
 .section:has(> .cta-panel){
   padding-top:clamp(36px,4vw,50px)!important;
