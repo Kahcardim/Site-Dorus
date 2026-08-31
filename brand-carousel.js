@@ -14,6 +14,29 @@
     var toggle=document.querySelector('[data-logo-toggle]');
     if(!track) return;
 
+    var status=marquee.closest('.logo-marquee-shell')&&marquee.closest('.logo-marquee-shell').querySelector('[data-logo-status],.logo-marquee-status');
+    var firstSet=track.querySelector('.logo-set:not([aria-hidden="true"])')||track.querySelector('.logo-set');
+    marquee.setAttribute('role',marquee.getAttribute('role')||'group');
+    marquee.setAttribute('aria-roledescription',marquee.getAttribute('aria-roledescription')||'carrossel');
+    if(firstSet){
+      firstSet.setAttribute('role','list');
+      Array.from(firstSet.children).forEach(function(card,index){
+        var image=card.querySelector('img[alt]');
+        var fallback=card.querySelector('.brand-fallback');
+        var brand=(card.getAttribute('data-brand')||(image&&image.alt)||(fallback&&fallback.textContent)||('Marca '+(index+1))).trim();
+        card.setAttribute('role','listitem');
+        card.setAttribute('data-brand',brand);
+      });
+    }
+
+    function announce(message){if(status) status.textContent=message;}
+    function trackInteraction(action,detail){
+      if(!window.dorusAnalytics||typeof window.dorusAnalytics.track!=='function') return;
+      var params={carousel_name:'marcas_atendidas',carousel_action:action};
+      Object.keys(detail||{}).forEach(function(key){params[key]=detail[key];});
+      window.dorusAnalytics.track('brand_carousel_interaction',params);
+    }
+
     var reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
     var hoverPaused=false;
     var manualPaused=false;
@@ -24,6 +47,7 @@
     var rafId=0;
     var startX=0;
     var startScroll=0;
+    var dragDistance=0;
     var lastTime=0;
     var speed=34;
 
@@ -81,6 +105,15 @@
       toggle.title=paused?'Retomar carrossel':'Pausar carrossel';
     }
 
+    function move(direction,source){
+      var card=firstSet&&firstSet.querySelector('.brand-logo');
+      var gap=parseFloat(getComputedStyle(firstSet||track).gap)||0;
+      var distance=card?card.getBoundingClientRect().width+gap:Math.max(180,marquee.clientWidth*.6);
+      marquee.scrollBy({left:direction*distance,behavior:reduceMotion.matches?'auto':'smooth'});
+      announce(direction>0?'Próximas marcas.':'Marcas anteriores.');
+      trackInteraction(direction>0?'next':'previous',{interaction_method:source||'keyboard'});
+    }
+
     marquee.addEventListener('mouseenter',function(){hoverPaused=true;refreshAuto();});
     marquee.addEventListener('mouseleave',function(){hoverPaused=false;refreshAuto();});
     marquee.addEventListener('focusin',function(){hoverPaused=true;refreshAuto();});
@@ -89,10 +122,11 @@
     marquee.addEventListener('pointerdown',function(event){
       interacting=true;
       stopAuto();
+      startScroll=marquee.scrollLeft;
       if(event.pointerType==='mouse'){
         dragging=true;
+        dragDistance=0;
         startX=event.clientX;
-        startScroll=marquee.scrollLeft;
         marquee.classList.add('is-dragging');
         try{marquee.setPointerCapture(event.pointerId);}catch(e){}
       }
@@ -100,11 +134,16 @@
 
     marquee.addEventListener('pointermove',function(event){
       if(!dragging) return;
+      dragDistance=Math.abs(event.clientX-startX);
       marquee.scrollLeft=startScroll-(event.clientX-startX);
       normalize();
     });
 
-    function endInteraction(){
+    function endInteraction(event){
+      if(dragging&&dragDistance>12){
+        announce('Posição das marcas ajustada.');
+        trackInteraction('drag',{interaction_method:event&&event.pointerType||'pointer'});
+      }
       dragging=false;
       interacting=false;
       marquee.classList.remove('is-dragging');
@@ -113,11 +152,31 @@
 
     marquee.addEventListener('pointerup',endInteraction);
     marquee.addEventListener('pointercancel',endInteraction);
-    marquee.addEventListener('touchend',function(){setTimeout(function(){interacting=false;refreshAuto();},350);},{passive:true});
+    marquee.addEventListener('touchend',function(){
+      setTimeout(function(){
+        if(Math.abs(marquee.scrollLeft-startScroll)>12){
+          announce('Posição das marcas ajustada.');
+          trackInteraction('swipe',{interaction_method:'touch'});
+        }
+        interacting=false;refreshAuto();
+      },350);
+    },{passive:true});
     marquee.addEventListener('scroll',normalize,{passive:true});
+    marquee.addEventListener('keydown',function(event){
+      if(event.key==='ArrowLeft'){event.preventDefault();move(-1,'keyboard');}
+      if(event.key==='ArrowRight'){event.preventDefault();move(1,'keyboard');}
+      if(event.key==='Home'){
+        event.preventDefault();marquee.scrollTo({left:0,behavior:reduceMotion.matches?'auto':'smooth'});
+        announce('Início da lista de marcas.');trackInteraction('first',{interaction_method:'keyboard'});
+      }
+    });
 
     if(toggle){
-      toggle.addEventListener('click',function(){manualPaused=!manualPaused;updateToggle();refreshAuto();});
+      toggle.addEventListener('click',function(){
+        manualPaused=!manualPaused;updateToggle();refreshAuto();
+        announce(manualPaused?'Carrossel de marcas pausado.':'Carrossel de marcas retomado.');
+        trackInteraction(manualPaused?'pause':'resume',{interaction_method:'button'});
+      });
     }
 
     if(reduceMotion.addEventListener){
@@ -127,11 +186,13 @@
     document.addEventListener('visibilitychange',refreshAuto);
     updateToggle();
 
-    var visibilityObserver=new IntersectionObserver(function(entries){
-      visible=entries.some(function(entry){return entry.isIntersecting;});
-      refreshAuto();
-    },{rootMargin:'120px 0px'});
-    visibilityObserver.observe(marquee);
+    if('IntersectionObserver' in window){
+      var visibilityObserver=new IntersectionObserver(function(entries){
+        visible=entries.some(function(entry){return entry.isIntersecting;});
+        refreshAuto();
+      },{rootMargin:'120px 0px'});
+      visibilityObserver.observe(marquee);
+    }
     startAuto();
   }
 

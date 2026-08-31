@@ -1,7 +1,7 @@
 (function () {
   var script = document.currentScript;
   var siteRoot = script && script.src ? new URL('.', script.src) : new URL('./', window.location.href);
-  var assetVersion = '20260829-uxhotfix';
+  var assetVersion = '20260831-native-a11y';
 
   function hasLoadedAsset(selector, fileName) {
     return Array.from(document.querySelectorAll(selector)).some(function (node) {

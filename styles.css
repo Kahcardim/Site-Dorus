@@ -151,7 +151,7 @@ button,input,select,textarea{font:inherit}
 .service-card-media{display:block;overflow:hidden;background:#eaf4ff}
 .service-card-media img{width:100%;aspect-ratio:1/1;object-fit:cover;object-position:center}
 .service-card-body{display:flex;flex:1;flex-direction:column;padding:20px 22px 24px}
-.service-card-body h2{margin:0 0 8px;color:var(--dark);font-size:1.35rem;line-height:1.18}
+.service-card-body h2,.service-card-body h3{margin:0 0 8px;color:var(--dark);font-size:1.35rem;line-height:1.18}
 .service-card-body p{margin:0 0 16px;color:var(--muted)}
 .service-card-body .text-link{margin-top:auto}
 .internal .service-hero-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(300px,.72fr);gap:clamp(28px,5vw,64px);align-items:center}

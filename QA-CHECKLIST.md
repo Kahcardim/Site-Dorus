@@ -26,6 +26,25 @@ Este checklist deve ser executado antes de qualquer publicação no site princip
 - Com várias contas Google conectadas, a leitura pública deve ignorar cookies, carregar os períodos disponíveis e manter o envio pelo WhatsApp caso a ponte protegida não inicialize.
 - Quando a agenda automática estiver indisponível, o fallback pelo WhatsApp deve permanecer utilizável e informar a limitação ao visitante.
 
+## Acessibilidade nativa
+
+- Não deve existir botão ou painel flutuante de acessibilidade sobre o conteúdo.
+- O site deve acompanhar as preferências do dispositivo para redução de movimento, aumento de contraste, cores forçadas, redução de transparência e ponteiro por toque.
+- As preferências devem ser consultadas apenas localmente com media queries, sem armazenamento, fingerprinting ou envio ao GA4.
+- Foco por teclado, link “Pular para o conteúdo”, nomes acessíveis, zoom de texto e áreas de toque de no mínimo 44 px devem continuar funcionando.
+- Em `forced-colors`, links, botões, campos, navegação móvel e CTAs devem permanecer visíveis e distinguíveis.
+
+## Página de Serviços e carrossel de marcas
+
+- Preservar exatamente os oito cards de equipamentos e validar todos os destinos.
+- Validar as seções Como funciona, Marcas atendidas, Áreas atendidas, diferenciais, prova social, FAQ e CTA final em desktop, tablet e celular.
+- Confirmar title, meta description, canonical, um único H1, hierarquia H2/H3 e schemas BreadcrumbList, Service e FAQPage.
+- O carrossel deve expor uma lista semântica; a cópia usada somente para o loop visual deve permanecer oculta para leitores de tela.
+- Setas do teclado, pausa, retomada, redução de movimento e mensagens em `aria-live` devem funcionar sem alterar o visual.
+- Com consentimento negado e em ambiente local, nenhuma interação deve ser enviada ao GA4.
+- Com consentimento aceito em produção, pausa, retomada, avanço, retorno e arraste devem usar `brand_carousel_interaction`, sem dados pessoais.
+- Não criar páginas de marca nesta sprint.
+
 ## Regressão global
 
 - Validar as 22 rotas em 1440×900, 768×1024 e 390×844.

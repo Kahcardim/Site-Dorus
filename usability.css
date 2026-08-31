@@ -246,10 +246,9 @@ html.a11y-larger-text .values{
 .overview-hero .eyebrow{justify-content:center}
 .overview-hero p{max-width:940px!important;margin-left:auto!important;margin-right:auto!important}
 .service-warranty{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  width:auto;
+  display:block;
+  width:fit-content;
+  max-width:min(100%,760px)!important;
   margin:18px auto 0!important;
   padding:10px 15px;
   border:1px solid rgba(15,139,67,.26);
@@ -257,6 +256,16 @@ html.a11y-larger-text .values{
   background:#f1fbf5;
   color:#285a3d!important;
   font-size:.94rem!important;
+  line-height:1.45!important;
+  text-align:center;
+}
+.service-warranty strong{display:inline}
+@media(max-width:600px){
+  .service-warranty{
+    width:100%;
+    padding:11px 16px;
+    border-radius:18px;
+  }
 }
 @media(min-width:1180px){
   .overview-hero h1{white-space:nowrap}

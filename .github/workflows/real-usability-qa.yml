@@ -93,7 +93,7 @@ jobs:
               });
 
               const tinyTargets=[];
-              if(vw<=480)document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary,[data-a11y-launcher]').forEach(e=>{
+              if(vw<=480)document.querySelectorAll('.button,.whatsapp-float,.mobile-nav summary').forEach(e=>{
                 if(!visible(e))return;const r=e.getBoundingClientRect();if(r.width<40||r.height<40)tinyTargets.push({tag:e.tagName,cls:e.className,w:Math.round(r.width),h:Math.round(r.height)});
               });
 
@@ -174,7 +174,7 @@ jobs:
               if(screenshotSizes.has(size))await page.screenshot({path:`real-usability/screenshots/${size}-${shortPath(path)}.png`,fullPage:true});
 
               if(size==='mobile-390'||size==='desktop-1366'){
-                await page.evaluate(()=>document.documentElement.style.setProperty('--user-font-scale','1.3'));await page.waitForTimeout(100);
+                await page.evaluate(()=>{document.documentElement.style.fontSize='130%'});await page.waitForTimeout(100);
                 const large=await inspect(page,path),largeReasons=[];
                 if(large.overflowX>1)largeReasons.push(`overflow com fonte ampliada ${large.overflowX}px`);
                 if(large.offscreen.length)largeReasons.push(`blocos fora da viewport com fonte ampliada: ${large.offscreen.length}`);

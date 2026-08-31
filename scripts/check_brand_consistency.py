@@ -23,7 +23,7 @@ for path in (ROOT/'index.html', ROOT/'servicos/index.html', ROOT/'servicos/fogoe
         errors.append(f'{path.relative_to(ROOT)}: serviço comercial não aprovado voltou ao conteúdo.')
 
 contrast = (ROOT/'accessibility-contrast.css').read_text(encoding='utf-8')
-for marker in ('a11y-high-contrast .mobile-nav div', 'a11y-high-contrast .mobile-nav a', 'visibility:visible!important'):
+for marker in ('prefers-contrast:more', 'forced-colors:active', '.mobile-nav div', 'visibility:visible!important'):
     if marker not in contrast: errors.append(f'accessibility-contrast.css: proteção ausente: {marker}')
 
 required_guides = ('geladeira-nao-gela','maquina-nao-centrifuga','geladeira-fazendo-barulho','freezer-nao-congela','fogao-nao-acende','micro-ondas-nao-aquece')

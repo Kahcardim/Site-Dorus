@@ -176,12 +176,15 @@ def check_accessibility_and_privacy(errors):
     privacy_js = (ROOT / 'privacy-consent.js').read_text(encoding='utf-8')
     enrich = (ROOT / 'scripts/enrich_meta.py').read_text(encoding='utf-8')
 
-    for marker in ('focus-visible', 'prefers-reduced-motion', 'a11y-high-contrast'):
+    for marker in ('focus-visible', 'prefers-reduced-motion', 'prefers-contrast', 'forced-colors', 'pointer:coarse', 'text-size-adjust'):
         if marker not in accessibility_css:
             errors.append(f'accessibility.css: critério de acessibilidade ausente: {marker}')
-    for marker in ('speechSynthesis', 'SpeechRecognition', 'aria-live'):
+    for marker in ('matchMedia', 'data-a11y-native', 'reducedMotion', 'moreContrast', 'forcedColors', 'coarsePointer'):
         if marker not in accessibility_js:
-            errors.append(f'accessibility-tools.js: recurso de áudio/voz ausente: {marker}')
+            errors.append(f'accessibility-tools.js: preferência nativa ausente: {marker}')
+    for legacy_marker in ('SpeechRecognition', 'speechSynthesis', 'STORAGE_KEY', 'createTools'):
+        if legacy_marker in accessibility_js:
+            errors.append(f'accessibility-tools.js: ferramenta manual legada ainda presente: {legacy_marker}')
     for marker in ('SameSite=Lax', 'Secure', 'privacidade/'):
         if marker not in privacy_js:
             errors.append(f'privacy-consent.js: requisito de privacidade ausente: {marker}')
@@ -235,6 +238,26 @@ def check_secondary_page_parity(errors):
         for marker in ('class="internal"', 'cta-panel', 'site.js'):
             if marker not in source:
                 errors.append(f'{page.relative_to(ROOT)}: artigo do Guia sem o marcador {marker}')
+
+
+def check_service_listing_enrichment(errors):
+    source = (ROOT / 'servicos/index.html').read_text(encoding='utf-8')
+    required = (
+        'Como funciona o atendimento',
+        'Samsung', 'Brastemp', 'Electrolux', 'Consul', 'GE', 'LG', 'Bosch',
+        'Centro de Guarulhos', 'Lago dos Patos', 'Bonsucesso', 'Pimentas',
+        'Honestidade no diagnóstico', 'Troca somente quando necessária', 'Preço justo',
+        'Prova social do Google', 'FAQPage', '"@type":"Service"',
+        'service-cta-professional', 'brand_carousel',
+    )
+    combined = source + (ROOT / 'brand-carousel.js').read_text(encoding='utf-8')
+    for marker in required:
+        if marker not in combined:
+            errors.append(f'servicos/index.html: enriquecimento obrigatório ausente: {marker}')
+    if source.count('class="card service-card"') != 8:
+        errors.append('servicos/index.html: os oito cards originais de equipamentos devem ser preservados')
+    if 'servicos/marcas/' in source or '/marcas/' in source:
+        errors.append('servicos/index.html: páginas de marca não devem ser criadas nesta sprint')
 
 
 def main():
@@ -298,6 +321,7 @@ def main():
     check_global_modules(errors)
     check_accessibility_and_privacy(errors)
     check_secondary_page_parity(errors)
+    check_service_listing_enrichment(errors)
 
     if errors:
         print('Falhas encontradas:')

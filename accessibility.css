@@ -1,9 +1,15 @@
-/* Acessibilidade global */
-:root{--user-font-scale:1}
-html{font-size:calc(100% * var(--user-font-scale))}
+/* Acessibilidade nativa: respeita preferências do sistema e do navegador. */
+:root{
+  color-scheme:light;
+  -webkit-text-size-adjust:100%;
+  text-size-adjust:100%;
+}
 
-.sr-only,
-.a11y-launcher>span:last-child{
+html{font-size:100%}
+body{overflow-wrap:break-word}
+button,input,select,textarea{font:inherit}
+
+.sr-only{
   position:absolute!important;
   width:1px!important;
   height:1px!important;
@@ -11,6 +17,7 @@ html{font-size:calc(100% * var(--user-font-scale))}
   margin:-1px!important;
   overflow:hidden!important;
   clip:rect(0,0,0,0)!important;
+  clip-path:inset(50%)!important;
   white-space:nowrap!important;
   border:0!important;
 }
@@ -21,6 +28,7 @@ html{font-size:calc(100% * var(--user-font-scale))}
   top:12px;
   z-index:1400;
   padding:11px 16px;
+  border:2px solid currentColor;
   border-radius:10px;
   background:#102037;
   color:#fff;
@@ -40,6 +48,7 @@ summary:focus-visible,
 [tabindex]:focus-visible{
   outline:3px solid #0d3b8e;
   outline-offset:3px;
+  box-shadow:0 0 0 2px #fff;
 }
 
 [aria-current="page"]{
@@ -52,162 +61,49 @@ input:focus-visible,
 select:focus-visible,
 textarea:focus-visible{border-color:#0d3b8e}
 
-/* O launcher fica pequeno. O painel abre independente dele. */
-.a11y-tools{
-  position:fixed!important;
-  left:16px!important;
-  bottom:16px!important;
-  z-index:1300!important;
-  width:auto!important;
-  min-width:0!important;
-  max-width:none!important;
-  font-size:16px!important;
-  line-height:1.4!important;
-}
-.a11y-launcher{
-  position:relative;
-  z-index:3;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:50px!important;
-  height:50px!important;
-  min-width:50px!important;
-  min-height:50px!important;
-  max-width:50px!important;
-  padding:0!important;
-  border:1px solid #c6d8eb;
-  border-radius:50%;
-  background:#fff;
-  color:#102037;
-  box-shadow:0 10px 26px rgba(16,32,55,.18);
-  font-weight:800;
-  cursor:pointer;
-}
-.a11y-launcher:hover{background:#f4f9ff}
-.a11y-launcher>span:first-child{font-size:1.2rem}
-
-.a11y-backdrop{
-  position:fixed!important;
-  inset:0!important;
-  z-index:1!important;
-  background:rgba(9,22,38,.38)!important;
-  backdrop-filter:blur(1px);
-}
-.a11y-backdrop[hidden]{display:none!important}
-
-.a11y-panel{
-  position:fixed!important;
-  left:18px!important;
-  right:auto!important;
-  bottom:82px!important;
-  z-index:2!important;
-  display:block;
-  width:min(380px,calc(100vw - 36px))!important;
-  min-width:min(320px,calc(100vw - 36px))!important;
-  max-width:380px!important;
-  max-height:min(680px,calc(100dvh - 110px))!important;
-  overflow:auto!important;
-  padding:18px!important;
-  margin:0!important;
-  border:1px solid #cbdced;
-  border-radius:18px;
-  background:#fff;
-  color:#223042;
-  box-shadow:0 20px 50px rgba(16,32,55,.28);
-  writing-mode:horizontal-tb!important;
-  text-orientation:mixed!important;
-  white-space:normal!important;
-  word-break:normal!important;
-  overflow-wrap:normal!important;
-}
-.a11y-panel[hidden]{display:none!important}
-.a11y-panel,
-.a11y-panel *{
-  writing-mode:horizontal-tb!important;
-  text-orientation:mixed!important;
-  word-break:normal!important;
-  overflow-wrap:normal!important;
-}
-.a11y-panel-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important}
-.a11y-panel-head strong{font-size:1.05rem!important;color:#102037;white-space:normal!important}
-.a11y-panel-head button{flex:0 0 40px;width:40px!important;height:40px!important;min-width:40px!important;border:0;border-radius:50%;background:#edf4fb;color:#102037;font-size:1.35rem;cursor:pointer}
-.a11y-help,.a11y-voice-help{margin:8px 0 14px!important;color:#566b82;line-height:1.45!important;font-size:.88rem!important;white-space:normal!important}
-.a11y-group{display:grid!important;grid-template-columns:minmax(44px,1fr) auto minmax(44px,1fr)!important;align-items:center!important;gap:8px!important;margin-bottom:10px!important;width:100%!important}
-.a11y-group button,.a11y-action,.a11y-reset{min-height:44px!important;border:1px solid #bed2e5;border-radius:11px;background:#f7fbff;color:#173b66;font-weight:800;cursor:pointer;font-size:.95rem!important;line-height:1.25!important;white-space:normal!important}
-.a11y-group span{text-align:center!important;font-weight:800;color:#102037;white-space:nowrap!important}
-.a11y-action{display:block!important;width:100%!important;max-width:none!important;margin-top:8px!important;padding:10px 12px!important;text-align:left!important}
-.a11y-action[aria-pressed="true"]{background:#dcecff;border-color:#0d3b8e;color:#0d3b8e}
-.a11y-voice{background:#e8f8ef;border-color:#9dd4b3;color:#176532}
-.a11y-reset{display:block!important;width:100%!important;max-width:none!important;margin-top:10px!important;padding:10px 12px!important;background:#fff;color:#5c6570}
-.is-voice-listening .a11y-voice{outline:3px solid #176532;outline-offset:2px}
-body.a11y-panel-open{overflow:hidden!important}
-
-html.a11y-high-contrast body{background:#000!important;color:#fff!important}
-html.a11y-high-contrast .header,
-html.a11y-high-contrast .section,
-html.a11y-high-contrast .section-soft,
-html.a11y-high-contrast .hero,
-html.a11y-high-contrast .internal,
-html.a11y-high-contrast .card,
-html.a11y-high-contrast .trust-card,
-html.a11y-high-contrast .service-card,
-html.a11y-high-contrast .review-card,
-html.a11y-high-contrast .form,
-html.a11y-high-contrast .contact-item,
-html.a11y-high-contrast .schedule-box,
-html.a11y-high-contrast .a11y-panel{background:#000!important;color:#fff!important}
-html.a11y-high-contrast h1,
-html.a11y-high-contrast h2,
-html.a11y-high-contrast h3,
-html.a11y-high-contrast p,
-html.a11y-high-contrast span,
-html.a11y-high-contrast strong,
-html.a11y-high-contrast a,
-html.a11y-high-contrast label,
-html.a11y-high-contrast summary{color:#fff!important}
-html.a11y-high-contrast a{text-decoration:underline}
-html.a11y-high-contrast button,
-html.a11y-high-contrast input,
-html.a11y-high-contrast select,
-html.a11y-high-contrast textarea{border-color:#fff!important}
-html.a11y-high-contrast .button,
-html.a11y-high-contrast .whatsapp-mini{outline:2px solid #fff}
-
-html.a11y-reduce-motion *,
-html.a11y-reduce-motion *::before,
-html.a11y-reduce-motion *::after{scroll-behavior:auto!important;animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
-
-@media(max-width:600px){
-  .a11y-tools{left:12px!important;bottom:12px!important}
-  .a11y-launcher{width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;max-width:48px!important}
-  .a11y-panel{
-    left:12px!important;
-    right:12px!important;
-    bottom:76px!important;
-    width:auto!important;
-    min-width:0!important;
-    max-width:none!important;
-    max-height:calc(100dvh - 100px)!important;
-    padding:18px!important;
-    border-radius:18px!important;
-  }
-  .a11y-action,.a11y-reset{font-size:1rem!important;padding:11px 12px!important}
-  .a11y-help,.a11y-voice-help{font-size:.92rem!important}
-}
+/* Textos e controles continuam utilizáveis com zoom e fontes ampliadas. */
+h1,h2,h3,h4,p,li,label,summary,.button{max-width:100%}
+.button,button,input,select,textarea{min-height:44px}
 
 @media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
+  html{scroll-behavior:auto!important}
   .skip-link{transition:none}
-  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.001ms!important;
+  }
+}
+
+@media(prefers-contrast:more){
+  a:not(.button){text-decoration-thickness:2px;text-underline-offset:.18em}
+  input,select,textarea,button,.button,.card,.service-card,.review-card,.trust-card,.cta-panel{border-width:2px!important}
+  .muted,.section-copy,.form-note{color:#354b63!important}
+}
+
+@media(prefers-reduced-transparency:reduce){
+  .header,.mobile-nav div,.cookie-banner,.whatsapp-mini,.floating-contact,
+  .review-card,.service-card,.trust-card,.cta-panel{
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+  }
+}
+
+@media(pointer:coarse){
+  a.button,button,summary,input,select,textarea,.nav a,.mobile-nav a,
+  .footer-social-link,.whatsapp-mini,.floating-contact{min-height:44px}
 }
 
 @media(forced-colors:active){
-  a:focus-visible,
-  button:focus-visible,
-  input:focus-visible,
-  select:focus-visible,
-  textarea:focus-visible,
-  summary:focus-visible,
-  [tabindex]:focus-visible{outline:2px solid CanvasText}
+  :root{forced-color-adjust:auto}
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,
+  textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{
+    outline:3px solid Highlight;
+    box-shadow:none;
+  }
+  .button,button,input,select,textarea,.card,.service-card,.review-card,
+  .trust-card,.cta-panel,.mobile-nav div,.footer-social-link{border:2px solid ButtonText!important}
+  [aria-current="page"]{text-decoration:underline 3px!important}
+  svg{fill:currentColor;forced-color-adjust:auto}
 }
