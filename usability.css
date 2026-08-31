@@ -343,6 +343,10 @@ html.a11y-larger-text .values{
   font-size:1.15rem;
 }
 .footer-social-icon svg{width:20px;height:20px;display:block}
+.footer-social-icon-instagram{
+  background:radial-gradient(circle at 30% 105%,#ffd600 0 22%,#ff7a00 30%,#ff0169 52%,#d300c5 72%,#7638fa 100%);
+}
+.footer-social-icon-whatsapp{background:#25d366}
 
 @media(max-width:1050px){
   .footer-grid-professional{grid-template-columns:repeat(2,minmax(0,1fr))!important}

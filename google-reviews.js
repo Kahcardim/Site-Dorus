@@ -2,9 +2,11 @@
   'use strict';
 
   var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec';
+  var EXPECTED_PLACE_ID = 'ChIJZyk7iQ31zpQR0C-R3wgVywg';
   var REQUEST_TIMEOUT = 10000;
 
   function applyReviews(data) {
+    if (!data || data.placeId !== EXPECTED_PLACE_ID) return false;
     var rating = Number(data && data.rating);
     var count = Number(data && data.userRatingCount);
     if (!Number.isFinite(rating) || rating < 1 || rating > 5) return false;

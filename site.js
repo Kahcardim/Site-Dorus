@@ -88,8 +88,8 @@
           '<div class="footer-social">',
             '<h3>Acompanhe e fale conosco</h3>',
             '<div class="footer-social-links">',
-              '<a href="https://instagram.com/assistenciadorus" target="_blank" rel="noopener noreferrer" aria-label="Instagram da D’orus"><span class="footer-social-icon">' + footerInstagramIcon + '</span> Instagram</a>',
-              '<a href="https://wa.me/5511913573932" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da D’orus"><span class="footer-social-icon">' + footerWhatsappIcon + '</span> WhatsApp</a>',
+              '<a href="https://instagram.com/assistenciadorus" target="_blank" rel="noopener noreferrer" aria-label="Instagram da D’orus"><span class="footer-social-icon footer-social-icon-instagram">' + footerInstagramIcon + '</span> Instagram</a>',
+              '<a href="https://wa.me/5511913573932" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da D’orus"><span class="footer-social-icon footer-social-icon-whatsapp">' + footerWhatsappIcon + '</span> WhatsApp</a>',
             '</div>',
           '</div>',
         '</div>',
@@ -158,20 +158,21 @@
       var detailCapture = document.querySelector('.cta-panel');
       if (detailCapture) {
         var detailCaptureTitle = detailCapture.querySelector('h2');
-        var equipmentLabel = document.querySelector('.service-hero-copy .eyebrow');
-        equipmentLabel = equipmentLabel ? equipmentLabel.textContent.trim().toLowerCase() : 'meu equipamento';
+        var equipmentLabelNode = document.querySelector('.service-hero-copy .eyebrow');
+        var equipmentLabelText = equipmentLabelNode ? equipmentLabelNode.textContent.trim() : 'Seu equipamento';
+        var equipmentLabel = equipmentLabelText.toLowerCase();
         var detailMessage = encodeURIComponent('Olá, gostaria de solicitar atendimento para ' + equipmentLabel + '.');
         detailCapture.classList.add('service-detail-cta-professional');
         detailCapture.innerHTML = [
           '<div class="service-detail-cta-copy">',
-            '<span class="kicker">Atendimento em domicílio</span>',
+            '<span class="kicker">Atendimento para ' + equipmentLabel + '</span>',
             '<h2>' + (detailCaptureTitle ? detailCaptureTitle.textContent.trim() : 'Conte o problema do seu equipamento.') + '</h2>',
-            '<p>Envie marca, modelo e uma breve descrição do defeito para a equipe orientar o próximo passo.</p>',
+            '<p>Informe marca, modelo e o sintoma do aparelho. A equipe orienta o próximo passo antes da visita.</p>',
             '<div class="service-detail-cta-trust"><span>Atendimento em domicílio</span><span>Garantia mínima de 90 dias</span></div>',
           '</div>',
           '<div class="actions service-detail-cta-actions">',
-            '<a class="button button-white" href="' + new URL('agendamento/', siteRoot).href + '">Agendar visita</a>',
-            '<a class="button button-green" href="https://wa.me/5511913573932?text=' + detailMessage + '" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>',
+            '<a class="button button-white" href="' + new URL('agendamento/', siteRoot).href + '">Ver horários</a>',
+            '<a class="button button-green" href="https://wa.me/5511913573932?text=' + detailMessage + '" target="_blank" rel="noopener noreferrer">Enviar pelo WhatsApp</a>',
           '</div>'
         ].join('');
       }
@@ -184,9 +185,55 @@
       });
     }
 
+    function addPageClosingCta(config) {
+      var main = document.querySelector('main');
+      if (!main || main.querySelector('.page-closing-cta')) return;
+      var section = document.createElement('section');
+      section.className = 'section page-closing-cta-section';
+      section.innerHTML = [
+        '<div class="container page-closing-cta">',
+          '<div class="page-closing-cta-copy">',
+            '<span class="kicker">' + config.kicker + '</span>',
+            '<h2>' + config.title + '</h2>',
+            '<p>' + config.text + '</p>',
+            '<div class="page-closing-cta-trust"><span>Atendimento em domicílio</span><span>Garantia mínima de 90 dias</span></div>',
+          '</div>',
+          '<div class="actions page-closing-cta-actions">',
+            '<a class="button button-white" href="' + new URL(config.secondaryPath, siteRoot).href + '">' + config.secondaryLabel + '</a>',
+            '<a class="button button-green" href="https://wa.me/5511913573932?text=' + encodeURIComponent(config.whatsappText) + '" target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>',
+          '</div>',
+        '</div>'
+      ].join('');
+      main.appendChild(section);
+    }
+
+    if (pagePath === '/sobre') {
+      addPageClosingCta({
+        kicker: 'Atendimento em domicílio',
+        title: 'Precisa de assistência para seu eletrodoméstico?',
+        text: 'Conte o que está acontecendo e a equipe orienta o melhor próximo passo para o atendimento.',
+        secondaryPath: 'agendamento/',
+        secondaryLabel: 'Agendar visita',
+        whatsappText: 'Olá, conheci a D’orus pelo site e gostaria de solicitar atendimento.'
+      });
+    }
+
+    if (pagePath === '/curiosidades') {
+      addPageClosingCta({
+        kicker: 'Precisa de assistência?',
+        title: 'Identificou algum desses sinais no seu aparelho?',
+        text: 'Evite desmontar o equipamento. Envie o sintoma, a marca e o modelo para a equipe avaliar o atendimento.',
+        secondaryPath: 'servicos/',
+        secondaryLabel: 'Ver serviços',
+        whatsappText: 'Olá, li um guia no site da D’orus e gostaria de ajuda com meu eletrodoméstico.'
+      });
+    }
+
     function addJourneySwitch(currentPage) {
       var heroContainer = document.querySelector('.internal > .container');
       if (!heroContainer || heroContainer.querySelector('.journey-switch')) return;
+      var journeyHero = heroContainer.closest('.internal');
+      if (journeyHero) journeyHero.classList.add('journey-hero-centered');
       var switcher = document.createElement('nav');
       switcher.className = 'journey-switch';
       switcher.setAttribute('aria-label', 'Escolha como deseja falar com a D’orus');
@@ -344,28 +391,15 @@
         calendarLink.href = calendarUrl;
         calendarLink.hidden = false;
         status.hidden = false;
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({event: 'envio_agendamento_whatsapp', equipamento: fieldValue(data, 'equipamento'), periodo: fieldValue(data, 'periodo')});
+        if (window.dorusAnalytics) {
+          window.dorusAnalytics.trackLead('schedule_whatsapp', {
+            equipment: fieldValue(data, 'equipamento'),
+            schedule_period: fieldValue(data, 'periodo'),
+            cta_location: 'schedule_form'
+          });
+        }
         window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
       });
     }
-
-    function conversionName(link) {
-      var href = (link.getAttribute('href') || '').toLowerCase();
-      if (href.includes('wa.me/') || href.includes('whatsapp')) return 'clique_whatsapp';
-      if (href.startsWith('tel:')) return 'clique_telefone';
-      if (href.includes('instagram.com')) return 'clique_instagram';
-      if (href.includes('/agendamento') || href === 'agendamento/' || href === '../agendamento/') return 'clique_agendamento';
-      return null;
-    }
-
-    document.querySelectorAll('a[href]').forEach(function (link) {
-      var eventName = conversionName(link);
-      if (!eventName) return;
-      link.addEventListener('click', function () {
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({event: eventName, link_url: link.href, page_path: window.location.pathname});
-      });
-    });
   });
 })();

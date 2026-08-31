@@ -236,12 +236,14 @@
         setStatus('Solicitação registrada na agenda. Agora confirme o atendimento pelo WhatsApp.', false);
         showWhatsappLink(whatsappUrl);
 
-        window.dataLayer = window.dataLayer || [];
-        window.dataLayer.push({
-          event: 'agendamento_registrado_google',
-          equipamento: fieldValue(data, 'equipamento'),
-          horario: fieldValue(data, 'periodo')
-        });
+        if (window.dorusAnalytics) {
+          window.dorusAnalytics.trackLead('schedule_google', {
+            equipment: fieldValue(data, 'equipamento'),
+            schedule_period: fieldValue(data, 'periodo'),
+            schedule_status: 'registered',
+            cta_location: 'schedule_form'
+          });
+        }
 
         var popup = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
         if (!popup) showWhatsappLink(whatsappUrl);

@@ -1328,6 +1328,10 @@ html.a11y-larger-text .values{
   font-size:1.15rem;
 }
 .footer-social-icon svg{width:20px;height:20px;display:block}
+.footer-social-icon-instagram{
+  background:radial-gradient(circle at 30% 105%,#ffd600 0 22%,#ff7a00 30%,#ff0169 52%,#d300c5 72%,#7638fa 100%);
+}
+.footer-social-icon-whatsapp{background:#25d366}
 
 @media(max-width:1050px){
   .footer-grid-professional{grid-template-columns:repeat(2,minmax(0,1fr))!important}
@@ -2365,7 +2369,7 @@ body:has(.contact-grid) .contact-grid .form textarea{
   background:linear-gradient(125deg,#0d2747 0%,#123b68 100%)!important;
   box-shadow:0 18px 44px rgba(8,30,57,.18)!important;
 }
-.service-detail-cta-professional .kicker{color:#8ec7ff!important}
+.service-detail-cta-professional .kicker{color:#8ec7ff!important;letter-spacing:.08em!important}
 .section > .service-detail-cta-professional h2{
   color:#fff!important;
   margin:4px 0 6px!important;
@@ -2453,6 +2457,130 @@ body:has(.contact-grid) .contact-grid .form textarea{
   .service-related-guides{padding-top:24px!important;padding-bottom:24px!important}
   .service-related-guides .card{padding:18px!important}
   .service-related-guides.is-single > .container > .card{align-items:flex-start!important;flex-direction:column!important;gap:8px!important}
+}
+
+/* Contato e agendamento: título, explicação e escolha de jornada centralizados. */
+.journey-hero-centered > .container{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+.journey-hero-centered h1{
+  width:100%!important;
+  max-width:1080px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-wrap:balance;
+}
+.journey-hero-centered > .container > p{
+  max-width:880px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.journey-hero-centered .eyebrow{justify-content:center!important}
+.journey-hero-centered .journey-switch{
+  width:100%!important;
+  margin:24px auto 0!important;
+  text-align:left!important;
+}
+
+/* Fechamento de conversão das páginas Sobre e Guias. */
+.page-closing-cta-section{
+  padding-top:30px!important;
+  padding-bottom:34px!important;
+}
+.page-closing-cta{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(330px,auto)!important;
+  align-items:center!important;
+  gap:28px!important;
+  width:min(1040px,calc(100% - 64px))!important;
+  padding:24px 26px!important;
+  border-radius:20px!important;
+  background:linear-gradient(125deg,#0d2747 0%,#123b68 100%)!important;
+  box-shadow:0 18px 44px rgba(8,30,57,.18)!important;
+}
+.page-closing-cta .kicker{color:#8ec7ff!important}
+.page-closing-cta h2{
+  margin:4px 0 6px!important;
+  color:#fff!important;
+  font-size:clamp(1.55rem,2vw,2rem)!important;
+  line-height:1.14!important;
+}
+.page-closing-cta p{max-width:650px!important;margin:0!important;color:#d6e5f6!important}
+.page-closing-cta-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px 18px;
+  margin-top:12px;
+  color:#fff;
+  font-size:.86rem;
+  font-weight:800;
+}
+.page-closing-cta-trust span::before{content:'✓';color:#56df8c;margin-right:7px}
+.page-closing-cta .page-closing-cta-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  min-width:330px!important;
+  gap:10px!important;
+  margin:0!important;
+}
+.page-closing-cta .page-closing-cta-actions .button{width:100%!important;min-width:0!important}
+.page-closing-cta .button-white{border-color:rgba(255,255,255,.34)!important}
+
+@media(max-width:900px){
+  .page-closing-cta{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:22px!important;
+  }
+  .page-closing-cta .page-closing-cta-actions{
+    min-width:0!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:620px){
+  .journey-hero-centered h1{font-size:clamp(2rem,9vw,2.45rem)!important}
+  .journey-hero-centered .journey-switch{margin-top:20px!important}
+  .page-closing-cta-section{padding-top:22px!important;padding-bottom:24px!important}
+  .page-closing-cta{width:calc(100% - 28px)!important;padding:18px 16px!important;gap:16px!important}
+  .page-closing-cta h2{font-size:1.4rem!important}
+  .page-closing-cta p{font-size:.92rem!important;line-height:1.42!important}
+  .page-closing-cta .page-closing-cta-actions{gap:8px!important}
+  .page-closing-cta .page-closing-cta-actions .button{
+    min-height:44px!important;
+    padding:10px 8px!important;
+    font-size:.82rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+  }
+  .page-closing-cta-trust{margin-top:10px;font-size:.8rem;line-height:1.35;gap:5px 12px}
+}
+
+/* Guias: diretório SEO com problemas comuns e ligação para os oito serviços. */
+.common-problems-directory{padding-top:42px!important;padding-bottom:42px!important}
+.common-problems-directory .section-head{margin-bottom:20px!important}
+.common-problems-directory .section-head p{max-width:780px!important}
+.common-problems-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+}
+.common-problem-card{
+  display:flex!important;
+  flex-direction:column;
+  min-height:230px!important;
+  padding:22px!important;
+}
+.common-problem-card h3{margin:5px 0 8px!important;font-size:1.18rem;line-height:1.25}
+.common-problem-card p{margin:0!important;font-size:.94rem!important;line-height:1.48!important}
+.common-problem-link{margin-top:auto;padding-top:16px;color:var(--primary);font-weight:800;font-size:.9rem}
+@media(max-width:1050px){.common-problems-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){
+  .common-problems-directory{padding-top:30px!important;padding-bottom:30px!important}
+  .common-problems-grid{grid-template-columns:1fr;gap:12px}
+  .common-problem-card{min-height:0!important;padding:18px!important}
 }
 /* accessibility-contrast.css */
 /* Correcoes de alto contraste — preserva navegacao, painel e foco. */

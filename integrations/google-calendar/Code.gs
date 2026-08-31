@@ -149,6 +149,7 @@ function getGoogleReviewsSummaryClient(bridgeSession) {
 
   const place = JSON.parse(response.getContentText());
   const result = {
+    placeId: placeId,
     rating: Number(place.rating),
     userRatingCount: Number(place.userRatingCount)
   };
