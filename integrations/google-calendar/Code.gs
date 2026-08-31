@@ -2,7 +2,11 @@ const CALENDAR_ID =
   'bca85ae34b7e3894763d97f8b0b5044d895632d3cca7bf0f5806e98156c8a48f@group.calendar.google.com';
 
 const TIMEZONE = 'America/Sao_Paulo';
-const MAX_BOOKINGS_PER_SLOT = 2;
+const MAX_BOOKINGS_PER_PERIOD = 5;
+const MORNING_START = '08:00';
+const MORNING_END = '13:00';
+const AFTERNOON_START = '13:00';
+const AFTERNOON_END = '18:00';
 const BRIDGE_SESSION_TTL_SECONDS = 600;
 const DUPLICATE_REQUEST_TTL_SECONDS = 600;
 const REVIEWS_CACHE_TTL_SECONDS = 21600;
@@ -222,11 +226,23 @@ function getAvailabilityByDate(date) {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
   if (!calendar) throw new Error('Agenda D’orus não encontrada.');
 
-  const slots = generateSlots(date).filter(slot => {
-    return calendar.getEvents(slot.start, slot.end).length < MAX_BOOKINGS_PER_SLOT;
-  }).map(slot => ({ value: slot.value, label: slot.label }));
+  const periods = generatePeriods(date);
+  const morningBookings = calendar.getEvents(periods.manha.start, periods.manha.end).length;
+  const afternoonBookings = calendar.getEvents(periods.tarde.start, periods.tarde.end).length;
+  const morningRemaining = Math.max(0, MAX_BOOKINGS_PER_PERIOD - morningBookings);
+  const afternoonRemaining = Math.max(0, MAX_BOOKINGS_PER_PERIOD - afternoonBookings);
+  const availablePeriods = [
+    { value: 'manha', label: 'Manhã - 8h às 13h', remaining: morningRemaining },
+    { value: 'tarde', label: 'Tarde - 13h às 18h', remaining: afternoonRemaining },
+    { value: 'integral', label: 'Dia inteiro - 8h às 18h', remaining: Math.min(morningRemaining, afternoonRemaining) }
+  ].filter(period => period.remaining > 0);
 
-  return { ok: true, date: date, slots: slots };
+  return {
+    ok: true,
+    date: date,
+    capacityPerPeriod: MAX_BOOKINGS_PER_PERIOD,
+    periods: availablePeriods
+  };
 }
 
 function createAppointment(data) {
@@ -236,8 +252,8 @@ function createAppointment(data) {
   const calendar = CalendarApp.getCalendarById(CALENDAR_ID);
   if (!calendar) throw new Error('Agenda D’orus não encontrada.');
 
-  const slot = getSlot(data.date, data.time);
-  if (!slot) throw new Error('Horário inválido.');
+  const selectedPeriod = getPeriod(data.date, data.period);
+  if (!selectedPeriod) throw new Error('Período inválido.');
 
   const duplicateKey = appointmentFingerprint(data);
   const cache = CacheService.getScriptCache();
@@ -261,16 +277,23 @@ function createAppointment(data) {
       };
     }
 
-    const conflicts = calendar.getEvents(slot.start, slot.end);
-    if (conflicts.length >= MAX_BOOKINGS_PER_SLOT) {
+    const periods = generatePeriods(data.date);
+    const morningBookings = calendar.getEvents(periods.manha.start, periods.manha.end).length;
+    const afternoonBookings = calendar.getEvents(periods.tarde.start, periods.tarde.end).length;
+    const periodFull = data.period === 'manha'
+      ? morningBookings >= MAX_BOOKINGS_PER_PERIOD
+      : data.period === 'tarde'
+        ? afternoonBookings >= MAX_BOOKINGS_PER_PERIOD
+        : morningBookings >= MAX_BOOKINGS_PER_PERIOD || afternoonBookings >= MAX_BOOKINGS_PER_PERIOD;
+    if (periodFull) {
       return {
         ok: false,
         conflict: true,
-        error: 'Esse horário já atingiu o limite de solicitações. Escolha outro horário.'
+        error: 'Este período já atingiu o limite de 5 clientes. Escolha outro período ou outra data.'
       };
     }
 
-    const title = 'Visita D’orus — ' + sanitize(data.equipment) + ' — ' + sanitize(data.name);
+    const title = 'Visita D’orus - ' + selectedPeriod.label + ' - ' + sanitize(data.equipment) + ' - ' + sanitize(data.name);
     const description = [
       'Solicitação recebida pelo site D’orus',
       '',
@@ -281,11 +304,13 @@ function createAppointment(data) {
       'Problema: ' + sanitize(data.problem),
       'Bairro: ' + sanitize(data.neighborhood),
       '',
+      'Período solicitado: ' + selectedPeriod.label,
+      'Horário exato: A CONFIRMAR PELO WHATSAPP',
       'Status: AGUARDANDO CONFIRMAÇÃO'
     ].join('\n');
 
     const location = sanitize(data.address) + ', ' + sanitize(data.neighborhood) + ', Guarulhos - SP';
-    const event = calendar.createEvent(title, slot.start, slot.end, {
+    const event = calendar.createEvent(title, selectedPeriod.start, selectedPeriod.end, {
       description: description,
       location: location
     });
@@ -296,7 +321,8 @@ function createAppointment(data) {
       ok: true,
       eventId: event.getId(),
       date: data.date,
-      time: data.time,
+      period: data.period,
+      periodLabel: selectedPeriod.label,
       message: 'Solicitação registrada na agenda D’orus.'
     };
   } finally {
@@ -306,34 +332,37 @@ function createAppointment(data) {
 
 function appointmentFingerprint(data) {
   const phone = String(data.phone || '').replace(/\D/g, '').slice(-11);
-  const raw = [phone, data.date, data.time, sanitize(data.equipment), sanitize(data.name)].join('|').toLowerCase();
+  const raw = [phone, data.date, data.period, sanitize(data.equipment), sanitize(data.name)].join('|').toLowerCase();
   const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw, Utilities.Charset.UTF_8);
   const hex = digest.map(byte => ('0' + ((byte + 256) % 256).toString(16)).slice(-2)).join('');
   return 'appointment:' + hex;
 }
 
-function generateSlots(date) {
-  const times = [
-    ['08:00', '10:00'],
-    ['10:00', '12:00'],
-    ['13:00', '15:00'],
-    ['15:00', '17:00']
-  ];
-
-  return times.map(pair => ({
-    value: pair[0],
-    label: pair[0] + ' às ' + pair[1],
-    start: parseLocalDateTime(date, pair[0]),
-    end: parseLocalDateTime(date, pair[1])
-  }));
+function generatePeriods(date) {
+  return {
+    manha: {
+      value: 'manha',
+      label: 'Manhã - 8h às 13h',
+      start: Utilities.parseDate(date + ' ' + MORNING_START, TIMEZONE, 'yyyy-MM-dd HH:mm'),
+      end: Utilities.parseDate(date + ' ' + MORNING_END, TIMEZONE, 'yyyy-MM-dd HH:mm')
+    },
+    tarde: {
+      value: 'tarde',
+      label: 'Tarde - 13h às 18h',
+      start: Utilities.parseDate(date + ' ' + AFTERNOON_START, TIMEZONE, 'yyyy-MM-dd HH:mm'),
+      end: Utilities.parseDate(date + ' ' + AFTERNOON_END, TIMEZONE, 'yyyy-MM-dd HH:mm')
+    },
+    integral: {
+      value: 'integral',
+      label: 'Dia inteiro - 8h às 18h',
+      start: Utilities.parseDate(date + ' ' + MORNING_START, TIMEZONE, 'yyyy-MM-dd HH:mm'),
+      end: Utilities.parseDate(date + ' ' + AFTERNOON_END, TIMEZONE, 'yyyy-MM-dd HH:mm')
+    }
+  };
 }
 
-function getSlot(date, time) {
-  return generateSlots(date).find(slot => slot.value === time) || null;
-}
-
-function parseLocalDateTime(date, time) {
-  return Utilities.parseDate(date + ' ' + time, TIMEZONE, 'yyyy-MM-dd HH:mm');
+function getPeriod(date, period) {
+  return generatePeriods(date)[String(period || '')] || null;
 }
 
 function validateDate(date) {
@@ -355,7 +384,7 @@ function validateDate(date) {
 }
 
 function validateRequired(data) {
-  const required = ['name', 'phone', 'neighborhood', 'address', 'equipment', 'problem', 'date', 'time'];
+  const required = ['name', 'phone', 'neighborhood', 'address', 'equipment', 'problem', 'date', 'period'];
   required.forEach(field => {
     if (!String(data[field] || '').trim()) throw new Error('Campo obrigatório ausente: ' + field);
   });

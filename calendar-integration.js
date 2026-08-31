@@ -3,6 +3,7 @@
 
   var WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbySQLF-zmEA9Pjx3-or9ZYb84FQYXzphMmDLm464tWWKv7Zial1dZoTcz6qw8pwZPNh/exec';
   var BRIDGE_URL = WEB_APP_URL + '?action=bridge';
+  var AVAILABILITY_URL = WEB_APP_URL + '?action=availability&date=';
   var REQUEST_TIMEOUT = 10000;
 
   function init() {
@@ -20,11 +21,21 @@
     var pending = new Map();
     var iframe = document.createElement('iframe');
     iframe.src = BRIDGE_URL;
-    iframe.hidden = true;
+    iframe.className = 'calendar-bridge-frame';
+    iframe.style.position = 'absolute';
+    iframe.style.width = '1px';
+    iframe.style.height = '1px';
+    iframe.style.left = '-10000px';
+    iframe.style.top = '0';
+    iframe.style.border = '0';
+    iframe.style.opacity = '0';
+    iframe.style.pointerEvents = 'none';
     iframe.tabIndex = -1;
+    // Impede que sessões Google do visitante alterem a rota pública do Apps
+    // Script quando há várias contas conectadas no mesmo navegador.
+    iframe.setAttribute('credentialless', '');
     iframe.setAttribute('aria-hidden', 'true');
     iframe.setAttribute('title', 'Integração segura com a agenda D’orus');
-    document.body.appendChild(iframe);
 
     function setStatus(message, isError) {
       status.hidden = false;
@@ -76,9 +87,9 @@
         periodSelect.dataset.calendarMode = 'slots';
         var label = periodSelect.closest('label');
         if (label && label.firstChild && label.firstChild.nodeType === Node.TEXT_NODE) {
-          label.firstChild.nodeValue = 'Horário disponível';
+          label.firstChild.nodeValue = 'Período disponível';
         }
-        submitButton.textContent = 'Solicitar horário e continuar no WhatsApp';
+        submitButton.textContent = 'Solicitar atendimento e continuar no WhatsApp';
         if (dateInput.value) loadAvailability();
         return;
       }
@@ -92,23 +103,27 @@
       else request.reject(new Error(message.error || 'Não foi possível consultar a agenda.'));
     });
 
+    // Registra o listener antes de carregar a ponte para não perder a
+    // mensagem "ready" em conexões rápidas.
+    document.body.appendChild(iframe);
+
     function setLoadingOptions() {
       periodSelect.disabled = true;
       periodSelect.innerHTML = '<option value="">Consultando agenda...</option>';
     }
 
-    function setSlotOptions(slots) {
-      periodSelect.innerHTML = '<option value="">Selecione um horário</option>';
-      (slots || []).forEach(function (slot) {
+    function setPeriodOptions(periods) {
+      periodSelect.innerHTML = '<option value="">Selecione um período</option>';
+      (periods || []).forEach(function (period) {
         var option = document.createElement('option');
-        option.value = slot.value;
-        option.textContent = slot.label;
+        option.value = period.value;
+        option.textContent = period.label;
         periodSelect.appendChild(option);
       });
       periodSelect.disabled = false;
 
-      if (!slots || slots.length === 0) {
-        periodSelect.innerHTML = '<option value="">Nenhum horário disponível nesta data</option>';
+      if (!periods || periods.length === 0) {
+        periodSelect.innerHTML = '<option value="">Nenhum período disponível nesta data</option>';
         periodSelect.disabled = true;
       }
     }
@@ -118,9 +133,9 @@
       periodSelect.disabled = false;
       periodSelect.innerHTML = [
         '<option value="">Selecione</option>',
-        '<option value="manha">Manhã — 8h às 12h</option>',
-        '<option value="tarde">Tarde — 13h às 17h</option>',
-        '<option value="comercial">Horário comercial — 8h às 17h</option>'
+        '<option value="manha">Manhã - 8h às 13h</option>',
+        '<option value="tarde">Tarde - 13h às 18h</option>',
+        '<option value="integral">Dia inteiro - 8h às 18h</option>'
       ].join('');
       var label = periodSelect.closest('label');
       if (label && label.firstChild && label.firstChild.nodeType === Node.TEXT_NODE) {
@@ -131,7 +146,7 @@
 
     async function loadAvailability() {
       resetStatus();
-      if (!bridgeReady || !dateInput.value) return;
+      if (!dateInput.value) return;
       if (!dateInput.checkValidity()) {
         periodSelect.innerHTML = '<option value="">Escolha uma data válida</option>';
         periodSelect.disabled = true;
@@ -141,11 +156,32 @@
       setLoadingOptions();
 
       try {
-        var result = await bridgeRequest('availability', { date: dateInput.value });
+        var result;
+        if (bridgeReady) {
+          result = await bridgeRequest('availability', { date: dateInput.value });
+        } else {
+          // A leitura pública usa uma requisição sem cookies. Assim, visitantes
+          // com várias contas Google conectadas não caem no erro de multi-login
+          // conhecido do Apps Script; a criação continua protegida pela ponte.
+          var response = await fetch(AVAILABILITY_URL + encodeURIComponent(dateInput.value), {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit',
+            cache: 'no-store',
+            referrerPolicy: 'no-referrer'
+          });
+          if (!response.ok) throw new Error('Agenda indisponível.');
+          result = await response.json();
+          periodSelect.dataset.calendarMode = 'live-fallback';
+          var liveLabel = periodSelect.closest('label');
+          if (liveLabel && liveLabel.firstChild && liveLabel.firstChild.nodeType === Node.TEXT_NODE) {
+            liveLabel.firstChild.nodeValue = 'Período disponível';
+          }
+        }
         if (!result || !result.ok) throw new Error(result && result.error ? result.error : 'Agenda indisponível.');
-        setSlotOptions(result.slots || []);
-        if (!result.slots || result.slots.length === 0) {
-          setStatus('Não há horários livres nesta data. Escolha outro dia.', true);
+        setPeriodOptions(result.periods || []);
+        if (!result.periods || result.periods.length === 0) {
+          setStatus('Os períodos desta data já atingiram o limite de 5 clientes. Escolha outro dia.', true);
         }
       } catch (error) {
         restoreFallbackOptions();
@@ -164,7 +200,7 @@
       return parts.length === 3 ? parts[2] + '/' + parts[1] + '/' + parts[0] : value;
     }
 
-    function whatsappMessage(data, slotLabel, registered) {
+    function whatsappMessage(data, periodLabel, registered) {
       return [
         'Olá, vim pelo site da D’orus e gostaria de solicitar uma visita técnica.',
         '',
@@ -176,7 +212,8 @@
         '*Marca/modelo:* ' + (fieldValue(data, 'marca') || 'Não informado'),
         '*Problema:* ' + fieldValue(data, 'problema'),
         '*Data preferida:* ' + displayDate(fieldValue(data, 'data')),
-        '*Horário:* ' + slotLabel,
+        '*Período solicitado:* ' + periodLabel,
+        '*Horário exato:* a confirmar pela equipe dentro do período escolhido,',
         '',
         registered ? 'A solicitação já foi registrada na agenda da D’orus e aguarda confirmação.' : 'Se possível, confirme a disponibilidade desse horário.'
       ].join('\n');
@@ -198,7 +235,7 @@
 
       var data = new FormData(form);
       var selectedOption = periodSelect.options[periodSelect.selectedIndex];
-      var slotLabel = selectedOption ? selectedOption.textContent : fieldValue(data, 'periodo');
+      var periodLabel = selectedOption ? selectedOption.textContent : fieldValue(data, 'periodo');
       submitButton.disabled = true;
       setStatus('Registrando sua solicitação na agenda da D’orus...', false);
 
@@ -211,7 +248,7 @@
         brand: fieldValue(data, 'marca'),
         problem: fieldValue(data, 'problema'),
         date: fieldValue(data, 'data'),
-        time: fieldValue(data, 'periodo')
+        period: fieldValue(data, 'periodo')
       };
 
       try {
@@ -223,7 +260,7 @@
             return;
           }
           if (result && result.duplicate) {
-            var duplicateUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, slotLabel, true));
+            var duplicateUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, periodLabel, true));
             setStatus('Essa solicitação já foi registrada. Continue pelo WhatsApp para confirmar o atendimento.', false);
             showWhatsappLink(duplicateUrl);
             return;
@@ -231,7 +268,7 @@
           throw new Error(result && result.error ? result.error : 'Não foi possível registrar a solicitação.');
         }
 
-        var message = whatsappMessage(data, slotLabel, true);
+        var message = whatsappMessage(data, periodLabel, true);
         var whatsappUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(message);
         setStatus('Solicitação registrada na agenda. Agora confirme o atendimento pelo WhatsApp.', false);
         showWhatsappLink(whatsappUrl);
@@ -249,7 +286,7 @@
         if (!popup) showWhatsappLink(whatsappUrl);
       } catch (error) {
         setStatus('Não consegui registrar automaticamente na agenda. Você ainda pode continuar pelo WhatsApp.', true);
-        var fallbackUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, slotLabel, false));
+        var fallbackUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(whatsappMessage(data, periodLabel, false));
         showWhatsappLink(fallbackUrl);
       } finally {
         submitButton.disabled = false;

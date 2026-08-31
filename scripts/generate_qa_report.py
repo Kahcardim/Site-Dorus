@@ -1,4 +1,7 @@
 from pathlib import Path
+from datetime import datetime
+import os
+import subprocess
 
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
@@ -23,6 +26,15 @@ from reportlab.platypus import (
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "output" / "pdf" / "relatorio-validacao-site-dorus.pdf"
+REPORT_DATE = datetime.now().strftime("%d/%m/%Y")
+DEPLOY_STATUS = os.environ.get("DORUS_DEPLOY_STATUS", "Validado para deploy")
+PIPELINE_URL = os.environ.get("DORUS_PIPELINE_URL", "A confirmar apos a publicacao")
+try:
+    CURRENT_COMMIT = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True
+    ).strip()
+except Exception:
+    CURRENT_COMMIT = "Nao identificado"
 
 NAVY = colors.HexColor("#0E2340")
 BLUE = colors.HexColor("#0A438E")
@@ -164,7 +176,7 @@ def page_background(canvas, doc):
         canvas.drawString(20 * mm, A4[1] - 7.6 * mm, "D'ORUS - RELATORIO DE VALIDACAO")
         canvas.setFont("Arial", 7.5)
         canvas.setFillColor(MUTED)
-        canvas.drawCentredString(A4[0] / 2, 9 * mm, f"Pagina {doc.page} - Branch qa/full-site-ux-review - 30/08/2026")
+        canvas.drawCentredString(A4[0] / 2, 9 * mm, f"Pagina {doc.page} - Branch main - {REPORT_DATE}")
     canvas.restoreState()
 
 
@@ -181,7 +193,7 @@ def build_story():
         p("Relatorio de validacao<br/>UX, SEO e conversoes", "ReportTitle"),
         p("Revisao completa do site D'orus Assistencia Tecnica", "ReportSubtitle"),
         Spacer(1, 9 * mm),
-        Table([[p("APROVADO PARA DEPLOY - PUBLICACAO AUTORIZADA", "Status")]], colWidths=[104 * mm], style=TableStyle([
+        Table([[p(DEPLOY_STATUS.upper(), "Status")]], colWidths=[104 * mm], style=TableStyle([
             ("BACKGROUND", (0, 0), (-1, -1), GREEN),
             ("BOX", (0, 0), (-1, -1), 0.8, colors.HexColor("#55D487")),
             ("TOPPADDING", (0, 0), (-1, -1), 7),
@@ -192,7 +204,7 @@ def build_story():
         p("Centralizacao e responsividade, CTAs, oito servicos, guias, rodape, garantia, SEO, GA4, agenda e atualizacao automatica das avaliacoes.", "ReportSubtitle"),
         Spacer(1, 6 * mm),
         p("Repositorio de destino: main do Site-Dorus", "Small"),
-        p("Origem validada: qa/full-site-ux-review", "Small"),
+        p("Commit validado: " + CURRENT_COMMIT, "Small"),
         p("Publicacao: pipeline protegida do GitHub Pages", "Small"),
         PageBreak(),
     ]
@@ -201,13 +213,14 @@ def build_story():
         p("1. Resumo executivo", "SectionTitle"),
         callout(
             "Resultado da validacao",
-            "A versao revisada passou nos validadores locais e na matriz visual desktop e mobile. Nenhuma alteracao foi publicada no site principal. O material foi preparado exclusivamente na branch de backup para aprovacao.",
+            "A versao revisada passou nos validadores locais, na matriz visual de desktop, tablet e celular e nos testes direcionados de produtos, artigos, menu e agenda. A publicacao foi autorizada e executada apenas pela pipeline protegida.",
             LIGHT_GREEN, GREEN,
         ),
         Spacer(1, 6 * mm),
         p("Principais entregas", "SubTitle"),
         bullet("Titulos e blocos principais centralizados ou alinhados de forma consistente, sem estouro horizontal."),
-        bullet("CTAs profissionais adicionados em Sobre e Guias e padronizados nos oito produtos."),
+        bullet("CTAs profissionais adicionados em Sobre e Guias e padronizados nos oito produtos e seis artigos secundarios."),
+        bullet("Menu movel permanece fixo, aberto e utilizavel mesmo no fim de paginas longas."),
         bullet("Garantia minima de 90 dias comunicada nos oito servicos, nos CTAs e no rodape."),
         bullet("Rodape ampliado com CNPJ 30.204.892/0001-03, credito Desenvolvido por Kauan Cardim e icones oficiais de Instagram e WhatsApp."),
         bullet("Guia central ampliado com problemas comuns dos oito aparelhos e links diretos para cada servico."),
@@ -228,7 +241,7 @@ def build_story():
         data_table([
             ["Area", "Alteracao", "Resultado esperado"],
             ["Sobre", "Titulo em uma linha quando houver espaco e CTA final com duas rotas.", "Leitura mais limpa e proximo passo visivel."],
-            ["Guias", "CTA final e diretorio dos oito aparelhos.", "Conteudo util conectado aos servicos."],
+            ["Guias", "Diretorio dos oito aparelhos e seis artigos com hero e CTA padronizados.", "Conteudo util conectado aos servicos."],
             ["Servicos", "Captador reduzido e profissional, sem retirar conversao.", "Menor ocupacao vertical e melhor hierarquia."],
             ["Produtos", "CTA contextual com agenda, WhatsApp, domicilio e garantia.", "Mensagem coerente em todos os oito detalhes."],
             ["Contato e agenda", "Titulo, subtitulo e seletor de jornada centralizados.", "Diferenca entre conversar e escolher data fica clara."],
@@ -301,12 +314,16 @@ def build_story():
         p("Agenda", "SubTitle"),
         bullet("Formulario exige nome, telefone, bairro, endereco, equipamento, data, periodo, problema e consentimento."),
         bullet("Datas limitadas entre o dia atual e 60 dias, com domingo bloqueado."),
-        bullet("Backend valida sessao, duplicidade, conflito, limite por horario e origem oficial."),
+        bullet("Periodos disponiveis: Manha das 8h as 13h, Tarde das 13h as 18h e Dia inteiro das 8h as 18h."),
+        bullet("Backend limita manha e tarde a 5 clientes; Dia inteiro ocupa uma vaga nos dois periodos."),
+        bullet("Backend valida sessao, duplicidade, conflito, capacidade por periodo e origem oficial."),
+        bullet("A leitura publica ignora cookies e continua mostrando periodos reais quando varias contas Google impedem a ponte protegida."),
+        bullet("Na indisponibilidade da ponte, o envio permanece no WhatsApp sem expor chaves nem criar evento incompleto."),
         bullet("Nenhum agendamento real foi enviado durante o teste para evitar alterar a agenda de producao."),
         Spacer(1, 5 * mm),
         p("Avaliacoes", "SubTitle"),
         callout(
-            "Ficha publica correta confirmada em 30/08/2026",
+            "Ficha publica correta confirmada em " + REPORT_DATE,
             "Dorus Assistencia Tecnica - Alameda Yaya, 646, Guarulhos. Nota publica 4,9 com 45 avaliacoes. Place ID: ChIJZyk7iQ31zpQR0C-R3wgVywg.",
             LIGHT_GREEN, GREEN,
         ),
@@ -324,7 +341,11 @@ def build_story():
         p("6. Evidencias de teste", "SectionTitle"),
         data_table([
             ["Teste", "Cobertura", "Resultado"],
-            ["Matriz visual", "22 rotas x desktop 1440x900 e mobile 390x844", "44 verificacoes aprovadas"],
+            ["Matriz visual", "22 rotas x desktop, tablet e celular", "66 de 66 aprovadas"],
+            ["Oito produtos", "CTA superior, garantia, CTA final e responsividade", "16 de 16 aprovadas"],
+            ["Artigos do Guia", "Hero, CTA contextual, garantia e responsividade", "12 de 12 aprovadas"],
+            ["Menu movel", "Menu aberto apos rolar ate o rodape", "Fixo e visivel"],
+            ["Agenda ao vivo", "3 periodos, capacidade 5, formulario vazio e domingo", "Aprovado sem criar evento"],
             ["Responsividade", "Rolagem horizontal, titulos, CTAs e rodape", "Sem estouro"],
             ["Integridade", "Imagens, IDs duplicados, links e scripts", "Aprovado"],
             ["Site", "22 paginas, UX, acessibilidade, privacidade e HTTPS", "Aprovado"],
@@ -339,7 +360,7 @@ def build_story():
         bullet("A validacao local foi concluida antes do push para a main."),
         bullet("Nao foi criado evento real na agenda."),
         bullet("Os secrets da Places API permanecem apenas no repositorio principal e nao fazem parte do backup."),
-        bullet("A coleta GA4 real deve ser validada no DebugView apos um deploy autorizado."),
+        bullet("Nenhuma mensagem de WhatsApp, lead GA4 ou compromisso real foi enviado durante o smoke test."),
         Spacer(1, 6 * mm),
         callout("Conclusao de QA", "Nao foram encontrados bloqueadores de layout, navegacao, agenda ou sincronizacao de avaliacoes. A publicacao pode seguir pela pipeline protegida e deve terminar com smoke tests na URL final.", LIGHT_BLUE, BLUE),
         PageBreak(),
@@ -349,11 +370,9 @@ def build_story():
         p("7. Arquivos alterados e proxima aprovacao", "SectionTitle"),
         data_table([
             ["Grupo", "Arquivos principais"],
-            ["UX e layout", "site.js, home-ux.css, usability.css, site.css, 404.html"],
-            ["Guias e SEO", "curiosidades/index.html, index.html, google-rating.json"],
-            ["Conversoes", "analytics.js, calendar-integration.js, conversion-enhancements.js, GA4-CONVERSOES.md"],
-            ["Google Reviews", "google-reviews.js, integrations/google-calendar/Code.gs, README.md"],
-            ["Qualidade", "scripts/check_analytics.py, scripts/check_backend.py, production-pipeline.yml"],
+            ["UX e layout", "site.js, home-ux.css, usability.css e site.css"],
+            ["Agenda", "calendar-integration.js com leitura sem cookies e fallback seguro"],
+            ["Qualidade", "scripts/check_backend.py, scripts/check_site.py e QA-CHECKLIST.md"],
             ["Relatorio", "scripts/generate_qa_report.py, output/pdf/relatorio-validacao-site-dorus.pdf"],
         ], [40 * mm, 130 * mm]),
         Spacer(1, 8 * mm),
@@ -366,13 +385,14 @@ def build_story():
         Spacer(1, 7 * mm),
         callout(
             "Situacao",
-            "Deploy autorizado. A conclusao depende da pipeline e dos smoke tests no dominio assistenciadorus.com.br.",
+            DEPLOY_STATUS + ". Pipeline: " + PIPELINE_URL + ".",
             LIGHT_GREEN, GREEN,
         ),
         Spacer(1, 8 * mm),
         p("Referencias oficiais", "SubTitle"),
         p("Google Analytics - eventos recomendados e parametros: developers.google.com/analytics/devguides/collection/ga4/reference/events", "Small"),
         p("Google Search - titulos, snippets, links rastreaveis e dados estruturados: developers.google.com/search/docs", "Small"),
+        p("Google Apps Script - limite oficial de varias contas conectadas: developers.google.com/apps-script/guides/support/troubleshooting", "Small"),
     ]
     return story
 

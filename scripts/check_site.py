@@ -193,6 +193,50 @@ def check_accessibility_and_privacy(errors):
         errors.append('scripts/enrich_meta.py: páginas de serviço não possuem imagens sociais específicas')
 
 
+def check_secondary_page_parity(errors):
+    """Evita que páginas secundárias voltem a divergir do padrão visual e de conversão."""
+    site_js = (ROOT / 'site.js').read_text(encoding='utf-8')
+    home_ux = (ROOT / 'home-ux.css').read_text(encoding='utf-8')
+
+    js_markers = (
+        'service-hero-copy-centered',
+        "detailHeroWhatsapp.textContent = 'Fale conosco'",
+        'service-detail-cta-professional',
+        'guide-detail-page',
+        'guide-detail-cta-professional',
+        'Garantia mínima de 90 dias',
+    )
+    for marker in js_markers:
+        if marker not in site_js:
+            errors.append(f'site.js: falta padrão obrigatório das páginas secundárias: {marker}')
+
+    css_markers = (
+        '.service-detail-hero .service-hero-copy-centered',
+        '.service-detail-cta-copy',
+        '.service-related-guides .section-head',
+        '.common-problems-directory .section-head',
+        '.guide-detail-page .guide-hero-centered',
+        '.guide-detail-cta-actions',
+        '.schedule-form .consent input[type="checkbox"]',
+        'position:sticky!important',
+    )
+    for marker in css_markers:
+        if marker not in home_ux:
+            errors.append(f'home-ux.css: falta regra de padronização secundária: {marker}')
+
+    for page_rel in SERVICE_IMAGES:
+        source = (ROOT / page_rel).read_text(encoding='utf-8')
+        for marker in ('service-hero-copy', 'cta-panel', 'site.js'):
+            if marker not in source:
+                errors.append(f'{page_rel}: estrutura secundária sem o marcador {marker}')
+
+    for page in sorted((ROOT / 'curiosidades').glob('*/index.html')):
+        source = page.read_text(encoding='utf-8')
+        for marker in ('class="internal"', 'cta-panel', 'site.js'):
+            if marker not in source:
+                errors.append(f'{page.relative_to(ROOT)}: artigo do Guia sem o marcador {marker}')
+
+
 def main():
     errors = []
     pages = sorted(p for p in ROOT.rglob('*.html') if not any(part in IGNORE_DIRS for part in p.parts))
@@ -253,6 +297,7 @@ def main():
     check_responsive_assets(errors)
     check_global_modules(errors)
     check_accessibility_and_privacy(errors)
+    check_secondary_page_parity(errors)
 
     if errors:
         print('Falhas encontradas:')

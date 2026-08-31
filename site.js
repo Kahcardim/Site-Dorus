@@ -148,6 +148,29 @@
 
     if (pagePath.indexOf('/servicos/') === 0 && pagePath !== '/servicos/') {
       var serviceDetailCopy = document.querySelector('.service-hero-copy');
+      var detailEquipmentNode = document.querySelector('.service-hero-copy .eyebrow');
+      var detailEquipmentText = detailEquipmentNode ? detailEquipmentNode.textContent.trim() : 'seu equipamento';
+      var detailEquipmentLabel = detailEquipmentText.toLowerCase();
+      var detailHeroMessage = encodeURIComponent('Olá, gostaria de solicitar atendimento para ' + detailEquipmentLabel + '.');
+      if (serviceDetailCopy) {
+        serviceDetailCopy.classList.add('service-hero-copy-centered');
+        var detailHeroActions = serviceDetailCopy.querySelector('.actions');
+        if (!detailHeroActions) {
+          detailHeroActions = document.createElement('div');
+          detailHeroActions.className = 'actions';
+          serviceDetailCopy.appendChild(detailHeroActions);
+        }
+        var detailHeroWhatsapp = detailHeroActions.querySelector('a[href*="wa.me/"]');
+        if (!detailHeroWhatsapp) {
+          detailHeroWhatsapp = document.createElement('a');
+          detailHeroActions.appendChild(detailHeroWhatsapp);
+        }
+        detailHeroWhatsapp.className = 'button button-green';
+        detailHeroWhatsapp.href = 'https://wa.me/5511913573932?text=' + detailHeroMessage;
+        detailHeroWhatsapp.target = '_blank';
+        detailHeroWhatsapp.rel = 'noopener noreferrer';
+        detailHeroWhatsapp.textContent = 'Fale conosco';
+      }
       if (serviceDetailCopy && !serviceDetailCopy.querySelector('.service-warranty')) {
         var detailWarranty = document.createElement('p');
         detailWarranty.className = 'service-warranty service-warranty-detail';
@@ -158,9 +181,7 @@
       var detailCapture = document.querySelector('.cta-panel');
       if (detailCapture) {
         var detailCaptureTitle = detailCapture.querySelector('h2');
-        var equipmentLabelNode = document.querySelector('.service-hero-copy .eyebrow');
-        var equipmentLabelText = equipmentLabelNode ? equipmentLabelNode.textContent.trim() : 'Seu equipamento';
-        var equipmentLabel = equipmentLabelText.toLowerCase();
+        var equipmentLabel = detailEquipmentLabel;
         var detailMessage = encodeURIComponent('Olá, gostaria de solicitar atendimento para ' + equipmentLabel + '.');
         detailCapture.classList.add('service-detail-cta-professional');
         detailCapture.innerHTML = [
@@ -183,6 +204,37 @@
         section.classList.add('service-related-guides');
         if (relatedGuideCards.length === 1) section.classList.add('is-single');
       });
+    }
+
+    if (pagePath.indexOf('/curiosidades/') === 0 && pagePath !== '/curiosidades/') {
+      document.body.classList.add('guide-detail-page');
+
+      var guideHeroContainer = document.querySelector('.internal > .container');
+      if (guideHeroContainer) guideHeroContainer.classList.add('guide-hero-centered');
+
+      var guideCapture = document.querySelector('.cta-panel');
+      if (guideCapture) {
+        var guideTitle = document.querySelector('.internal h1');
+        var guideCaptureTitle = guideCapture.querySelector('h2');
+        var guideCaptureText = guideCapture.querySelector('p');
+        var guideServiceLink = guideCapture.querySelector('a:not([href*="wa.me/"])');
+        var guideWhatsappLink = guideCapture.querySelector('a[href*="wa.me/"]');
+        var guideMessage = encodeURIComponent('Olá, li o guia "' + (guideTitle ? guideTitle.textContent.trim() : 'da D’orus') + '" e gostaria de atendimento.');
+
+        guideCapture.classList.add('guide-detail-cta-professional');
+        guideCapture.innerHTML = [
+          '<div class="guide-detail-cta-copy">',
+            '<span class="kicker">Orientação e assistência</span>',
+            '<h2>' + (guideCaptureTitle ? guideCaptureTitle.textContent.trim() : 'Precisa de ajuda com seu eletrodoméstico?') + '</h2>',
+            '<p>' + (guideCaptureText ? guideCaptureText.textContent.trim() : 'Conte o sintoma para a equipe e receba orientação sobre o próximo passo.') + '</p>',
+            '<div class="guide-detail-cta-trust"><span>Atendimento em domicílio</span><span>Garantia mínima de 90 dias</span></div>',
+          '</div>',
+          '<div class="actions guide-detail-cta-actions">',
+            guideServiceLink ? '<a class="button button-white" href="' + guideServiceLink.href + '">' + guideServiceLink.textContent.trim() + '</a>' : '',
+            '<a class="button button-green" href="https://wa.me/5511913573932?text=' + guideMessage + '" target="_blank" rel="noopener noreferrer">Fale conosco</a>',
+          '</div>'
+        ].join('');
+      }
     }
 
     function addPageClosingCta(config) {
@@ -251,8 +303,8 @@
       addJourneySwitch('schedule');
       var scheduleTitle = document.querySelector('.internal h1');
       var scheduleLead = document.querySelector('.internal p');
-      if (scheduleTitle) scheduleTitle.textContent = 'Escolha uma data e solicite uma visita técnica.';
-      if (scheduleLead) scheduleLead.textContent = 'Use esta página quando já quiser informar endereço, equipamento e uma data preferida para o atendimento.';
+      if (scheduleTitle) scheduleTitle.textContent = 'Escolha a data e o período para solicitar uma visita.';
+      if (scheduleLead) scheduleLead.textContent = 'Selecione manhã, tarde ou dia inteiro. Cada período aceita até 5 clientes; o horário exato é confirmado pelo WhatsApp.';
     }
 
     if (pagePath === '/fale-conosco') {
@@ -320,8 +372,24 @@
     var scheduleForm = document.querySelector('[data-schedule-form]');
     if (scheduleForm) {
       var dateInput = scheduleForm.querySelector('input[name="data"]');
+      var periodSelect = scheduleForm.querySelector('select[name="periodo"]');
       var status = scheduleForm.querySelector('[data-schedule-status]');
       var calendarLink = scheduleForm.querySelector('[data-calendar-link]');
+      var scheduleKicker = scheduleForm.querySelector('.form-heading .kicker');
+      var scheduleDisclaimer = scheduleForm.querySelector('.schedule-disclaimer');
+      var scheduleSteps = document.querySelectorAll('.schedule-steps > div > span');
+      if (scheduleKicker) scheduleKicker.textContent = 'Solicitar atendimento';
+      if (scheduleDisclaimer) scheduleDisclaimer.textContent = 'A data e o período são uma solicitação. O horário exato da visita é confirmado pela equipe da D’orus no WhatsApp.';
+      if (scheduleSteps[0]) scheduleSteps[0].textContent = 'Escolha a data e o período: manhã, tarde ou dia inteiro.';
+      if (scheduleSteps[2]) scheduleSteps[2].textContent = 'A D’orus confirma o horário exato pelo WhatsApp.';
+      if (periodSelect) {
+        periodSelect.innerHTML = [
+          '<option value="">Selecione</option>',
+          '<option value="manha">Manhã - 8h às 13h</option>',
+          '<option value="tarde">Tarde - 13h às 18h</option>',
+          '<option value="integral">Dia inteiro - 8h às 18h</option>'
+        ].join('');
+      }
       var today = new Date();
       var localTodayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       var maxScheduleDate = new Date(localTodayDate.getTime());
@@ -353,7 +421,12 @@
       function fieldValue(data, name) { return String(data.get(name) || '').trim(); }
       function displayDate(value) { var parts = value.split('-'); return parts.length === 3 ? parts[2] + '/' + parts[1] + '/' + parts[0] : value; }
       function calendarDates(date, period) {
-        var hours = period === 'tarde' ? ['130000', '170000'] : period === 'comercial' ? ['080000', '170000'] : ['080000', '120000'];
+        var periodHours = {
+          'manha': ['080000', '130000'],
+          'tarde': ['130000', '180000'],
+          'integral': ['080000', '180000']
+        };
+        var hours = periodHours[period] || periodHours.manha;
         var compactDate = date.replace(/-/g, '');
         return compactDate + 'T' + hours[0] + '/' + compactDate + 'T' + hours[1];
       }
@@ -363,7 +436,6 @@
         validateScheduleDate();
         if (!scheduleForm.reportValidity()) return;
         var data = new FormData(scheduleForm);
-        var periodSelect = scheduleForm.querySelector('select[name="periodo"]');
         var periodLabel = periodSelect.options[periodSelect.selectedIndex].text;
         var message = [
           'Olá, vim pelo site da D’orus e gostaria de solicitar uma visita técnica.', '',
@@ -374,13 +446,14 @@
           '*Equipamento:* ' + fieldValue(data, 'equipamento'),
           '*Marca/modelo:* ' + (fieldValue(data, 'marca') || 'Não informado'),
           '*Problema:* ' + fieldValue(data, 'problema'),
-          '*Data preferida:* ' + displayDate(fieldValue(data, 'data')),
-          '*Período:* ' + periodLabel, '',
-          'Se possível, confirme a disponibilidade desse horário.'
+          '*Data solicitada:* ' + displayDate(fieldValue(data, 'data')),
+          '*Período solicitado:* ' + periodLabel,
+          '*Horário exato:* a confirmar pela equipe dentro do período escolhido.', '',
+          'Por favor, confirme o horário da visita pelo WhatsApp.'
         ].join('\n');
 
         var whatsappUrl = 'https://wa.me/5511913573932?text=' + encodeURIComponent(message);
-        var calendarDetails = 'Solicitação enviada à D’orus Assistência Técnica. Horário aguardando confirmação pelo WhatsApp.\nEquipamento: ' + fieldValue(data, 'equipamento') + '\nProblema: ' + fieldValue(data, 'problema');
+        var calendarDetails = 'Solicitação enviada à D’orus Assistência Técnica. Horário exato aguardando confirmação pelo WhatsApp.\nPeríodo solicitado: ' + periodLabel + '\nEquipamento: ' + fieldValue(data, 'equipamento') + '\nProblema: ' + fieldValue(data, 'problema');
         var calendarUrl = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
           '&text=' + encodeURIComponent('Solicitação D’orus — aguardando confirmação') +
           '&dates=' + encodeURIComponent(calendarDates(fieldValue(data, 'data'), fieldValue(data, 'periodo'))) +
