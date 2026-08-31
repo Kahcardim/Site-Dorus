@@ -38,19 +38,18 @@ Cada publicação valida sintaxe, backend, identidade, acessibilidade, SEO e int
 
 ## Avaliações do Google
 
-A home mantém `4,5` e `8 avaliações` como fallback visual e tenta atualizar esses dois valores pelo mesmo Google Apps Script usado pela agenda. A chave da API nunca é enviada ao navegador.
+A home mantém `4,9` e `45 avaliações` como fallback visual. O workflow `Sincronizar avaliações Google` consulta a Places API (New) a cada 6 horas, atualiza `google-rating.json` somente quando houver mudança e aciona a pipeline de publicação. A chave da API nunca é enviada ao navegador nem gravada no repositório.
 
 Para ativar a atualização automática:
 
 1. No Google Cloud, ative **Places API (New)** no projeto e crie uma chave de API restrita a essa API.
-2. Obtenha o Place ID correto da D’orus.
-3. No projeto do Apps Script, abra **Configurações do projeto > Propriedades do script** e crie:
-   - `GOOGLE_PLACES_API_KEY`: a chave criada no Google Cloud;
-   - `GOOGLE_PLACE_ID`: o Place ID da D’orus.
-4. Atualize a implantação existente do Web App para uma nova versão, mantendo a execução como proprietário e o acesso público já utilizado pelo agendamento.
-5. Abra a home e confirme que os dois pontos exibem a mesma nota e quantidade do perfil no Google.
+2. No repositório principal do GitHub, configure os secrets de Actions:
+   - `GOOGLE_PLACES_API_KEY`: chave restrita à Places API (New);
+   - `GOOGLE_PLACE_ID`: `ChIJZyk7iQ31zpQR0C-R3wgVywg` (ficha pública Dorus Assistência Técnica, Alameda Yayá, 646, Guarulhos).
+3. Execute manualmente o workflow uma vez e confirme que `google-rating.json` recebe a nota e a quantidade da ficha correta.
+4. Abra a home publicada e confirme os mesmos valores no resumo e na seção de avaliações.
 
-O resultado fica em cache por 6 horas para reduzir custo e tráfego. Se a configuração estiver ausente, a API falhar ou a resposta for inválida, o JavaScript não modifica o HTML e o fallback permanece visível.
+O script recusa um Place ID diferente da ficha validada. Se a configuração estiver ausente, a API falhar ou a resposta for inválida, o workflow falha sem substituir os dados publicados e o fallback permanece visível. O repositório de backup não precisa conter os secrets.
 
 ## Resultado
 

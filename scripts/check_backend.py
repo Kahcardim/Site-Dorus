@@ -4,6 +4,7 @@ import re
 ROOT = Path(__file__).resolve().parents[1]
 code = (ROOT / 'integrations/google-calendar/Code.gs').read_text(encoding='utf-8')
 calendar = (ROOT / 'calendar-integration.js').read_text(encoding='utf-8')
+rating_sync = (ROOT / 'scripts/sync_google_rating.py').read_text(encoding='utf-8')
 site = (ROOT / 'site.js').read_text(encoding='utf-8')
 form_html = (ROOT / 'agendamento/index.html').read_text(encoding='utf-8')
 errors = []
@@ -34,6 +35,9 @@ for name in ('nome','telefone','bairro','endereco','equipamento','data','periodo
     if not re.search(pattern, form_html, flags=re.I): errors.append(f'agendamento/index.html: campo obrigatório sem required: {name}')
 if 'data-schedule-status' not in form_html or 'aria-live="polite"' not in form_html: errors.append('agendamento/index.html: feedback acessível ausente.')
 if 'calendar-integration.js' not in form_html: errors.append('agendamento/index.html: integração da agenda não carregada.')
+expected_place_id = 'ChIJZyk7iQ31zpQR0C-R3wgVywg'
+if expected_place_id not in rating_sync: errors.append('sync_google_rating.py: Place ID esperado da D’orus ausente.')
+if 'place_id != EXPECTED_PLACE_ID' not in rating_sync: errors.append('sync_google_rating.py: ficha Google não é validada antes da sincronização.')
 if errors:
     print('Falhas de backend/agenda encontradas:')
     for error in errors: print('-', error)

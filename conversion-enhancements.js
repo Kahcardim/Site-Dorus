@@ -71,13 +71,13 @@
 
     section.querySelectorAll('[data-related-service]').forEach(function(link){
       link.addEventListener('click',function(){
-        window.dataLayer=window.dataLayer||[];
-        window.dataLayer.push({
-          event:'clique_servico_relacionado',
-          servico_origem:current.slug,
-          servico_destino:link.getAttribute('data-related-service'),
-          page_path:window.location.pathname
-        });
+        if(window.dorusAnalytics){
+          window.dorusAnalytics.track('select_related_service',{
+            service_origin:current.slug,
+            service_destination:link.getAttribute('data-related-service'),
+            cta_location:'related_services'
+          });
+        }
       });
     });
 

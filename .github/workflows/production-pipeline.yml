@@ -36,7 +36,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in site.js calendar-integration.js brand-carousel.js conversion-enhancements.js accessibility-tools.js privacy-consent.js; do
+          for file in site.js analytics.js google-reviews.js calendar-integration.js brand-carousel.js conversion-enhancements.js accessibility-tools.js privacy-consent.js; do
             node --check "$file"
           done
           cp integrations/google-calendar/Code.gs /tmp/dorus-apps-script.js
@@ -48,6 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           python scripts/check_backend.py
+          python scripts/check_analytics.py
           python scripts/check_brand_consistency.py
           python scripts/build_css.py
           python scripts/enrich_meta.py

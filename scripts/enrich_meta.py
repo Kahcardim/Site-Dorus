@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = 'https://assistenciadorus.com.br/'
 SITE_NAME = 'D’orus Assistência Técnica'
 ORGANIZATION_ID = BASE_URL + '#organization'
+SERVICE_WARRANTY_DESCRIPTION = 'Garantia mínima de 90 dias nos serviços executados.'
 GENERAL_SHARE_IMAGE = ('assets/banner-principal-dorus.webp', 'Eletrodomésticos de linha branca atendidos pela D’orus', 1693, 929)
 SERVICE_SHARE_IMAGES = {
     '/servicos/geladeiras/': ('assets/servicos/servico-geladeira.webp', 'Geladeira atendida pela D’orus', 1254, 1254),
@@ -149,6 +150,10 @@ def enrich(path):
     canonical = first(r'<link\s+rel=["\']canonical["\']\s+href=["\']([^"\']+)', source)
     if not title or not desc or not canonical or '</head>' not in source.lower():
         return False
+    canonical_path = urlparse(canonical).path or '/'
+    if canonical_path.startswith('/servicos/') and canonical_path != '/servicos/' and 'garantia mínima de 90 dias' not in desc.lower():
+        desc = desc.rstrip('.') + '. ' + SERVICE_WARRANTY_DESCRIPTION
+        source = set_meta(source, 'name', 'description', desc)
     source = normalize_structured_data(source)
     source = ensure_icons(source, rel)
     source = consolidate_stylesheets(source, rel)

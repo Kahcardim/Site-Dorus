@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "google-rating.json"
 SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
+EXPECTED_PLACE_ID = "ChIJZyk7iQ31zpQR0C-R3wgVywg"
 
 
 def fail(message: str) -> None:
@@ -100,6 +101,8 @@ def main() -> None:
         fail("GOOGLE_PLACES_API_KEY não configurada.")
     if not place_id:
         fail("GOOGLE_PLACE_ID não configurado.")
+    if place_id != EXPECTED_PLACE_ID:
+        fail("GOOGLE_PLACE_ID não corresponde à ficha pública validada da D'orus.")
 
     url = "https://places.googleapis.com/v1/places/" + urllib.parse.quote(place_id, safe="")
     request = urllib.request.Request(

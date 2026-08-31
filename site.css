@@ -1219,9 +1219,131 @@ html.a11y-larger-text .values{
     transition:none!important;
   }
 }
-/* conversion-enhancements.css */
-@import url('home-ux.css');
 
+/* Revisão QA: títulos internos usam melhor a largura útil sem criar vazios artificiais. */
+.overview-hero .container{max-width:1280px!important;text-align:center}
+.overview-hero h1{
+  max-width:none!important;
+  font-size:clamp(2.35rem,3.2vw,3.35rem)!important;
+  line-height:1.08!important;
+  text-wrap:balance;
+}
+.overview-hero .eyebrow{justify-content:center}
+.overview-hero p{max-width:940px!important;margin-left:auto!important;margin-right:auto!important}
+.service-warranty{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:auto;
+  margin:18px auto 0!important;
+  padding:10px 15px;
+  border:1px solid rgba(15,139,67,.26);
+  border-radius:999px;
+  background:#f1fbf5;
+  color:#285a3d!important;
+  font-size:.94rem!important;
+}
+@media(min-width:1180px){
+  .overview-hero h1{white-space:nowrap}
+}
+
+/* Sobre: os valores funcionam como navegação visual logo após a apresentação. */
+.about-values{
+  padding-top:clamp(24px,3vw,38px)!important;
+  padding-bottom:clamp(24px,3vw,38px)!important;
+}
+.about-values .card{min-height:0!important}
+
+/* Serviços: CTA final deliberadamente menor para não competir com a grade principal. */
+.service-capture{
+  padding-top:28px!important;
+  padding-bottom:28px!important;
+}
+.service-capture > .cta-panel{
+  padding:22px 28px!important;
+  border-radius:20px!important;
+}
+.service-capture > .cta-panel h2{
+  font-size:clamp(1.75rem,2.35vw,2.4rem)!important;
+  margin:5px 0 7px!important;
+}
+
+/* Agendamento e contato deixam explícito qual caminho atende cada necessidade. */
+.journey-switch{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  margin-top:24px;
+  max-width:860px;
+}
+.journey-switch a,
+.journey-switch span{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:13px 16px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  color:var(--dark);
+  font-weight:800;
+  box-shadow:0 8px 24px rgba(12,37,72,.06);
+}
+.journey-switch span[aria-current="page"]{
+  border-color:rgba(15,139,67,.38);
+  background:#f1fbf5;
+  color:#087134;
+}
+.journey-switch small{display:block;color:var(--muted);font-weight:600}
+
+/* Rodapé institucional consistente em todas as rotas. */
+.footer-grid-professional{
+  grid-template-columns:minmax(240px,1.25fr) repeat(3,minmax(150px,.75fr))!important;
+  gap:clamp(22px,3vw,42px)!important;
+  align-items:start;
+}
+.footer-company p{margin:4px 0 14px!important}
+.footer-company-data{display:grid;gap:4px;color:#d5e4ff!important;font-size:.9rem}
+.footer-company-data span{color:#a9bfd3}
+.footer-links span{color:#a9bfd3;line-height:1.5}
+.footer-social h3{margin-top:0;color:#fff}
+.footer-social-links{display:grid;gap:10px}
+.footer-social-links a{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  width:max-content;
+  color:#fff;
+  font-weight:800;
+}
+.footer-social-icon{
+  display:grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#0f8b43;
+  color:#fff;
+  font-size:1.15rem;
+}
+.footer-social-icon svg{width:20px;height:20px;display:block}
+.footer-social-icon-instagram{
+  background:radial-gradient(circle at 30% 105%,#ffd600 0 22%,#ff7a00 30%,#ff0169 52%,#d300c5 72%,#7638fa 100%);
+}
+.footer-social-icon-whatsapp{background:#25d366}
+
+@media(max-width:1050px){
+  .footer-grid-professional{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .footer-grid-professional > :first-child{grid-column:auto!important}
+}
+@media(max-width:680px){
+  .overview-hero h1{white-space:normal;font-size:clamp(2rem,9vw,2.45rem)!important}
+  .journey-switch{grid-template-columns:1fr}
+  .service-capture > .cta-panel{padding:20px 18px!important}
+  .footer-grid-professional{grid-template-columns:1fr!important}
+}
+/* conversion-enhancements.css */
 :root{
   /* Contraste AA com texto branco (aprox. 4,9:1). */
   --success:#12823a;
@@ -2024,6 +2146,16 @@ body:has(.contact-grid) .contact-grid .form textarea{
   }
 }
 
+/* Mantém os valores dinâmicos de avaliações na mesma linha do texto do card. */
+.hero-points [data-google-rating],
+.hero-points [data-google-review-count]{
+  display:inline!important;
+  margin:0!important;
+  color:inherit!important;
+  font-size:inherit!important;
+  line-height:inherit!important;
+}
+
 /* CTAs finais — compactação e alinhamento consistente em todas as páginas */
 .section:has(> .cta-panel){
   padding-top:clamp(36px,4vw,50px)!important;
@@ -2121,6 +2253,342 @@ body:has(.contact-grid) .contact-grid .form textarea{
     width:100%!important;
     min-width:0!important;
   }
+}
+
+/* Revisão QA: captadores finais compactos e consistentes em todas as páginas. */
+.section:has(> .cta-panel){
+  padding-top:24px!important;
+  padding-bottom:24px!important;
+}
+.section > .cta-panel{
+  width:min(1080px,calc(100% - 64px))!important;
+  max-width:1080px!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  gap:24px!important;
+  padding:20px 24px!important;
+  border-radius:18px!important;
+}
+.section > .cta-panel > div:first-child{max-width:680px!important}
+.section > .cta-panel h2{
+  max-width:680px!important;
+  margin:4px 0 6px!important;
+  font-size:clamp(1.55rem,2.2vw,2.15rem)!important;
+  line-height:1.12!important;
+  letter-spacing:-.025em!important;
+}
+.section > .cta-panel p{font-size:.98rem!important;line-height:1.45!important}
+.section > .cta-panel .button{
+  min-height:46px!important;
+  padding:12px 20px!important;
+  font-size:.96rem!important;
+}
+@media(max-width:900px){
+  .section > .cta-panel{
+    width:min(760px,calc(100% - 40px))!important;
+    grid-template-columns:1fr!important;
+    gap:16px!important;
+    padding:20px!important;
+  }
+}
+@media(max-width:560px){
+  .section:has(> .cta-panel){padding-top:18px!important;padding-bottom:18px!important}
+  .section > .cta-panel{width:calc(100% - 28px)!important;padding:18px 16px!important}
+}
+
+.overview-hero .container{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+.overview-hero h1,.overview-hero p{margin-left:auto!important;margin-right:auto!important}
+
+/* CTA de Serviços: dois caminhos claros, prova de confiança e leitura compacta. */
+.section > .service-cta-professional{
+  width:min(1040px,calc(100% - 64px))!important;
+  grid-template-columns:minmax(0,1fr) minmax(330px,auto)!important;
+  gap:30px!important;
+  padding:26px 28px!important;
+  border:0!important;
+  border-radius:20px!important;
+  background:linear-gradient(125deg,#0d2747 0%,#123b68 100%)!important;
+  box-shadow:0 18px 44px rgba(8,30,57,.2)!important;
+}
+.service-cta-professional .kicker{color:#8ec7ff!important}
+.section > .service-cta-professional h2{
+  color:#fff!important;
+  font-size:clamp(1.65rem,2.2vw,2.2rem)!important;
+  margin:4px 0 6px!important;
+}
+.section > .service-cta-professional p{color:#d6e5f6!important;max-width:650px!important;margin:0!important}
+.service-cta-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px 18px;
+  margin-top:14px;
+  color:#fff;
+  font-size:.88rem;
+  font-weight:800;
+}
+.service-cta-trust span::before{content:'✓';color:#56df8c;margin-right:7px}
+.section > .service-cta-professional .service-cta-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  min-width:330px!important;
+  gap:10px!important;
+}
+.section > .service-cta-professional .service-cta-actions .button{
+  width:100%!important;
+  min-width:0!important;
+}
+.service-cta-professional .button-white{border-color:rgba(255,255,255,.34)!important}
+
+.service-warranty-detail{
+  margin:16px 0 0!important;
+  align-self:flex-start;
+}
+
+@media(max-width:900px){
+  .section > .service-cta-professional{
+    grid-template-columns:1fr!important;
+    gap:20px!important;
+    padding:24px!important;
+  }
+  .section > .service-cta-professional .service-cta-actions{min-width:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:620px){
+  .section > .service-cta-professional{width:calc(100% - 28px)!important;padding:18px 16px!important;gap:16px!important}
+  .section > .service-cta-professional h2{font-size:1.45rem!important;line-height:1.12!important}
+  .section > .service-cta-professional p{font-size:.93rem!important;line-height:1.42!important}
+  .section > .service-cta-professional .service-cta-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .section > .service-cta-professional .service-cta-actions .button{min-height:44px!important;padding:10px 8px!important;font-size:.82rem!important;line-height:1.15!important;white-space:normal!important}
+  .service-cta-trust{display:flex;margin-top:10px;font-size:.8rem;line-height:1.35;gap:5px 12px}
+  .service-warranty-detail{border-radius:14px;text-align:left}
+}
+
+/* Páginas individuais: CTA consistente e guias relacionados sem áreas vazias. */
+.section > .service-detail-cta-professional{
+  width:min(1040px,calc(100% - 64px))!important;
+  grid-template-columns:minmax(0,1fr) minmax(330px,auto)!important;
+  gap:28px!important;
+  padding:24px 26px!important;
+  border:0!important;
+  border-radius:20px!important;
+  background:linear-gradient(125deg,#0d2747 0%,#123b68 100%)!important;
+  box-shadow:0 18px 44px rgba(8,30,57,.18)!important;
+}
+.service-detail-cta-professional .kicker{color:#8ec7ff!important;letter-spacing:.08em!important}
+.section > .service-detail-cta-professional h2{
+  color:#fff!important;
+  margin:4px 0 6px!important;
+  font-size:clamp(1.55rem,2vw,2rem)!important;
+}
+.section > .service-detail-cta-professional p{
+  max-width:650px!important;
+  margin:0!important;
+  color:#d6e5f6!important;
+}
+.service-detail-cta-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px 18px;
+  margin-top:12px;
+  color:#fff;
+  font-size:.86rem;
+  font-weight:800;
+}
+.service-detail-cta-trust span::before{content:'✓';color:#56df8c;margin-right:7px}
+.section > .service-detail-cta-professional .service-detail-cta-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  min-width:330px!important;
+  gap:10px!important;
+}
+.section > .service-detail-cta-professional .service-detail-cta-actions .button{
+  width:100%!important;
+  min-width:0!important;
+}
+.service-detail-cta-professional .button-white{border-color:rgba(255,255,255,.34)!important}
+
+.service-related-guides{
+  padding-top:34px!important;
+  padding-bottom:34px!important;
+}
+.service-related-guides > .container{max-width:1040px!important}
+.service-related-guides .section-head{margin-bottom:16px!important}
+.service-related-guides .cards{
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important;
+  gap:16px!important;
+}
+.service-related-guides .card{
+  min-height:0!important;
+  padding:20px 22px!important;
+}
+.service-related-guides.is-single > .container > .card{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:20px!important;
+  width:100%!important;
+}
+.service-related-guides.is-single > .container > .card h3,
+.service-related-guides.is-single > .container > .card p{margin:0!important}
+
+@media(max-width:900px){
+  .section > .service-detail-cta-professional{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:22px!important;
+  }
+  .section > .service-detail-cta-professional .service-detail-cta-actions{
+    min-width:0!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:620px){
+  .section > .service-detail-cta-professional{
+    width:calc(100% - 28px)!important;
+    padding:18px 16px!important;
+    gap:16px!important;
+  }
+  .section > .service-detail-cta-professional h2{font-size:1.4rem!important;line-height:1.14!important}
+  .section > .service-detail-cta-professional p{font-size:.92rem!important;line-height:1.42!important}
+  .section > .service-detail-cta-professional .service-detail-cta-actions{gap:8px!important}
+  .section > .service-detail-cta-professional .service-detail-cta-actions .button{
+    min-height:44px!important;
+    padding:10px 8px!important;
+    font-size:.82rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+  }
+  .service-detail-cta-trust{margin-top:10px;font-size:.8rem;line-height:1.35;gap:5px 12px}
+  .service-related-guides{padding-top:24px!important;padding-bottom:24px!important}
+  .service-related-guides .card{padding:18px!important}
+  .service-related-guides.is-single > .container > .card{align-items:flex-start!important;flex-direction:column!important;gap:8px!important}
+}
+
+/* Contato e agendamento: título, explicação e escolha de jornada centralizados. */
+.journey-hero-centered > .container{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  text-align:center!important;
+}
+.journey-hero-centered h1{
+  width:100%!important;
+  max-width:1080px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+  text-wrap:balance;
+}
+.journey-hero-centered > .container > p{
+  max-width:880px!important;
+  margin-left:auto!important;
+  margin-right:auto!important;
+}
+.journey-hero-centered .eyebrow{justify-content:center!important}
+.journey-hero-centered .journey-switch{
+  width:100%!important;
+  margin:24px auto 0!important;
+  text-align:left!important;
+}
+
+/* Fechamento de conversão das páginas Sobre e Guias. */
+.page-closing-cta-section{
+  padding-top:30px!important;
+  padding-bottom:34px!important;
+}
+.page-closing-cta{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(330px,auto)!important;
+  align-items:center!important;
+  gap:28px!important;
+  width:min(1040px,calc(100% - 64px))!important;
+  padding:24px 26px!important;
+  border-radius:20px!important;
+  background:linear-gradient(125deg,#0d2747 0%,#123b68 100%)!important;
+  box-shadow:0 18px 44px rgba(8,30,57,.18)!important;
+}
+.page-closing-cta .kicker{color:#8ec7ff!important}
+.page-closing-cta h2{
+  margin:4px 0 6px!important;
+  color:#fff!important;
+  font-size:clamp(1.55rem,2vw,2rem)!important;
+  line-height:1.14!important;
+}
+.page-closing-cta p{max-width:650px!important;margin:0!important;color:#d6e5f6!important}
+.page-closing-cta-trust{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px 18px;
+  margin-top:12px;
+  color:#fff;
+  font-size:.86rem;
+  font-weight:800;
+}
+.page-closing-cta-trust span::before{content:'✓';color:#56df8c;margin-right:7px}
+.page-closing-cta .page-closing-cta-actions{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  min-width:330px!important;
+  gap:10px!important;
+  margin:0!important;
+}
+.page-closing-cta .page-closing-cta-actions .button{width:100%!important;min-width:0!important}
+.page-closing-cta .button-white{border-color:rgba(255,255,255,.34)!important}
+
+@media(max-width:900px){
+  .page-closing-cta{
+    grid-template-columns:1fr!important;
+    gap:18px!important;
+    padding:22px!important;
+  }
+  .page-closing-cta .page-closing-cta-actions{
+    min-width:0!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
+@media(max-width:620px){
+  .journey-hero-centered h1{font-size:clamp(2rem,9vw,2.45rem)!important}
+  .journey-hero-centered .journey-switch{margin-top:20px!important}
+  .page-closing-cta-section{padding-top:22px!important;padding-bottom:24px!important}
+  .page-closing-cta{width:calc(100% - 28px)!important;padding:18px 16px!important;gap:16px!important}
+  .page-closing-cta h2{font-size:1.4rem!important}
+  .page-closing-cta p{font-size:.92rem!important;line-height:1.42!important}
+  .page-closing-cta .page-closing-cta-actions{gap:8px!important}
+  .page-closing-cta .page-closing-cta-actions .button{
+    min-height:44px!important;
+    padding:10px 8px!important;
+    font-size:.82rem!important;
+    line-height:1.15!important;
+    white-space:normal!important;
+  }
+  .page-closing-cta-trust{margin-top:10px;font-size:.8rem;line-height:1.35;gap:5px 12px}
+}
+
+/* Guias: diretório SEO com problemas comuns e ligação para os oito serviços. */
+.common-problems-directory{padding-top:42px!important;padding-bottom:42px!important}
+.common-problems-directory .section-head{margin-bottom:20px!important}
+.common-problems-directory .section-head p{max-width:780px!important}
+.common-problems-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:16px;
+}
+.common-problem-card{
+  display:flex!important;
+  flex-direction:column;
+  min-height:230px!important;
+  padding:22px!important;
+}
+.common-problem-card h3{margin:5px 0 8px!important;font-size:1.18rem;line-height:1.25}
+.common-problem-card p{margin:0!important;font-size:.94rem!important;line-height:1.48!important}
+.common-problem-link{margin-top:auto;padding-top:16px;color:var(--primary);font-weight:800;font-size:.9rem}
+@media(max-width:1050px){.common-problems-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){
+  .common-problems-directory{padding-top:30px!important;padding-bottom:30px!important}
+  .common-problems-grid{grid-template-columns:1fr;gap:12px}
+  .common-problem-card{min-height:0!important;padding:18px!important}
 }
 /* accessibility-contrast.css */
 /* Correcoes de alto contraste — preserva navegacao, painel e foco. */
