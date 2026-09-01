@@ -25,7 +25,18 @@
   text-decoration: none;
 }
 #root .hero-rating strong {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35em;
+}
+#root .hero-rating strong > span {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+}
+#root .hero-rating strong > [aria-hidden] {
+  color: #8a6000 !important;
 }
 #root .hero-rating > span {
   display: block;
@@ -45,7 +56,7 @@
 }
 #root .hero-copy h1,
 #root .hero-copy > p {
-  margin-inline: auto;
+  margin-inline: auto !important;
 }
 #root .hero-copy .actions {
   justify-content: center;
