@@ -1,56 +1,81 @@
 # D’orus Assistência Técnica
 
-Plataforma institucional e de aquisição local para uma assistência técnica de eletrodomésticos de linha branca com atendimento em domicílio na região de Guarulhos.
+Site institucional de uma assistência técnica de eletrodomésticos de linha branca, com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.
 
-[Acessar o site](https://assistenciadorus.com.br/)
+[Acessar o site](https://assistenciadorus.com.br/) · [Qualidade e publicação](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
 
-## Produto
+## O projeto
 
-O projeto transforma buscas locais e dúvidas sobre defeitos em jornadas claras de atendimento. A experiência reúne páginas comerciais por equipamento, conteúdo educativo, contato por WhatsApp e solicitação de visita.
+A experiência conecta quem procura ajuda para um eletrodoméstico aos canais de atendimento da empresa. Reúne serviços por equipamento, guias educativos, avaliações do Google e jornadas distintas para contato e solicitação de visita.
 
-## Destaques
+O site usa **React e Vite com geração estática de HTML**. Cada endereço entrega seu conteúdo, links e metadados antes da execução de JavaScript. Os componentes interativos são carregados após a primeira exibição do conteúdo, com código separado por grupo de páginas.
 
-- arquitetura responsiva para celular, tablet e desktop;
-- SEO técnico com URLs canônicas, sitemap e dados estruturados Schema.org;
-- páginas de serviço e guias conectadas por links internos;
-- acessibilidade com navegação por teclado, contraste, ajuste de texto e redução de movimento;
-- consentimento de cookies e métricas de conversão;
-- imagens responsivas e entrega otimizada para Core Web Vitals;
-- integração de agendamento com fallback seguro para WhatsApp;
-- pipeline contínuo de qualidade, publicação e auditoria Lighthouse.
+## Funcionalidades
+
+- Páginas de serviços e guias com navegação interna rastreável.
+- Contato direto por telefone e WhatsApp.
+- Solicitação de visita com integração de agenda e alternativa por WhatsApp.
+- Nota e quantidade de avaliações sincronizadas com o Google.
+- Carrosséis com teclado, controles de pausa e respeito à redução de movimento.
+- Preferências de cookies e integração de métricas.
+- Layout responsivo, imagens adaptativas e garantia em destaque.
 
 ## Tecnologias
 
-HTML semântico, CSS responsivo, JavaScript, Python, Google Apps Script, GitHub Actions e GitHub Pages.
+React · Vite · JavaScript · CSS · Playwright · axe-core · Lighthouse · GitHub Actions · GitHub Pages
+
+As integrações utilizam Google Apps Script e scripts Python executados nos fluxos de manutenção.
+
+## Executar localmente
+
+Requisitos: Node.js 22 e Python 3.12 para os testes de manutenção. As versões das dependências estão fixadas no projeto.
+
+```bash
+npm ci
+npm run dev
+```
+
+Para conferir a versão estática:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Estrutura principal
+
+| Diretório | Responsabilidade |
+| --- | --- |
+| `src/pages/` | Páginas e jornadas de atendimento |
+| `src/components/` | Componentes compartilhados |
+| `src/data/` | Conteúdo editorial, catálogo e metadados |
+| `src/hooks/` | Avaliações, consentimento e preferências de acessibilidade |
+| `src/styles/` | Estilos organizados por responsabilidade |
+| `public/` | Arquivos públicos, imagens e integrações do navegador |
+| `scripts/` | Geração estática, validações e manutenção |
+| `tests/` | Testes unitários, manutenção e referências isoladas |
+| `integrations/google-calendar/` | Código da integração com a agenda |
+| `.github/workflows/` | Qualidade, publicação e sincronização de avaliações |
 
 ## Qualidade
 
-Cada publicação valida sintaxe, backend, identidade, acessibilidade, SEO e integridade das páginas antes do deploy. Após a publicação, o pipeline executa uma auditoria Lighthouse no domínio de produção.
+```bash
+npx playwright install chromium
+npm run check
+```
 
-## Estrutura
+A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core.
 
-- `servicos/` — páginas comerciais por equipamento;
-- `curiosidades/` — guias relacionados aos principais sintomas;
-- `assets/` — identidade visual e imagens responsivas;
-- `integrations/` — integração de agenda;
-- `scripts/` — validações e preparação da publicação;
-- `.github/workflows/` — integração e entrega contínuas.
+Os testes automatizados complementam a revisão manual; não representam uma certificação de acessibilidade nem uma garantia de posicionamento no Google. Relatórios Lighthouse e capturas ficam disponíveis nas execuções do GitHub Actions.
 
-## Avaliações do Google
+## Publicação e integrações
 
-A home mantém `4,9` e `45 avaliações` como fallback visual. O workflow `Sincronizar avaliações Google` consulta a Places API (New) a cada 6 horas, atualiza `google-rating.json` somente quando houver mudança e aciona a pipeline de publicação. A chave da API nunca é enviada ao navegador nem gravada no repositório.
+O GitHub Pages recebe o conteúdo gerado em `dist/` após a aprovação da pipeline. Mudanças apenas de documentação e builds equivalentes não exigem uma nova publicação. A validação pós-publicação confere a revisão entregue, as páginas, os dados de conteúdo e o SEO técnico.
 
-Para ativar a atualização automática:
+As credenciais do Google ficam nos secrets do GitHub Actions ou na configuração do serviço correspondente, nunca no código enviado ao navegador. Instruções de desenvolvimento e manutenção estão em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md).
 
-1. No Google Cloud, ative **Places API (New)** no projeto e crie uma chave de API restrita a essa API.
-2. No repositório principal do GitHub, configure os secrets de Actions:
-   - `GOOGLE_PLACES_API_KEY`: chave restrita à Places API (New);
-   - `GOOGLE_PLACE_ID`: `ChIJZyk7iQ31zpQR0C-R3wgVywg` (ficha pública Dorus Assistência Técnica, Alameda Yayá, 646, Guarulhos).
-3. Execute manualmente o workflow uma vez e confirme que `google-rating.json` recebe a nota e a quantidade da ficha correta.
-4. Abra a home publicada e confirme os mesmos valores no resumo e na seção de avaliações.
+## Autor
 
-O script recusa um Place ID diferente da ficha validada. Se a configuração estiver ausente, a API falhar ou a resposta for inválida, o workflow falha sem substituir os dados publicados e o fallback permanece visível. O repositório de backup não precisa conter os secrets.
+Desenvolvido por [Kauan Cardim](https://github.com/Kahcardim) para a D’orus Assistência Técnica.
 
-## Resultado
-
-Uma presença digital rápida, acessível e orientada à conversão, preparada para descoberta orgânica local e evolução contínua do negócio.
+Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md)

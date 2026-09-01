@@ -6,7 +6,7 @@ import { spawnSync } from "node:child_process";
 const root = resolve(import.meta.dirname, "..");
 const target = resolve(root, "test-results/published");
 const origin = "https://assistenciadorus.com.br";
-const expectedRevision = process.env.GITHUB_SHA;
+const expectedRevision = process.env.DORUS_REVISION || process.env.GITHUB_SHA;
 assert(
   expectedRevision,
   "Informe GITHUB_SHA para validar exatamente a revisão publicada.",

@@ -1,0 +1,90 @@
+:root{
+  
+  --success:#12823a;
+}
+
+.service-breadcrumb{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:0 0 16px;
+  color:var(--muted);
+  font-size:.86rem;
+}
+.service-breadcrumb a{color:var(--primary);font-weight:700}
+.service-breadcrumb a:hover{text-decoration:underline}
+.service-breadcrumb .separator{color:#9aabc0}
+
+.related-services{
+  padding:clamp(46px,6vw,72px) 0;
+  background:#fff;
+  border-top:1px solid var(--line);
+}
+.related-services-head{
+  display:flex;
+  align-items:end;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.related-services-head h2{
+  margin:7px 0 0;
+  color:var(--dark);
+  font-size:clamp(1.6rem,2.7vw,2.35rem);
+  line-height:1.12;
+  letter-spacing:-.03em;
+}
+.related-services-head>a{color:var(--primary);font-weight:800}
+.related-service-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:18px;
+}
+.related-service-card{
+  min-width:0;
+  overflow:hidden;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:#fff;
+  box-shadow:0 14px 34px rgba(13,59,142,.08);
+  transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.related-service-card:hover,
+.related-service-card:focus-visible{
+  transform:translateY(-3px);
+  border-color:#b9cfe3;
+  box-shadow:0 18px 38px rgba(13,59,142,.13);
+}
+.related-service-card picture{
+  display:grid;
+  place-items:center;
+  width:100%;
+  aspect-ratio:4/3;
+  padding:10px;
+  background:linear-gradient(180deg,#f4f9ff,#fff);
+}
+.related-service-card img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center;
+}
+.related-service-copy{padding:17px 19px 20px}
+.related-service-copy strong{display:block;color:var(--dark);font-size:1.04rem}
+.related-service-copy span{display:block;margin-top:5px;color:var(--primary);font-size:.88rem;font-weight:800}
+
+@media(max-width:900px){
+  .related-service-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+  .related-services{padding-block:42px}
+  .related-service-grid{grid-template-columns:1fr}
+  .related-services-head{align-items:flex-start;flex-direction:column}
+  .related-service-card picture{aspect-ratio:16/10}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .related-service-card{transition:none}
+}

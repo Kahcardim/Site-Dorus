@@ -1,13 +1,13 @@
-@import "../../styles.css";
-@import "../../accessibility.css";
-@import "../../layout.css";
-@import "../../usability.css";
-@import "../../conversion-enhancements.css";
-@import "../../privacy.css";
-@import "../../ui-final.css";
-@import "../../compact-pages.css";
-@import "../../home-ux.css";
-@import "../../accessibility-contrast.css";
+@import "./base/foundation.css";
+@import "./base/accessibility.css";
+@import "./base/layout.css";
+@import "./base/usability.css";
+@import "./base/conversion.css";
+@import "./base/consent.css";
+@import "./base/components.css";
+@import "./base/page-density.css";
+@import "./base/home.css";
+@import "./base/contrast.css";
 
 .prose ul {
   display: grid;

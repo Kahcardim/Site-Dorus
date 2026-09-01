@@ -1,4 +1,4 @@
-import { brands, guides, reviews, services, SITE } from "../data/site.js";
+import { brands, reviews, services, SITE } from "../data/site.js";
 import { useGoogleRating } from "../hooks/useSiteEffects.js";
 import { CtaPanel } from "../components/Layout.jsx";
 import { Faq } from "../components/ContentSections.jsx";

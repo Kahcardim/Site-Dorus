@@ -3,6 +3,8 @@ name: Pipeline de producao
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**/*.md"
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -24,16 +26,24 @@ jobs:
     name: Build e regressão React
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      revision: ${{ steps.source.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
+      - id: source
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
       - name: Instalar navegador de regressão
         run: npx playwright install --with-deps chromium
       - name: Validar componentes, build, rotas e acessibilidade
+        env:
+          DORUS_REVISION: ${{ steps.source.outputs.sha }}
         run: npm run check
       - name: Instalar auditoria de desempenho
         run: npm install --global lighthouse@12
@@ -47,42 +57,89 @@ jobs:
           path: test-results/
           retention-days: 14
 
-  deploy:
-    name: Publicar GitHub Pages
+  equivalencia:
+    name: Equivalência da refatoração
+    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'refactor:')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: .baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+      - run: npm ci
+      - run: npm ci
+        working-directory: .baseline
+      - run: npm run build
+        working-directory: .baseline
+      - run: npm run build
+      - name: Comparar arquivos entregues
+        run: node scripts/compare-builds.mjs .baseline/dist dist
+
+  preparar:
+    name: Preparar publicação
     if: github.event_name != 'pull_request'
     needs: qualidade
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
+    outputs:
+      changed: ${{ steps.changed.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.qualidade.outputs.revision }}
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
       - name: Gerar site React estático
         run: npm run build
-      - uses: actions/configure-pages@v5
+      - run: node scripts/fingerprint-build.mjs
+      - id: changed
+        name: Evitar publicação de build idêntico
+        run: node scripts/should-deploy.mjs
+      - if: steps.changed.outputs.changed == 'true'
+        uses: actions/configure-pages@v5
         with:
           enablement: true
-      - uses: actions/upload-pages-artifact@v3
+      - if: steps.changed.outputs.changed == 'true'
+        uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+  deploy:
+    name: Publicar GitHub Pages
+    if: github.event_name != 'pull_request' && needs.preparar.outputs.changed == 'true'
+    needs: [qualidade, preparar]
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.deployment.outcome == 'success' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
 
   lighthouse:
     name: Auditoria Lighthouse pos-deploy
-    if: github.event_name != 'pull_request'
-    needs: deploy
+    if: github.event_name != 'pull_request' && needs.deploy.outputs.published == 'true'
+    needs: [qualidade, deploy]
     runs-on: ubuntu-latest
+    env:
+      DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.qualidade.outputs.revision }}
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version-file: ".nvmrc"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -95,15 +152,15 @@ jobs:
           CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
           export CHROME_PATH
           for tentativa in {1..18}; do
-            HTML="$(curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}")"
-            grep -q "name=\"dorus-revision\" content=\"${GITHUB_SHA}\"" <<< "$HTML" && break
+            HTML="$(curl -fsSL "https://assistenciadorus.com.br/?revision=${DORUS_REVISION}&tentativa=${tentativa}")"
+            grep -q "name=\"dorus-revision\" content=\"${DORUS_REVISION}\"" <<< "$HTML" && break
             test "$tentativa" -lt 18 || { echo 'A revisao publicada nao foi confirmada.'; exit 1; }
             sleep 5
           done
           lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-mobile.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
           lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --preset=desktop --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-desktop.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
           python scripts/summarize_lighthouse.py
-      - name: Comparar publicação com a base anterior à migração
+      - name: Validar conteúdo e integrações publicados
         run: node scripts/validate-deployment.mjs
       - name: Salvar relatorios Lighthouse
         if: always()

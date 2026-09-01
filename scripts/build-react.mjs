@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { build, createServer } from "vite";
 
@@ -35,7 +35,7 @@ try {
     const document = template
       .replace(
         "<!--app-head-->",
-        `${head}\n    <meta name="dorus-revision" content="${process.env.GITHUB_SHA || "local"}">\n    ${integrations}`,
+        `${head}\n    <meta name="dorus-revision" content="${process.env.DORUS_REVISION || process.env.GITHUB_SHA || "local"}">\n    ${integrations}`,
       )
       .replace("<!--app-html-->", html);
 
