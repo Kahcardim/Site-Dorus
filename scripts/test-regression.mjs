@@ -194,7 +194,8 @@ try {
     .getByRole("button", { name: /Pausar carrossel de marcas/ })
     .click();
   await page.mouse.move(0, 0);
-  await page.locator(".brand-list").evaluate((element) => element.blur());
+  await page.evaluate(() => document.activeElement?.blur());
+  await page.waitForTimeout(600);
   const stopped = await page
     .locator(".brand-list")
     .evaluate((element) => element.scrollLeft);
@@ -285,7 +286,9 @@ try {
             Math.abs(box.width - frame.width) > 2 ||
             Math.abs(box.height - frame.height) > 2
           )
-            errors.push("imagem não preenche moldura");
+            errors.push(
+              `imagem não preenche moldura: ${image.getAttribute("src")} (${box.width}×${box.height} / ${frame.width}×${frame.height})`,
+            );
           if (Math.abs(frame.width - frame.height) > 2)
             errors.push("moldura distorce proporção quadrada");
         }
@@ -403,10 +406,28 @@ try {
         waitUntil: "networkidle",
       });
       await loadLazyImages(desktop);
+      const brokenImages = await desktop
+        .locator(".service-card-media img")
+        .evaluateAll(
+          (images) =>
+            images.filter(
+              (image) => !image.complete || image.naturalWidth === 0,
+            ).length,
+        );
+      check(brokenImages === 0, `${path} (${width}px): imagem não carregou`);
       await desktop.screenshot({
         path: resolve(screenshots, `${name}-${width}.png`),
         fullPage: true,
       });
+      if (name === "servicos") {
+        await desktop
+          .locator(".service-card")
+          .first()
+          .screenshot({ path: resolve(screenshots, `produto-${width}.png`) });
+        await desktop
+          .locator(".brands-section")
+          .screenshot({ path: resolve(screenshots, `carrossel-${width}.png`) });
+      }
     }
   }
   await desktop.close();

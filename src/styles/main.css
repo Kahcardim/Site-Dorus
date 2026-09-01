@@ -42,16 +42,19 @@
 }
 
 #root .service-card-media {
+  position: relative;
+  flex: 0 0 auto;
   display: block !important;
   aspect-ratio: 1 !important;
   padding: 0 !important;
   width: 100% !important;
 }
 #root .service-card-media img {
-  position: static;
+  position: absolute;
+  inset: 0;
   display: block !important;
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
   aspect-ratio: 1;
   max-width: none !important;
   max-height: none !important;
@@ -296,6 +299,13 @@
 #root .journey-switch a,
 #root .journey-switch span {
   min-height: 86px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+#root .reviews-section .google-score {
+  justify-content: center;
 }
 #root .contact-hero {
   background: #f0faf5;
