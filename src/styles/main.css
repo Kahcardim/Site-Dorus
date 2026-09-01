@@ -61,6 +61,20 @@
   text-decoration: underline;
 }
 
+#root .service-card-media {
+  position: relative;
+}
+#root .service-card-media img {
+  position: absolute;
+  inset: 10px;
+  width: calc(100% - 20px) !important;
+  height: calc(100% - 20px) !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+}
+
 @media (max-width: 900px) {
   .brand-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));

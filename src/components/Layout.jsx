@@ -130,7 +130,10 @@ export function Layout({
         rel="noopener noreferrer"
         aria-label="Falar com a D’orus pelo WhatsApp"
       >
-        WhatsApp
+        <svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M16 3a12 12 0 0 0-10.4 18L4 28l7-1.6A12 12 0 1 0 16 3zm0 2a10 10 0 1 1-4.7 18.8l-.4-.2-4.2 1 1-4.1-.3-.4A10 10 0 0 1 16 5z" />
+          <path d="M11 10c-.6 0-1.5.7-1.5 2.1 0 3.2 4.9 8.4 8.5 8.4 1.3 0 2.5-1 2.5-1.8v-1l-3-1.4-1.2 1.4c-1.6-.7-3.2-2.3-4-3.8l1.2-1.3-1.4-2.6z" />
+        </svg>
       </a>
       <footer className="footer">
         {!compactFooter && (

@@ -200,6 +200,25 @@ try {
         }),
       );
       const severe = result.violations;
+      const clippedImages = await page
+        .locator(".service-card-media img")
+        .evaluateAll(
+          (images) =>
+            images.filter((image) => {
+              const imageBox = image.getBoundingClientRect();
+              const frame = image.parentElement.getBoundingClientRect();
+              return (
+                imageBox.top < frame.top - 1 ||
+                imageBox.bottom > frame.bottom + 1 ||
+                imageBox.left < frame.left - 1 ||
+                imageBox.right > frame.right + 1
+              );
+            }).length,
+        );
+      check(
+        clippedImages === 0,
+        `${path} (${width}px): imagem de serviço fora da moldura`,
+      );
       accessibility.push({ path, width, violations: severe });
       check(
         severe.length === 0,
