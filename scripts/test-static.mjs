@@ -26,6 +26,18 @@ for (const path of paths) {
   assert.match(html, /<main id="conteudo">/, `${path}: main sem id`);
   assert.match(
     html,
+    /Desenvolvido por Kauan Cardim/,
+    `${path}: crédito do autor ausente`,
+  );
+  if (path !== "/" && path !== "/privacidade/") {
+    assert.match(
+      html,
+      /class="warranty-notice"/,
+      `${path}: garantia sem destaque no conteúdo`,
+    );
+  }
+  assert.match(
+    html,
     /<meta name="description" content="[^"]{40,}"/,
     `${path}: descrição ausente`,
   );
@@ -83,6 +95,21 @@ assert.match(
 const contact = await readFile(
   resolve(dist, "fale-conosco", "index.html"),
   "utf8",
+);
+assert.match(
+  contact,
+  /class="contact-message"/,
+  "Contato: formulário opcional ausente",
+);
+assert.doesNotMatch(
+  contact,
+  /name="data"/,
+  "Contato não deve exigir data da visita",
+);
+assert.match(
+  schedule,
+  /1\. Data e período da visita/,
+  "Agenda: escolha de horário deve vir primeiro",
 );
 assert.match(
   contact,

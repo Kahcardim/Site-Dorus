@@ -137,8 +137,8 @@ export function Layout({
       </a>
       <footer className="footer">
         {!compactFooter && (
-          <div className="container footer-grid">
-            <div>
+          <div className="container footer-grid footer-grid-professional">
+            <div className="footer-company">
               <img
                 src="/assets/dorus-logo-3d.webp"
                 alt={SITE.name}
@@ -148,8 +148,11 @@ export function Layout({
                 Assistência técnica de linha branca com atendimento em
                 domicílio.
               </p>
-              <p>CNPJ 30.204.892/0001-03</p>
-              <p>Garantia mínima de 90 dias nos serviços executados.</p>
+              <p className="footer-company-data">
+                <strong>{SITE.name}</strong>
+                <span>CNPJ 30.204.892/0001-03</span>
+                <span>Garantia mínima de 90 dias nos serviços executados.</span>
+              </p>
             </div>
             <div className="footer-links">
               <h3>Institucional</h3>
@@ -163,6 +166,10 @@ export function Layout({
               <a href="/agendamento/">Agendamento</a>
               <a href="/fale-conosco/">Fale conosco</a>
               <a href={SITE.phoneHref}>{SITE.phone}</a>
+              <span>{SITE.serviceArea}</span>
+            </div>
+            <div className="footer-links footer-social">
+              <h3>Acompanhe e fale conosco</h3>
               <a
                 href={SITE.instagram}
                 target="_blank"
@@ -170,12 +177,15 @@ export function Layout({
               >
                 @assistenciadorus
               </a>
+              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer">
+                WhatsApp da D’orus
+              </a>
             </div>
           </div>
         )}
         <div className="container footer-bottom">
           <span>© {SITE.name}</span>
-          <span>Empresa de área de serviço</span>
+          <span className="footer-credit">Desenvolvido por Kauan Cardim</span>
           <button
             type="button"
             className="cookie-settings-link"
@@ -190,13 +200,31 @@ export function Layout({
   );
 }
 
-export function InternalHero({ eyebrow, title, children, className = "" }) {
+export function Warranty() {
   return (
-    <section className={`internal ${className}`.trim()}>
+    <p className="warranty-notice">
+      <strong>Garantia mínima de 90 dias</strong>
+      <span>
+        nos serviços executados, conforme as condições da ordem de serviço.
+      </span>
+    </p>
+  );
+}
+
+export function InternalHero({
+  eyebrow,
+  title,
+  children,
+  className = "",
+  warranty = true,
+}) {
+  return (
+    <section className={`internal centered-hero ${className}`.trim()}>
       <div className="container">
         <span className="eyebrow">{eyebrow}</span>
         <h1>{title}</h1>
         {children}
+        {warranty && <Warranty />}
       </div>
     </section>
   );
@@ -208,14 +236,18 @@ export function CtaPanel({
 }) {
   return (
     <section className="section section-soft final-cta">
-      <div className="container cta-panel">
-        <div>
+      <div className="container cta-panel professional-cta">
+        <div className="cta-copy">
           <span className="kicker">Precisa de assistência?</span>
           <h2>{title}</h2>
           <p>
             {children ||
               `Atendimento em ${SITE.serviceArea}, conforme disponibilidade.`}
           </p>
+          <div className="cta-trust">
+            <span>Atendimento em domicílio</span>
+            <span>Garantia mínima de 90 dias</span>
+          </div>
         </div>
         <div className="actions">
           <a

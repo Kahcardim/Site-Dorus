@@ -136,9 +136,88 @@ try {
     "Home: menu móvel não abre",
   );
 
+  for (const path of ["/", "/servicos/"]) {
+    await page.goto(`http://127.0.0.1:4174${path}`, {
+      waitUntil: "networkidle",
+    });
+    const brands = page.locator(".brand-list");
+    check(
+      (await brands.locator(".brand-logo").count()) === 13,
+      `${path}: marcas ausentes do carrossel`,
+    );
+    await brands.scrollIntoViewIfNeeded();
+    await page
+      .getByRole("button", { name: "Próximo: Marcas atendidas" })
+      .click();
+    await page.waitForTimeout(600);
+    const next = await brands.evaluate((element) => element.scrollLeft);
+    check(next > 0, `${path}: seta do carrossel não avança`);
+    await brands.focus();
+    await page.keyboard.press("ArrowLeft");
+    await page.waitForTimeout(600);
+    check(
+      (await brands.evaluate((element) => element.scrollLeft)) < next,
+      `${path}: teclado do carrossel não retorna`,
+    );
+    check(
+      (await page
+        .getByRole("button", { name: /Retomar carrossel de marcas/ })
+        .getAttribute("aria-pressed")) === "true",
+      `${path}: interação não pausou o carrossel`,
+    );
+  }
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+  const reducedTrack = page.locator(".brand-list");
+  await reducedTrack.scrollIntoViewIfNeeded();
+  const reducedStart = await reducedTrack.evaluate(
+    (element) => element.scrollLeft,
+  );
+  await page.waitForTimeout(3800);
+  check(
+    (await reducedTrack.evaluate((element) => element.scrollLeft)) ===
+      reducedStart,
+    "Carrossel não respeita movimento reduzido",
+  );
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+  await page.locator(".brand-list").scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  await page.waitForTimeout(3800);
+  check(
+    (await page
+      .locator(".brand-list")
+      .evaluate((element) => element.scrollLeft)) > 0,
+    "Carrossel não avança automaticamente",
+  );
+  await page
+    .getByRole("button", { name: /Pausar carrossel de marcas/ })
+    .click();
+  await page.mouse.move(0, 0);
+  await page.locator(".brand-list").evaluate((element) => element.blur());
+  const stopped = await page
+    .locator(".brand-list")
+    .evaluate((element) => element.scrollLeft);
+  await page.waitForTimeout(3800);
+  check(
+    (await page
+      .locator(".brand-list")
+      .evaluate((element) => element.scrollLeft)) === stopped,
+    "Pausa do carrossel não foi mantida",
+  );
+
   await page.goto("http://127.0.0.1:4174/fale-conosco/", {
     waitUntil: "networkidle",
   });
+  check(
+    (await page.locator(".contact-message").getAttribute("open")) === null,
+    "Contato: formulário deve ser opcional e recolhido inicialmente",
+  );
+  check(
+    await page.locator('.contact-hero a[href^="tel:"]').isVisible(),
+    "Contato: ligação direta ausente",
+  );
+  await page.locator(".contact-message > summary").click();
   await page.evaluate(() => {
     window.open = (url) => {
       window.__dorusOpened = url;
@@ -193,6 +272,55 @@ try {
       await page.goto(`http://127.0.0.1:4174${path}`, {
         waitUntil: "networkidle",
       });
+      if (path === "/fale-conosco/")
+        await page.locator(".contact-message > summary").click();
+      const visualErrors = await page.evaluate(() => {
+        const errors = [];
+        for (const image of document.querySelectorAll(
+          ".service-card-media img",
+        )) {
+          const box = image.getBoundingClientRect();
+          const frame = image.parentElement.getBoundingClientRect();
+          if (
+            Math.abs(box.width - frame.width) > 2 ||
+            Math.abs(box.height - frame.height) > 2
+          )
+            errors.push("imagem não preenche moldura");
+          if (Math.abs(frame.width - frame.height) > 2)
+            errors.push("moldura distorce proporção quadrada");
+        }
+        for (const heading of document.querySelectorAll(
+          ".internal h1, .section-head",
+        )) {
+          if (getComputedStyle(heading).textAlign !== "center")
+            errors.push("cabeçalho descentralizado");
+        }
+        for (const panel of document.querySelectorAll(".professional-cta")) {
+          if (
+            !panel.querySelector(".cta-trust")?.textContent.includes("90 dias")
+          )
+            errors.push("CTA sem garantia");
+          if (
+            getComputedStyle(panel.querySelector(".cta-copy")).textAlign !==
+            "center"
+          )
+            errors.push("CTA descentralizado");
+          const box = panel.getBoundingClientRect();
+          if (Math.abs(box.left + box.width / 2 - innerWidth / 2) > 2)
+            errors.push("painel CTA fora do centro");
+        }
+        if (
+          !document
+            .querySelector(".footer-credit")
+            ?.textContent.includes("Kauan Cardim")
+        )
+          errors.push("rodapé sem autor");
+        return errors;
+      });
+      check(
+        visualErrors.length === 0,
+        `${path} (${width}px): ${visualErrors.join(", ")}`,
+      );
       await page.addScriptTag({ content: axeSource });
       const result = await page.evaluate(() =>
         axe.run(document, {
@@ -260,6 +388,27 @@ try {
     path: resolve(screenshots, "home-desktop.png"),
     fullPage: true,
   });
+  for (const width of [390, 1440]) {
+    await desktop.setViewportSize({ width, height: 1000 });
+    for (const [name, path] of Object.entries({
+      sobre: "/sobre/",
+      servicos: "/servicos/",
+      guias: "/curiosidades/",
+      geladeira: "/servicos/geladeiras/",
+      guia: "/curiosidades/geladeira-nao-gela/",
+      contato: "/fale-conosco/",
+      agendamento: "/agendamento/",
+    })) {
+      await desktop.goto(`http://127.0.0.1:4174${path}`, {
+        waitUntil: "networkidle",
+      });
+      await loadLazyImages(desktop);
+      await desktop.screenshot({
+        path: resolve(screenshots, `${name}-${width}.png`),
+        fullPage: true,
+      });
+    }
+  }
   await desktop.close();
   await desktopContext.close();
 

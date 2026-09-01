@@ -4,6 +4,7 @@ import { CtaPanel } from "../components/Layout.jsx";
 import { Faq } from "../components/ContentSections.jsx";
 import faq from "../data/faq.json";
 import catalogCopy from "../data/catalog-copy.json";
+import { Carousel } from "../components/Carousel.jsx";
 
 function ServiceCards() {
   return (
@@ -17,7 +18,7 @@ function ServiceCards() {
           <picture className="service-card-media">
             <source
               media="(max-width:680px)"
-              srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp`}
+              srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp 1x, /assets/servicos/${service.image}.webp 2x`}
             />
             <img
               src={`/assets/servicos/${service.image}.webp`}
@@ -27,7 +28,7 @@ function ServiceCards() {
               height="1254"
             />
           </picture>
-          <div className="service-card-copy">
+          <div className="service-card-body">
             <h3>{service.name}</h3>
             <p>
               {catalogCopy.homeSummaries[service.slug] ||
@@ -58,9 +59,9 @@ export function BrandCarousel({
             <p>{description}</p>
           </div>
         </div>
-        <ul className="brand-list" role="list">
+        <Carousel label="Marcas atendidas" className="brand-list" autoPlay>
           {brands.map(([name, file]) => (
-            <li
+            <div
               className={`brand-logo${file ? "" : " is-text-only"}`}
               key={name}
             >
@@ -72,9 +73,9 @@ export function BrandCarousel({
                 />
               )}
               <span className="brand-fallback">{name}</span>
-            </li>
+            </div>
           ))}
-        </ul>
+        </Carousel>
       </div>
     </section>
   );
@@ -110,7 +111,7 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
             </div>
           </div>
         </div>
-        <div className="review-carousel" tabIndex="0">
+        <Carousel label="Avaliações de clientes" className="review-carousel">
           {reviews.map(([name, text]) => (
             <article className="review-card" key={name}>
               <div className="review-top">
@@ -127,7 +128,7 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
               <p>“{text}”</p>
             </article>
           ))}
-        </div>
+        </Carousel>
       </div>
     </section>
   );

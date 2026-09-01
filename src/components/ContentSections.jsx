@@ -1,7 +1,7 @@
 export function ContentSections({ sections }) {
   return sections.map((section, index) => (
     <section
-      className={`section${index % 2 ? " section-soft" : ""}`}
+      className={`section content-section${index % 2 ? " section-soft" : ""}`}
       key={index}
     >
       <div className="container">
