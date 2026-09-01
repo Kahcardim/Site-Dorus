@@ -1,0 +1,83 @@
+{
+  "/": [
+    "Organization",
+    "WebSite"
+  ],
+  "/agendamento/": [
+    "BreadcrumbList"
+  ],
+  "/curiosidades/": [
+    "BreadcrumbList",
+    "ItemList"
+  ],
+  "/curiosidades/fogao-nao-acende/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/curiosidades/freezer-nao-congela/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/curiosidades/geladeira-fazendo-barulho/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/curiosidades/geladeira-nao-gela/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/curiosidades/maquina-nao-centrifuga/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/curiosidades/micro-ondas-nao-aquece/": [
+    "Article",
+    "BreadcrumbList"
+  ],
+  "/fale-conosco/": [
+    "BreadcrumbList"
+  ],
+  "/privacidade/": [
+    "BreadcrumbList"
+  ],
+  "/servicos/": [
+    "BreadcrumbList",
+    "Service",
+    "FAQPage"
+  ],
+  "/servicos/fogoes/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/fornos/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/freezers/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/geladeiras/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/lava-e-seca/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/lava-loucas/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/maquinas-de-lavar/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/servicos/micro-ondas/": [
+    "Service",
+    "BreadcrumbList"
+  ],
+  "/sobre/": [
+    "BreadcrumbList"
+  ]
+}

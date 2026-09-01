@@ -1,0 +1,64 @@
+{
+  "homeSummaries": {
+    "geladeiras": "Falhas de refrigeração, excesso de gelo, vazamentos e ruídos.",
+    "maquinas-de-lavar": "Centrifugação, drenagem, enchimento, vazamentos e ciclos.",
+    "fogoes": "Falhas de acendimento, chama irregular, queimadores e forno.",
+    "freezers": "Baixo rendimento, excesso de gelo e falhas de refrigeração.",
+    "lava-loucas": "Drenagem, lavagem, aquecimento e interrupções de ciclo."
+  },
+  "serviceSummaries": {
+    "geladeiras": "Refrigeração, gelo, vazamentos e ruídos.",
+    "maquinas-de-lavar": "Centrifugação, drenagem, enchimento e ciclos.",
+    "fogoes": "Acendimento, chama, queimadores e forno.",
+    "freezers": "Rendimento, gelo e refrigeração.",
+    "lava-loucas": "Lavagem, drenagem e interrupções.",
+    "lava-e-seca": "Lavagem, centrifugação, drenagem e secagem.",
+    "fornos": "Aquecimento, acionamento e comandos.",
+    "micro-ondas": "Aquecimento, painel e funcionamento."
+  },
+  "serviceLinks": {
+    "geladeiras": [
+      {
+        "slug": "geladeira-nao-gela",
+        "title": "Geladeira não gela: causas comuns",
+        "description": "Ler guia →"
+      },
+      {
+        "slug": "geladeira-fazendo-barulho",
+        "title": "Geladeira fazendo barulho",
+        "description": "Ler guia →"
+      }
+    ],
+    "maquinas-de-lavar": [
+      {
+        "slug": "maquina-nao-centrifuga",
+        "title": "Veja o que observar antes da assistência",
+        "description": "Ler guia →"
+      }
+    ],
+    "fogoes": [
+      {
+        "slug": "fogao-nao-acende",
+        "title": "Fogão não acende? Veja o que verificar com segurança",
+        "description": "Ler guia →"
+      }
+    ],
+    "freezers": [
+      {
+        "slug": "freezer-nao-congela",
+        "title": "Freezer não congela? Veja causas comuns",
+        "description": "Ler guia →"
+      }
+    ],
+    "lava-loucas": [],
+    "lava-e-seca": [],
+    "fornos": [],
+    "micro-ondas": [
+      {
+        "slug": "micro-ondas-nao-aquece",
+        "title": "Micro‑ondas liga, mas não aquece?",
+        "description": "Leia os sinais e cuidados de segurança →"
+      }
+    ]
+  }
+}

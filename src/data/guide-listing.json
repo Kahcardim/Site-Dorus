@@ -1,0 +1,118 @@
+[
+  {
+    "heading": "Guias de eletrodomésticos",
+    "kicker": "",
+    "paragraphs": [],
+    "cards": [],
+    "links": [
+      {
+        "href": "/curiosidades/geladeira-nao-gela/",
+        "title": "Geladeira não está gelando?",
+        "description": "Causas comuns, sinais seguros para observar e quando procurar assistência.",
+        "kicker": "Geladeira",
+        "card": true
+      },
+      {
+        "href": "/curiosidades/maquina-nao-centrifuga/",
+        "title": "Máquina não centrifuga?",
+        "description": "Drenagem, carga, trava e outros sinais importantes.",
+        "kicker": "Lavadora",
+        "card": true
+      },
+      {
+        "href": "/curiosidades/geladeira-fazendo-barulho/",
+        "title": "Geladeira fazendo barulho",
+        "description": "Quando o som é normal e quando merece atenção.",
+        "kicker": "Geladeira",
+        "card": true
+      },
+      {
+        "href": "/curiosidades/freezer-nao-congela/",
+        "title": "Freezer não congela direito",
+        "description": "Vedação, temperatura, gelo e perda de desempenho.",
+        "kicker": "Freezer",
+        "card": true
+      },
+      {
+        "href": "/curiosidades/fogao-nao-acende/",
+        "title": "Fogão não acende",
+        "description": "Verificações simples e cuidados de segurança.",
+        "kicker": "Fogão",
+        "card": true
+      },
+      {
+        "href": "/curiosidades/micro-ondas-nao-aquece/",
+        "title": "Micro-ondas não aquece",
+        "description": "Sinais comuns e por que não abrir o gabinete.",
+        "kicker": "Micro-ondas",
+        "card": true
+      }
+    ]
+  },
+  {
+    "heading": "Encontre orientações e assistência para os oito equipamentos",
+    "kicker": "Problemas comuns por aparelho",
+    "paragraphs": [
+      "Use os sintomas como referência inicial. O diagnóstico correto depende da avaliação do aparelho."
+    ],
+    "cards": [],
+    "links": [
+      {
+        "href": "/servicos/geladeiras/",
+        "title": "Não gela, forma gelo ou vaza água",
+        "description": "Perda de refrigeração, ruídos, ciclos fora do padrão e vedação.",
+        "kicker": "Geladeiras",
+        "card": true
+      },
+      {
+        "href": "/servicos/maquinas-de-lavar/",
+        "title": "Não centrifuga, drena ou completa o ciclo",
+        "description": "Falhas de enchimento, vazamentos, ruídos e travas.",
+        "kicker": "Máquinas de lavar",
+        "card": true
+      },
+      {
+        "href": "/servicos/fogoes/",
+        "title": "Não acende ou apresenta chama irregular",
+        "description": "Queimadores, ignição e desempenho do forno merecem avaliação.",
+        "kicker": "Fogões",
+        "card": true
+      },
+      {
+        "href": "/servicos/freezers/",
+        "title": "Não congela ou acumula gelo em excesso",
+        "description": "Temperatura, vedação, ruídos e perda de rendimento.",
+        "kicker": "Freezers",
+        "card": true
+      },
+      {
+        "href": "/servicos/lava-loucas/",
+        "title": "Não lava, aquece ou drena corretamente",
+        "description": "Interrupções de ciclo, resíduos e falhas de escoamento.",
+        "kicker": "Lava-louças",
+        "card": true
+      },
+      {
+        "href": "/servicos/lava-e-seca/",
+        "title": "Não seca, centrifuga ou conclui o programa",
+        "description": "Falhas combinadas de lavagem, drenagem e secagem.",
+        "kicker": "Lava e seca",
+        "card": true
+      },
+      {
+        "href": "/servicos/fornos/",
+        "title": "Não aquece ou mantém temperatura irregular",
+        "description": "Comandos, aquecimento e desligamentos inesperados.",
+        "kicker": "Fornos",
+        "card": true
+      },
+      {
+        "href": "/servicos/micro-ondas/",
+        "title": "Liga, mas não aquece ou não gira",
+        "description": "Painel, prato giratório e funcionamento sem aquecimento.",
+        "kicker": "Micro-ondas",
+        "card": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,190 @@
+{
+  "fogoes": {
+    "ctaDescription": "",
+    "ctaTitle": "Conte o que está acontecendo com seu fogão.",
+    "intro": "Falhas de acendimento, chama irregular, queimadores que não funcionam ou forno com desempenho diferente podem ser avaliados pela D’orus.",
+    "issues": [
+      {
+        "description": "Queimadores que não acendem ou ignição intermitente precisam de avaliação.",
+        "title": "Acendimento falhando"
+      },
+      {
+        "description": "Chama amarela, baixa ou instável pode indicar necessidade de limpeza, regulagem ou reparo.",
+        "title": "Chama irregular"
+      },
+      {
+        "description": "Entupimentos, encaixe ou componentes desgastados podem afetar o funcionamento.",
+        "title": "Queimador não funciona"
+      },
+      {
+        "description": "Falhas para acender, aquecer ou manter o funcionamento devem ser diagnosticadas.",
+        "title": "Forno com problema"
+      }
+    ],
+    "title": "Assistência técnica de fogões em Guarulhos e região."
+  },
+  "fornos": {
+    "ctaDescription": "Envie marca, modelo e uma breve descrição do defeito.",
+    "ctaTitle": "Conte o problema do seu forno.",
+    "intro": "Se o forno não aquece corretamente, apresenta funcionamento irregular ou falhas de comando, a D’orus pode avaliar o equipamento.",
+    "issues": [
+      {
+        "description": "O forno liga, mas não atinge ou mantém a temperatura esperada.",
+        "title": "Não aquece"
+      },
+      {
+        "description": "Diferenças de temperatura podem indicar falha de funcionamento.",
+        "title": "Aquecimento irregular"
+      },
+      {
+        "description": "Falhas ao ligar, desligar ou selecionar funções merecem avaliação.",
+        "title": "Comandos e acionamento"
+      }
+    ],
+    "title": "Assistência técnica de fornos em Guarulhos e região."
+  },
+  "freezers": {
+    "ctaDescription": "Envie marca, modelo e uma descrição do comportamento do aparelho.",
+    "ctaTitle": "Precisa verificar seu freezer?",
+    "intro": "Baixo rendimento, excesso de gelo, demora para congelar ou funcionamento irregular são sinais que merecem avaliação.",
+    "issues": [
+      {
+        "description": "Perda de desempenho compromete a conservação dos alimentos.",
+        "title": "Não congela direito"
+      },
+      {
+        "description": "Acúmulo fora do normal pode indicar falha de vedação ou degelo.",
+        "title": "Gelo em excesso"
+      },
+      {
+        "description": "Ruídos, ciclos fora do padrão ou aquecimento excessivo pedem avaliação.",
+        "title": "Funcionamento irregular"
+      }
+    ],
+    "title": "Assistência técnica de freezers em Guarulhos e região."
+  },
+  "geladeiras": {
+    "ctaDescription": "Envie marca, modelo, foto e uma breve descrição do defeito.",
+    "ctaTitle": "Conte o problema da sua geladeira.",
+    "intro": "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
+    "issues": [
+      {
+        "description": "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação.",
+        "title": "Não está gelando"
+      },
+      {
+        "description": "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção.",
+        "title": "Freezer gela, geladeira não"
+      },
+      {
+        "description": "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna.",
+        "title": "Gelo em excesso"
+      },
+      {
+        "description": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação.",
+        "title": "Vazamento de água"
+      },
+      {
+        "description": "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico.",
+        "title": "Ruídos diferentes"
+      },
+      {
+        "description": "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
+        "title": "Liga e desliga demais"
+      }
+    ],
+    "title": "Assistência técnica de geladeiras em Guarulhos e região."
+  },
+  "lava-e-seca": {
+    "ctaDescription": "Envie marca, modelo e o erro apresentado.",
+    "ctaTitle": "Conte o problema da sua lava e seca.",
+    "intro": "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+    "issues": [
+      {
+        "description": "O ciclo termina com excesso de água ou não chega à etapa de centrifugação.",
+        "title": "Não centrifuga"
+      },
+      {
+        "description": "A secagem demora demais ou as roupas continuam úmidas.",
+        "title": "Não seca corretamente"
+      },
+      {
+        "description": "Códigos no painel, água parada ou interrupções precisam de avaliação.",
+        "title": "Erros e drenagem"
+      }
+    ],
+    "title": "Assistência técnica de lava e seca em Guarulhos e região."
+  },
+  "lava-loucas": {
+    "ctaDescription": "Se houver código de erro, envie também uma foto.",
+    "ctaTitle": "Conte o problema da sua lava‑louças.",
+    "intro": "Falhas de drenagem, lavagem incompleta, aquecimento ou interrupção do ciclo podem ser avaliadas pela D’orus.",
+    "issues": [
+      {
+        "description": "Água parada ou drenagem lenta pode indicar obstrução ou falha no sistema.",
+        "title": "Não drena"
+      },
+      {
+        "description": "Louças permanecem sujas mesmo com programa e abastecimento adequados.",
+        "title": "Lavagem incompleta"
+      },
+      {
+        "description": "Códigos de erro, travamentos e ciclos interrompidos precisam de diagnóstico.",
+        "title": "Erros e interrupções"
+      }
+    ],
+    "title": "Assistência técnica de lava‑louças em Guarulhos e região."
+  },
+  "maquinas-de-lavar": {
+    "ctaDescription": "Informe marca, modelo e em qual etapa o problema aparece.",
+    "ctaTitle": "Conte o problema da sua máquina.",
+    "intro": "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. Observe o comportamento antes de insistir no uso.",
+    "issues": [
+      {
+        "description": "A roupa termina muito molhada ou a máquina não entra na etapa de centrifugação.",
+        "title": "Não centrifuga"
+      },
+      {
+        "description": "Água parada pode indicar obstrução, bomba ou outro ponto do sistema de drenagem.",
+        "title": "Não drena"
+      },
+      {
+        "description": "Falhas de entrada de água podem envolver alimentação, filtros, válvulas ou comandos.",
+        "title": "Não enche"
+      },
+      {
+        "description": "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem.",
+        "title": "Vaza água"
+      },
+      {
+        "description": "Batidas fortes e ruídos persistentes merecem diagnóstico.",
+        "title": "Ruídos e vibração"
+      },
+      {
+        "description": "Travamentos podem estar ligados a sensores, trava, alimentação ou controle.",
+        "title": "Ciclo para no meio"
+      }
+    ],
+    "title": "Assistência técnica de máquinas de lavar em Guarulhos e região."
+  },
+  "micro-ondas": {
+    "ctaDescription": "Informe marca e modelo para confirmar a possibilidade de atendimento.",
+    "ctaTitle": "Conte o problema do seu micro‑ondas.",
+    "intro": "Problemas de aquecimento, comandos ou funcionamento podem ser avaliados conforme marca, modelo e defeito.",
+    "issues": [
+      {
+        "description": "O equipamento liga, mas os alimentos não aquecem como deveriam.",
+        "title": "Não aquece"
+      },
+      {
+        "description": "Teclas, display ou seleção de funções apresentam falhas.",
+        "title": "Painel ou comandos"
+      },
+      {
+        "description": "Desligamentos, ruídos anormais ou comportamento diferente precisam de avaliação.",
+        "title": "Funcionamento irregular"
+      }
+    ],
+    "title": "Assistência técnica de micro‑ondas em Guarulhos e região."
+  }
+}

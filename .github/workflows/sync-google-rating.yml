@@ -3,11 +3,12 @@ name: Sincronizar avaliações Google
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 */6 * * *'
+    - cron: "17 */6 * * *"
   push:
+    branches: [main]
     paths:
-      - '.github/workflows/sync-google-rating.yml'
-      - 'scripts/sync_google_rating.py'
+      - ".github/workflows/sync-google-rating.yml"
+      - "scripts/sync_google_rating.py"
 
 permissions:
   contents: write
@@ -28,7 +29,7 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Consultar Google Places
         env:
@@ -39,13 +40,13 @@ jobs:
       - name: Publicar atualização quando houver mudança
         shell: bash
         run: |
-          if git diff --quiet -- google-rating.json; then
+          if git diff --quiet -- public/google-rating.json; then
             echo "Nenhuma alteração na nota/quantidade."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add google-rating.json
+          git add public/google-rating.json
           git commit -m "chore: sync Google rating"
           git push
