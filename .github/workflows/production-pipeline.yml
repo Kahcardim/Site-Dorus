@@ -21,39 +21,27 @@ concurrency:
 
 jobs:
   qualidade:
-    name: Qualidade, SEO e marca
+    name: Build e regressão React
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
-      - name: Verificar sintaxe JavaScript
-        shell: bash
-        run: |
-          set -euo pipefail
-          for file in site.js analytics.js google-reviews.js calendar-integration.js brand-carousel.js conversion-enhancements.js accessibility-tools.js privacy-consent.js; do
-            node --check "$file"
-          done
-          cp integrations/google-calendar/Code.gs /tmp/dorus-apps-script.js
-          node --check /tmp/dorus-apps-script.js
-      - name: Verificar sintaxe Python
-        run: python -m compileall -q scripts
-      - name: Validar site, backend, marca e SEO
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/check_backend.py
-          python scripts/check_analytics.py
-          python scripts/check_brand_consistency.py
-          python scripts/build_css.py
-          python scripts/enrich_meta.py
-          python scripts/check_site.py
-          python scripts/check_seo.py
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Instalar navegador de regressão
+        run: npx playwright install --with-deps chromium
+      - name: Validar componentes, build, rotas e acessibilidade
+        run: npm run check
+      - name: Salvar capturas da homologação
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-qa-${{ github.run_id }}
+          path: test-results/
+          retention-days: 14
 
   deploy:
     name: Publicar GitHub Pages
@@ -65,22 +53,19 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-node@v4
         with:
-          python-version: '3.12'
-      - name: Preparar metadados e invalidar cache
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/build_css.py
-          python scripts/enrich_meta.py
-          python scripts/cache_bust.py "${GITHUB_SHA:0:12}"
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Gerar site React estático
+        run: npm run build
       - uses: actions/configure-pages@v5
         with:
           enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: dist
       - id: deployment
         uses: actions/deploy-pages@v4
 
@@ -93,10 +78,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: "22"
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Instalar Lighthouse
         run: npm install --global lighthouse@12
       - name: Auditar site publicado
@@ -107,7 +92,7 @@ jobs:
           export CHROME_PATH
           for tentativa in {1..18}; do
             HTML="$(curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}")"
-            grep -q "?v=${GITHUB_SHA:0:12}" <<< "$HTML" && break
+            grep -q 'id="root"' <<< "$HTML" && break
             test "$tentativa" -lt 18 || { echo 'A revisao publicada nao foi confirmada.'; exit 1; }
             sleep 5
           done

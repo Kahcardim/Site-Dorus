@@ -1,0 +1,23 @@
+{
+  "updatedAt": "2026-08-29",
+  "reviews": [
+    {
+      "name": "Romildo Oliveira",
+      "rating": 5,
+      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
+      "source": "Google"
+    },
+    {
+      "name": "Daiana Marques",
+      "rating": 5,
+      "text": "Otimo",
+      "source": "Google"
+    },
+    {
+      "name": "Ju Kanashiro",
+      "rating": 5,
+      "text": "",
+      "source": "Google"
+    }
+  ]
+}

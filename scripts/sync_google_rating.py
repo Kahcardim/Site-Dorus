@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "google-rating.json"
+OUTPUT = ROOT / "public" / "google-rating.json"
 SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
 EXPECTED_PLACE_ID = "ChIJZyk7iQ31zpQR0C-R3wgVywg"
 

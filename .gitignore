@@ -3,3 +3,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 lighthouse-current/
+node_modules/
+dist/
+test-results/
+playwright-report/
