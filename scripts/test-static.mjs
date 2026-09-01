@@ -26,6 +26,11 @@ for (const path of paths) {
   assert.match(html, /<main id="conteudo">/, `${path}: main sem id`);
   assert.match(
     html,
+    /<script type="module" fetchpriority="low"/,
+    `${path}: hidratação deve preservar a prioridade do conteúdo estático`,
+  );
+  assert.match(
+    html,
     /Desenvolvido por Kauan Cardim/,
     `${path}: crédito do autor ausente`,
   );

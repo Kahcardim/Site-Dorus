@@ -9,7 +9,11 @@ await rm(dist, { recursive: true, force: true });
 await build({ root });
 
 const templatePath = resolve(dist, "app.html");
-const template = await readFile(templatePath, "utf8");
+// Vite omits the entry's fetchpriority attribute; preserve the SSG-first priority.
+const template = (await readFile(templatePath, "utf8")).replace(
+  '<script type="module"',
+  '<script type="module" fetchpriority="low"',
+);
 const vite = await createServer({
   root,
   server: { middlewareMode: true },
