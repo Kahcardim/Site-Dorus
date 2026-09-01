@@ -1,4 +1,5 @@
 import { SITE } from "./data/site.js";
+import listingSchema from "./data/listing-schema.json";
 
 export function breadcrumbsFor(route) {
   const items = [{ name: "Início", path: "/" }];
@@ -90,5 +91,6 @@ export function structuredData(route) {
       areaServed,
       mainEntityOfPage: { "@id": page["@id"] },
     });
+  graph.push(...(listingSchema[route.path] || []));
   return { "@context": "https://schema.org", "@graph": graph };
 }

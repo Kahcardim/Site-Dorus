@@ -203,9 +203,23 @@ const normalizeContent = (value) =>
     .normalize("NFD")
     .replace(/\p{Diacritic}/gu, "");
 const contentLosses = [];
+const originalSchemaTypes = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/pre-react-schema-types.json"),
+    "utf8",
+  ),
+);
 for (const [path, blocks] of Object.entries(fullContent.pages)) {
   const html = await readFile(resolve(dist, "." + path, "index.html"), "utf8");
   const main = normalizeContent(html.match(/<main[^>]*>([\s\S]*?)<\/main>/)[1]);
+  const graph = JSON.parse(
+    html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1],
+  )["@graph"];
+  for (const type of originalSchemaTypes[path])
+    assert(
+      graph.some((node) => node["@type"] === type),
+      `${path}: marcação ${type} perdida`,
+    );
   for (const block of blocks)
     if (!main.includes(normalizeContent(block.text)))
       contentLosses.push({ path, ...block });

@@ -1,0 +1,233 @@
+{
+  "/curiosidades/": [
+    {
+      "@type": "ItemList",
+      "name": "Problemas comuns por eletrodoméstico",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Problemas comuns em geladeiras",
+          "url": "https://assistenciadorus.com.br/servicos/geladeiras/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Problemas comuns em máquinas de lavar",
+          "url": "https://assistenciadorus.com.br/servicos/maquinas-de-lavar/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Problemas comuns em fogões",
+          "url": "https://assistenciadorus.com.br/servicos/fogoes/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Problemas comuns em freezers",
+          "url": "https://assistenciadorus.com.br/servicos/freezers/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Problemas comuns em lava-louças",
+          "url": "https://assistenciadorus.com.br/servicos/lava-loucas/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Problemas comuns em lava e seca",
+          "url": "https://assistenciadorus.com.br/servicos/lava-e-seca/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Problemas comuns em fornos",
+          "url": "https://assistenciadorus.com.br/servicos/fornos/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "Problemas comuns em micro-ondas",
+          "url": "https://assistenciadorus.com.br/servicos/micro-ondas/"
+        }
+      ]
+    }
+  ],
+  "/servicos/": [
+    {
+      "@type": "Service",
+      "@id": "https://assistenciadorus.com.br/servicos/#service",
+      "name": "Assistência técnica de eletrodomésticos em Guarulhos",
+      "serviceType": "Assistência técnica de eletrodomésticos de linha branca em domicílio",
+      "url": "https://assistenciadorus.com.br/servicos/",
+      "provider": {
+        "@type": "Organization",
+        "@id": "https://assistenciadorus.com.br/#organization",
+        "name": "D’orus Assistência Técnica",
+        "telephone": "+55-11-91357-3932"
+      },
+      "areaServed": [
+        {
+          "@type": "Place",
+          "name": "Centro de Guarulhos"
+        },
+        {
+          "@type": "Place",
+          "name": "Lago dos Patos, Guarulhos"
+        },
+        {
+          "@type": "Place",
+          "name": "Bonsucesso, Guarulhos"
+        },
+        {
+          "@type": "Place",
+          "name": "Pimentas, Guarulhos"
+        },
+        {
+          "@type": "City",
+          "name": "São Paulo"
+        }
+      ],
+      "brand": [
+        {
+          "@type": "Brand",
+          "name": "Samsung"
+        },
+        {
+          "@type": "Brand",
+          "name": "Brastemp"
+        },
+        {
+          "@type": "Brand",
+          "name": "Electrolux"
+        },
+        {
+          "@type": "Brand",
+          "name": "Consul"
+        },
+        {
+          "@type": "Brand",
+          "name": "GE"
+        },
+        {
+          "@type": "Brand",
+          "name": "LG"
+        },
+        {
+          "@type": "Brand",
+          "name": "Bosch"
+        }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Equipamentos atendidos",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para geladeiras"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para máquinas de lavar"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para fogões"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para freezers"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para lava-louças"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para lava e seca"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para fornos"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Assistência para micro-ondas"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://assistenciadorus.com.br/servicos/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Como funciona a visita técnica?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "O cliente informa o problema e a região. A data é combinada conforme disponibilidade, e a visita é realizada no endereço informado."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Como é feito o orçamento?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "As condições do orçamento são alinhadas após a avaliação do aparelho e a explicação do serviço recomendado."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qual é o prazo do serviço?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "O prazo depende do diagnóstico, da complexidade do reparo e da disponibilidade de peças. A previsão é informada após a avaliação."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Os serviços têm garantia?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Os serviços executados pela D’orus têm garantia mínima de 90 dias, conforme as condições registradas na ordem de serviço."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quais regiões recebem atendimento?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Há atendimento no Centro de Guarulhos, Lago dos Patos, Bonsucesso e Pimentas. São Paulo é atendida sob consulta e conforme disponibilidade."
+          }
+        }
+      ]
+    }
+  ]
+}
