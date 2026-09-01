@@ -189,3 +189,32 @@ for (const [path, hash] of Object.entries(backup.integrationHashes)) {
 console.log(
   `OK: dados de conteúdo e integrações comparados com o backup ${backup.backupCommit}.`,
 );
+
+const fullContent = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/pre-react-content.json"),
+    "utf8",
+  ),
+);
+const normalizeContent = (value) =>
+  plain(value.replace(/<!--[\s\S]*?-->/g, ""))
+    .replace(/\s+([.,?!:;])/g, "$1")
+    .replace(/‑/g, "-")
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
+const contentLosses = [];
+for (const [path, blocks] of Object.entries(fullContent.pages)) {
+  const html = await readFile(resolve(dist, "." + path, "index.html"), "utf8");
+  const main = normalizeContent(html.match(/<main[^>]*>([\s\S]*?)<\/main>/)[1]);
+  for (const block of blocks)
+    if (!main.includes(normalizeContent(block.text)))
+      contentLosses.push({ path, ...block });
+}
+assert.deepEqual(
+  contentLosses,
+  [],
+  "Perda de conteúdo em comparação integral das páginas do backup",
+);
+console.log(
+  `OK: ${Object.values(fullContent.pages).flat().length} blocos de títulos, parágrafos e listas conferidos nas 21 páginas; ${fullContent.omitted.length} mensagens de interface com substituição documentada.`,
+);

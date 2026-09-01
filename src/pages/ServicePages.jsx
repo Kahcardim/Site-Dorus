@@ -4,6 +4,7 @@ import { ContentSections, Faq } from "../components/ContentSections.jsx";
 import { BrandCarousel, Reviews } from "./HomePage.jsx";
 import serviceContent from "../data/service-content.json";
 import institutionalContent from "../data/institutional-content.json";
+import catalogCopy from "../data/catalog-copy.json";
 
 export function ServicesPage() {
   return (
@@ -15,6 +16,15 @@ export function ServicesPage() {
         <p>{institutionalContent.servicos.intro}</p>
       </InternalHero>
       <section className="section">
+        <div className="container section-head">
+          <div>
+            <h2>Escolha o aparelho que precisa de assistência</h2>
+            <p>
+              Veja sintomas comuns, orientações e os canais para solicitar
+              atendimento.
+            </p>
+          </div>
+        </div>
         <div className="container service-grid">
           {services.map((service) => (
             <a
@@ -37,7 +47,7 @@ export function ServicesPage() {
               </picture>
               <div className="service-card-copy">
                 <h2>{service.name}</h2>
-                <p>{service.summary}</p>
+                <p>{catalogCopy.serviceSummaries[service.slug]}</p>
                 <span>Conhecer o serviço →</span>
               </div>
             </a>
@@ -45,13 +55,19 @@ export function ServicesPage() {
         </div>
       </section>
       <ContentSections sections={institutionalContent.servicos.sections} />
-      <BrandCarousel />
-      <Reviews />
+      <BrandCarousel
+        title="Atendimento multimarcas para linha branca"
+        description="Samsung, Brastemp, Electrolux, Consul, GE, LG e Bosch. A possibilidade de atendimento depende do aparelho, modelo e serviço necessário."
+      />
+      <Reviews title="Avaliações de clientes da D’orus" />
       <Faq
         items={institutionalContent.servicos.faq}
         title="Informações antes de solicitar atendimento"
       />
-      <CtaPanel />
+      <CtaPanel title="Conte o que está acontecendo com seu aparelho">
+        Envie marca, modelo e uma descrição do problema para iniciar o
+        atendimento.
+      </CtaPanel>
     </>
   );
 }
@@ -103,7 +119,11 @@ export function ServiceDetailPage({ service }) {
           <div className="section-head">
             <div>
               <span className="kicker">Problemas comuns</span>
-              <h2>Sinais que ajudam no diagnóstico</h2>
+              <h2>
+                {service.slug === "geladeiras"
+                  ? "O que observar antes de solicitar assistência"
+                  : "Sinais que ajudam no diagnóstico"}
+              </h2>
             </div>
           </div>
           <div className="cards">
@@ -122,7 +142,11 @@ export function ServiceDetailPage({ service }) {
             <div className="section-head">
               <div>
                 <span className="kicker">Guias relacionados</span>
-                <h2>Entenda melhor os sintomas</h2>
+                <h2>
+                  {service.slug === "maquinas-de-lavar"
+                    ? "Máquina não centrifuga?"
+                    : "Entenda melhor os sintomas"}
+                </h2>
               </div>
             </div>
             <div className="cards">
@@ -132,7 +156,11 @@ export function ServiceDetailPage({ service }) {
                   href={`/curiosidades/${guide.slug}/`}
                   key={guide.slug}
                 >
-                  <h3>{guide.title}</h3>
+                  <h3>
+                    {catalogCopy.serviceLinks[service.slug]?.find(
+                      (link) => link.slug === guide.slug,
+                    )?.title || guide.title}
+                  </h3>
                   <p>{guide.description}</p>
                   <span>Ler guia →</span>
                   {service.slug === "micro-ondas" && (

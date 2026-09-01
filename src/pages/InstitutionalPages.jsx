@@ -156,8 +156,8 @@ export function SchedulePage() {
         title="Solicite o melhor horário para sua visita."
       >
         <p>
-          Informe o aparelho, o problema e o endereço. A disponibilidade é
-          confirmada pelo WhatsApp.
+          Informe o aparelho, o problema e o endereço onde o atendimento deverá
+          ser realizado. A disponibilidade é confirmada pelo WhatsApp.
         </p>
       </InternalHero>
       <section className="section">
@@ -248,7 +248,8 @@ export function SchedulePage() {
               Continuar no WhatsApp
             </a>
             <p className="schedule-disclaimer">
-              A visita só fica confirmada depois da resposta da D’orus.
+              A data escolhida é uma preferência. A visita só fica confirmada
+              depois da resposta da D’orus.
             </p>
           </form>
           <aside className="schedule-sidebar">

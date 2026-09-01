@@ -3,6 +3,7 @@ import { useGoogleRating } from "../hooks/useSiteEffects.js";
 import { CtaPanel } from "../components/Layout.jsx";
 import { Faq } from "../components/ContentSections.jsx";
 import faq from "../data/faq.json";
+import catalogCopy from "../data/catalog-copy.json";
 
 function ServiceCards() {
   return (
@@ -28,7 +29,10 @@ function ServiceCards() {
           </picture>
           <div className="service-card-copy">
             <h3>{service.name}</h3>
-            <p>{service.issues.slice(0, 3).join(", ")}.</p>
+            <p>
+              {catalogCopy.homeSummaries[service.slug] ||
+                catalogCopy.serviceSummaries[service.slug]}
+            </p>
             <span>Ver assistência →</span>
           </div>
         </a>
@@ -37,7 +41,10 @@ function ServiceCards() {
   );
 }
 
-export function BrandCarousel() {
+export function BrandCarousel({
+  title = "Experiência com as principais marcas de linha branca",
+  description = "O atendimento depende do equipamento, modelo e disponibilidade de serviço.",
+}) {
   return (
     <section
       className="section section-soft brands-section"
@@ -47,13 +54,8 @@ export function BrandCarousel() {
         <div className="section-head">
           <div>
             <span className="kicker">Marcas atendidas</span>
-            <h2 id="brands-title">
-              Experiência com as principais marcas de linha branca
-            </h2>
-            <p>
-              O atendimento depende do equipamento, modelo e disponibilidade de
-              serviço.
-            </p>
+            <h2 id="brands-title">{title}</h2>
+            <p>{description}</p>
           </div>
         </div>
         <ul className="brand-list" role="list">
@@ -78,7 +80,7 @@ export function BrandCarousel() {
   );
 }
 
-export function Reviews() {
+export function Reviews({ title = "Experiências de clientes da D’orus" }) {
   const { rating, reviews: count } = useGoogleRating();
   return (
     <section className="section reviews-section">
@@ -86,7 +88,7 @@ export function Reviews() {
         <div className="section-head compact-head">
           <div>
             <span className="kicker">Avaliações do Google</span>
-            <h2>Experiências de clientes da D’orus</h2>
+            <h2>{title}</h2>
             <a
               href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg"
               target="_blank"
@@ -186,7 +188,9 @@ export function HomePage() {
           <div className="section-head">
             <div>
               <span className="kicker">Serviços</span>
-              <h2>Assistência para os principais equipamentos da sua casa</h2>
+              <h2>
+                Assistência para os aparelhos que fazem parte da sua rotina
+              </h2>
               <p>
                 Escolha o aparelho para conhecer problemas comuns e preparar o
                 atendimento.
@@ -197,6 +201,10 @@ export function HomePage() {
             </a>
           </div>
           <ServiceCards />
+          <div className="prose">
+            <h3>Outros equipamentos</h3>
+            <p>Lava e seca, fornos e micro-ondas, conforme avaliação.</p>
+          </div>
         </div>
       </section>
       <BrandCarousel />
@@ -219,15 +227,15 @@ export function HomePage() {
               <h3>Diagnóstico responsável</h3>
               <p>
                 Os sintomas são avaliados e a necessidade de manutenção é
-                explicada com clareza.
+                explicada de forma clara.
               </p>
             </article>
             <article className="trust-card">
               <div className="icon">03</div>
               <h3>Contato direto</h3>
               <p>
-                WhatsApp e agendamento simples reduzem o tempo até o
-                atendimento.
+                WhatsApp e agendamento simples para reduzir o tempo entre o
+                problema e o atendimento.
               </p>
             </article>
           </div>
@@ -239,13 +247,33 @@ export function HomePage() {
             <div>
               <span className="kicker">Guias práticos</span>
               <h2>Entenda o problema antes de solicitar assistência</h2>
+              <p>
+                Conteúdo direto para reconhecer sinais comuns e saber quando
+                buscar avaliação técnica.
+              </p>
             </div>
             <a className="text-link" href="/curiosidades/">
               Ver todos os guias →
             </a>
           </div>
           <div className="cards">
-            {guides.slice(0, 3).map((guide) => (
+            {[
+              {
+                slug: "geladeira-nao-gela",
+                title: "Geladeira não gela",
+                description: "Veja causas comuns e quando chamar assistência.",
+              },
+              {
+                slug: "maquina-nao-centrifuga",
+                title: "Máquina não centrifuga",
+                description: "Entenda os sintomas mais frequentes.",
+              },
+              {
+                slug: "micro-ondas-nao-aquece",
+                title: "Micro-ondas não aquece",
+                description: "Saiba quais sinais pedem avaliação.",
+              },
+            ].map((guide) => (
               <a
                 className="card"
                 href={`/curiosidades/${guide.slug}/`}
@@ -275,12 +303,18 @@ export function HomePage() {
             <article className="step">
               <span className="num">02</span>
               <h3>Envie as informações</h3>
-              <p>Marca, modelo, foto e vídeo ajudam a preparar o contato.</p>
+              <p>
+                Marca, modelo, foto e vídeo ajudam a preparar o primeiro
+                contato.
+              </p>
             </article>
             <article className="step">
               <span className="num">03</span>
               <h3>Combine a visita</h3>
-              <p>A disponibilidade é confirmada pelo WhatsApp.</p>
+              <p>
+                A disponibilidade é confirmada e o atendimento é realizado no
+                endereço informado.
+              </p>
             </article>
           </div>
         </div>

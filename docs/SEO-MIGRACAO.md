@@ -6,6 +6,8 @@ Snapshot anterior: `32ddda2730660f12d38e5b55736558b1814cb030`, branch `pre-react
 Árvore confirmada: `45dea93395e97dee870e35dfafcceaafc80f9796`, idêntica à revisão pública `0aba6dbd5f4b44831b3c313cc12eee8b0c31a657`.
 O contrato em `tests/fixtures/pre-react-contract.json` registra os metadados, textos dos guias/serviços/sobre/privacidade, avaliações e hashes das integrações dessa base.
 
+Complemento integral: `tests/fixtures/pre-react-content.json` foi extraído diretamente do commit anterior com `git show`. Compara 415 blocos de H1/H2/H3, parágrafos e itens de lista das 21 páginas, normalizando apenas espaços, acentos e hífen tipográfico. As três exceções explícitas são duas instruções do carrossel antigo e uma mensagem dinâmica de formulário, não conteúdo editorial. Esse mesmo teste roda sobre o HTML publicado.
+
 ## Pesquisa de concorrentes — 01/09/2026
 
 Amostra encontrada em buscas por conserto de geladeira, máquina de lavar e assistência de linha branca em Guarulhos e Alto Tietê. Não representa classificação fixa do Google nem comprova quem recebe mais visitas.

@@ -1,0 +1,1728 @@
+{
+  "sourceCommit": "0aba6dbd5f4b44831b3c313cc12eee8b0c31a657",
+  "gitTree": "45dea93395e97dee870e35dfafcceaafc80f9796",
+  "pages": {
+    "/": [
+      {
+        "tag": "h1",
+        "text": "Seu eletrodoméstico apresentou problema? Fale com quem entende."
+      },
+      {
+        "tag": "p",
+        "text": "Há mais de 10 anos, a D’orus atende linha branca com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo."
+      },
+      {
+        "tag": "h2",
+        "text": "Assistência para os aparelhos que fazem parte da sua rotina"
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeiras"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de refrigeração, excesso de gelo, vazamentos e ruídos."
+      },
+      {
+        "tag": "h3",
+        "text": "Máquinas de lavar"
+      },
+      {
+        "tag": "p",
+        "text": "Centrifugação, drenagem, enchimento, vazamentos e ciclos."
+      },
+      {
+        "tag": "h3",
+        "text": "Fogões"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de acendimento, chama irregular, queimadores e forno."
+      },
+      {
+        "tag": "h3",
+        "text": "Freezers"
+      },
+      {
+        "tag": "p",
+        "text": "Baixo rendimento, excesso de gelo e falhas de refrigeração."
+      },
+      {
+        "tag": "h3",
+        "text": "Lava-louças"
+      },
+      {
+        "tag": "p",
+        "text": "Drenagem, lavagem, aquecimento e interrupções de ciclo."
+      },
+      {
+        "tag": "h3",
+        "text": "Outros equipamentos"
+      },
+      {
+        "tag": "p",
+        "text": "Lava e seca, fornos e micro-ondas, conforme avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "Experiência com as principais marcas de linha branca"
+      },
+      {
+        "tag": "p",
+        "text": "O atendimento depende do equipamento, modelo e disponibilidade de serviço."
+      },
+      {
+        "tag": "li",
+        "text": "Brastemp"
+      },
+      {
+        "tag": "li",
+        "text": "Consul"
+      },
+      {
+        "tag": "li",
+        "text": "Electrolux"
+      },
+      {
+        "tag": "li",
+        "text": "Samsung"
+      },
+      {
+        "tag": "li",
+        "text": "LG"
+      },
+      {
+        "tag": "li",
+        "text": "Continental"
+      },
+      {
+        "tag": "li",
+        "text": "Atlas"
+      },
+      {
+        "tag": "li",
+        "text": "Midea"
+      },
+      {
+        "tag": "li",
+        "text": "Mueller"
+      },
+      {
+        "tag": "li",
+        "text": "Philco"
+      },
+      {
+        "tag": "li",
+        "text": "Panasonic"
+      },
+      {
+        "tag": "li",
+        "text": "GE"
+      },
+      {
+        "tag": "li",
+        "text": "Bosch"
+      },
+      {
+        "tag": "h2",
+        "text": "Uma assistência preparada para ir até você"
+      },
+      {
+        "tag": "h3",
+        "text": "Atendimento em domicílio"
+      },
+      {
+        "tag": "p",
+        "text": "O endereço é informado apenas no agendamento da visita."
+      },
+      {
+        "tag": "h3",
+        "text": "Diagnóstico responsável"
+      },
+      {
+        "tag": "p",
+        "text": "Os sintomas são avaliados e a necessidade de manutenção é explicada de forma clara."
+      },
+      {
+        "tag": "h3",
+        "text": "Contato direto"
+      },
+      {
+        "tag": "p",
+        "text": "WhatsApp e agendamento simples para reduzir o tempo entre o problema e o atendimento."
+      },
+      {
+        "tag": "h2",
+        "text": "Entenda o problema antes de solicitar assistência"
+      },
+      {
+        "tag": "p",
+        "text": "Conteúdo direto para reconhecer sinais comuns e saber quando buscar avaliação técnica."
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeira não gela"
+      },
+      {
+        "tag": "p",
+        "text": "Veja causas comuns e quando chamar assistência."
+      },
+      {
+        "tag": "h3",
+        "text": "Máquina não centrifuga"
+      },
+      {
+        "tag": "p",
+        "text": "Entenda os sintomas mais frequentes."
+      },
+      {
+        "tag": "h3",
+        "text": "Micro-ondas não aquece"
+      },
+      {
+        "tag": "p",
+        "text": "Saiba quais sinais pedem avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "Da pesquisa ao atendimento"
+      },
+      {
+        "tag": "h3",
+        "text": "Identifique o sintoma"
+      },
+      {
+        "tag": "p",
+        "text": "Consulte os guias ou descreva o comportamento do aparelho."
+      },
+      {
+        "tag": "h3",
+        "text": "Envie as informações"
+      },
+      {
+        "tag": "p",
+        "text": "Marca, modelo, foto e vídeo ajudam a preparar o primeiro contato."
+      },
+      {
+        "tag": "h3",
+        "text": "Combine a visita"
+      },
+      {
+        "tag": "p",
+        "text": "A disponibilidade é confirmada e o atendimento é realizado no endereço informado."
+      },
+      {
+        "tag": "h2",
+        "text": "Antes de solicitar atendimento"
+      },
+      {
+        "tag": "p",
+        "text": "Geladeiras, máquinas de lavar, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas, conforme o serviço necessário."
+      },
+      {
+        "tag": "p",
+        "text": "Sim. Os serviços executados pela D’orus têm garantia mínima de 90 dias, conforme as condições registradas na ordem de serviço."
+      },
+      {
+        "tag": "p",
+        "text": "Sim. A visita é realizada no endereço informado pelo cliente, conforme disponibilidade e área de atendimento."
+      },
+      {
+        "tag": "p",
+        "text": "Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+      },
+      {
+        "tag": "p",
+        "text": "Se possível, envie marca, modelo, foto da etiqueta e um vídeo curto mostrando o defeito."
+      },
+      {
+        "tag": "h2",
+        "text": "Experiências de clientes da D’orus"
+      },
+      {
+        "tag": "h3",
+        "text": "Romildo Oliveira"
+      },
+      {
+        "tag": "p",
+        "text": "“Bom lugar para consertos de geladeiras e máquinas de lavar”"
+      },
+      {
+        "tag": "h3",
+        "text": "Daiana Marques"
+      },
+      {
+        "tag": "p",
+        "text": "“Otimo”"
+      },
+      {
+        "tag": "h3",
+        "text": "Ju Kanashiro"
+      },
+      {
+        "tag": "p",
+        "text": "Avaliou a D’orus com 5 estrelas no Google."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema e fale direto com a D’orus."
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+      }
+    ],
+    "/agendamento/": [
+      {
+        "tag": "h1",
+        "text": "Solicite o melhor horário para sua visita."
+      },
+      {
+        "tag": "p",
+        "text": "Informe o aparelho, o problema e o endereço onde o atendimento deverá ser realizado. A disponibilidade é confirmada pelo WhatsApp."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o que aconteceu"
+      },
+      {
+        "tag": "p",
+        "text": "A data escolhida é uma preferência. A visita só fica confirmada depois da resposta da D’orus."
+      },
+      {
+        "tag": "h2",
+        "text": "Agendamento simples"
+      },
+      {
+        "tag": "h2",
+        "text": "Atendimento no endereço da visita"
+      },
+      {
+        "tag": "p",
+        "text": "Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+      }
+    ],
+    "/curiosidades/": [
+      {
+        "tag": "h1",
+        "text": "Entenda os sinais do seu eletrodoméstico."
+      },
+      {
+        "tag": "p",
+        "text": "Conteúdo prático para reconhecer sintomas, evitar improvisos e chegar mais preparado ao atendimento técnico."
+      },
+      {
+        "tag": "h2",
+        "text": "Geladeira não está gelando?"
+      },
+      {
+        "tag": "p",
+        "text": "Causas comuns, sinais seguros para observar e quando procurar assistência."
+      },
+      {
+        "tag": "h2",
+        "text": "Máquina não centrifuga?"
+      },
+      {
+        "tag": "p",
+        "text": "Drenagem, carga, trava e outros sinais importantes."
+      },
+      {
+        "tag": "h2",
+        "text": "Geladeira fazendo barulho"
+      },
+      {
+        "tag": "p",
+        "text": "Quando o som é normal e quando merece atenção."
+      },
+      {
+        "tag": "h2",
+        "text": "Freezer não congela direito"
+      },
+      {
+        "tag": "p",
+        "text": "Vedação, temperatura, gelo e perda de desempenho."
+      },
+      {
+        "tag": "h2",
+        "text": "Fogão não acende"
+      },
+      {
+        "tag": "p",
+        "text": "Verificações simples e cuidados de segurança."
+      },
+      {
+        "tag": "h2",
+        "text": "Micro-ondas não aquece"
+      },
+      {
+        "tag": "p",
+        "text": "Sinais comuns e por que não abrir o gabinete."
+      },
+      {
+        "tag": "h2",
+        "text": "Encontre orientações e assistência para os oito equipamentos"
+      },
+      {
+        "tag": "p",
+        "text": "Use os sintomas como referência inicial. O diagnóstico correto depende da avaliação do aparelho."
+      },
+      {
+        "tag": "h3",
+        "text": "Não gela, forma gelo ou vaza água"
+      },
+      {
+        "tag": "p",
+        "text": "Perda de refrigeração, ruídos, ciclos fora do padrão e vedação."
+      },
+      {
+        "tag": "h3",
+        "text": "Não centrifuga, drena ou completa o ciclo"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de enchimento, vazamentos, ruídos e travas."
+      },
+      {
+        "tag": "h3",
+        "text": "Não acende ou apresenta chama irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Queimadores, ignição e desempenho do forno merecem avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Não congela ou acumula gelo em excesso"
+      },
+      {
+        "tag": "p",
+        "text": "Temperatura, vedação, ruídos e perda de rendimento."
+      },
+      {
+        "tag": "h3",
+        "text": "Não lava, aquece ou drena corretamente"
+      },
+      {
+        "tag": "p",
+        "text": "Interrupções de ciclo, resíduos e falhas de escoamento."
+      },
+      {
+        "tag": "h3",
+        "text": "Não seca, centrifuga ou conclui o programa"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas combinadas de lavagem, drenagem e secagem."
+      },
+      {
+        "tag": "h3",
+        "text": "Não aquece ou mantém temperatura irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Comandos, aquecimento e desligamentos inesperados."
+      },
+      {
+        "tag": "h3",
+        "text": "Liga, mas não aquece ou não gira"
+      },
+      {
+        "tag": "p",
+        "text": "Painel, prato giratório e funcionamento sem aquecimento."
+      }
+    ],
+    "/curiosidades/fogao-nao-acende/": [
+      {
+        "tag": "h1",
+        "text": "Fogão não acende? Faça apenas verificações seguras."
+      },
+      {
+        "tag": "p",
+        "text": "Falhas no acendimento podem ser simples, mas qualquer sinal relacionado ao gás exige cuidado."
+      },
+      {
+        "tag": "h2",
+        "text": "Observe sem desmontar nem improvisar."
+      },
+      {
+        "tag": "p",
+        "text": "Se o acendimento elétrico não funciona, confira se o aparelho está conectado à energia quando o modelo depende de ignição elétrica. Veja também se as peças removíveis do queimador estão limpas, secas e corretamente encaixadas."
+      },
+      {
+        "tag": "p",
+        "text": "Não use objetos para alargar furos, não altere regulagens de gás e não desmonte válvulas. Chama persistentemente amarela, muito baixa ou instável merece avaliação."
+      },
+      {
+        "tag": "p",
+        "text": "Se houver cheiro de gás: feche o registro se isso puder ser feito com segurança, ventile o ambiente, não acenda chamas e evite acionar interruptores ou equipamentos elétricos. Procure o suporte apropriado para a instalação de gás."
+      },
+      {
+        "tag": "h3",
+        "text": "Um queimador falha"
+      },
+      {
+        "tag": "p",
+        "text": "Compare o encaixe e a limpeza com os demais queimadores sem desmontar componentes internos."
+      },
+      {
+        "tag": "h3",
+        "text": "Todos falham"
+      },
+      {
+        "tag": "p",
+        "text": "Observe energia, fornecimento de gás e se houve mudança recente no comportamento do aparelho."
+      },
+      {
+        "tag": "h3",
+        "text": "Chama irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Registre em foto ou vídeo apenas se for seguro e interrompa o uso se houver risco."
+      },
+      {
+        "tag": "h2",
+        "text": "O fogão continua com falha de acendimento?"
+      },
+      {
+        "tag": "p",
+        "text": "A D’orus pode avaliar o equipamento conforme a área de atendimento."
+      }
+    ],
+    "/curiosidades/freezer-nao-congela/": [
+      {
+        "tag": "h1",
+        "text": "Freezer não congela direito? Veja o que observar."
+      },
+      {
+        "tag": "p",
+        "text": "Perda de desempenho pode vir de condições de uso ou de falhas que precisam de diagnóstico técnico."
+      },
+      {
+        "tag": "h3",
+        "text": "Confira o ajuste de temperatura"
+      },
+      {
+        "tag": "p",
+        "text": "Veja se o controle não foi alterado e aguarde o tempo adequado após mudanças de configuração."
+      },
+      {
+        "tag": "h3",
+        "text": "Observe a vedação"
+      },
+      {
+        "tag": "p",
+        "text": "Porta mal fechada ou borracha deformada deixa entrar ar quente e aumenta o esforço do aparelho."
+      },
+      {
+        "tag": "h3",
+        "text": "Evite abrir toda hora"
+      },
+      {
+        "tag": "p",
+        "text": "Aberturas frequentes dificultam a recuperação da temperatura, principalmente em dias quentes."
+      },
+      {
+        "tag": "h3",
+        "text": "Excesso de gelo"
+      },
+      {
+        "tag": "p",
+        "text": "Acúmulo anormal pode prejudicar circulação e indicar problema de vedação ou degelo."
+      },
+      {
+        "tag": "h3",
+        "text": "Deixe ventilação externa"
+      },
+      {
+        "tag": "p",
+        "text": "Respeite os espaços indicados pelo fabricante para dissipação de calor."
+      },
+      {
+        "tag": "h3",
+        "text": "Perda persistente de desempenho"
+      },
+      {
+        "tag": "p",
+        "text": "Se alimentos deixam de congelar mesmo com uso normal, procure avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "O freezer continua sem congelar?"
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e uma descrição do comportamento."
+      }
+    ],
+    "/curiosidades/geladeira-fazendo-barulho/": [
+      {
+        "tag": "h1",
+        "text": "Geladeira fazendo barulho: quando o som merece atenção?"
+      },
+      {
+        "tag": "p",
+        "text": "Geladeiras produzem sons durante o funcionamento. O importante é perceber quando aparece um ruído novo, forte ou acompanhado de outro sintoma."
+      },
+      {
+        "tag": "h2",
+        "text": "Nem todo estalo ou vibração significa defeito."
+      },
+      {
+        "tag": "p",
+        "text": "Pequenos estalos podem ocorrer pela dilatação de materiais e mudanças de temperatura. Sons de circulação também podem aparecer quando ventiladores ou o sistema de refrigeração entram em funcionamento."
+      },
+      {
+        "tag": "p",
+        "text": "Verifique se o aparelho está nivelado e se objetos, paredes ou móveis não estão encostando e amplificando vibrações."
+      },
+      {
+        "tag": "p",
+        "text": "Se o ruído surgiu recentemente, ficou muito mais alto ou aparece junto com perda de refrigeração, aquecimento excessivo ou funcionamento contínuo, vale procurar avaliação técnica."
+      },
+      {
+        "tag": "h3",
+        "text": "Grave o som"
+      },
+      {
+        "tag": "p",
+        "text": "Um vídeo curto ajuda o técnico a entender quando e como o ruído acontece."
+      },
+      {
+        "tag": "h3",
+        "text": "Observe se ainda está gelando"
+      },
+      {
+        "tag": "p",
+        "text": "Ruído acompanhado de queda de refrigeração é uma informação importante."
+      },
+      {
+        "tag": "h3",
+        "text": "Não desmonte o equipamento"
+      },
+      {
+        "tag": "p",
+        "text": "Evite remover tampas ou acessar componentes elétricos e de refrigeração."
+      },
+      {
+        "tag": "h2",
+        "text": "O barulho mudou e não voltou ao normal?"
+      },
+      {
+        "tag": "p",
+        "text": "Conte o sintoma para a D’orus."
+      }
+    ],
+    "/curiosidades/geladeira-nao-gela/": [
+      {
+        "tag": "h1",
+        "text": "Geladeira não está gelando? Veja o que observar antes da assistência."
+      },
+      {
+        "tag": "p",
+        "text": "Nem toda perda de refrigeração tem a mesma causa. Alguns sinais ajudam a entender o cenário sem desmontar o aparelho."
+      },
+      {
+        "tag": "h2",
+        "text": "Comece pelo que é simples e seguro."
+      },
+      {
+        "tag": "p",
+        "text": "Confira se o aparelho está energizado e se o controle de temperatura não foi alterado por engano. Em seguida, veja se a porta fecha completamente e se a borracha de vedação está limpa e sem deformações evidentes."
+      },
+      {
+        "tag": "p",
+        "text": "Evite bloquear saídas internas de ar com alimentos encostados nas paredes. A circulação de ar é importante para distribuir a refrigeração pelo gabinete."
+      },
+      {
+        "tag": "p",
+        "text": "Se houver gelo em excesso, queda forte de temperatura, ruído novo ou funcionamento contínuo fora do padrão, não force o aparelho nem tente acessar componentes internos."
+      },
+      {
+        "tag": "h2",
+        "text": "O comportamento do aparelho ajuda no diagnóstico"
+      },
+      {
+        "tag": "h3",
+        "text": "Freezer gela, parte inferior não"
+      },
+      {
+        "tag": "p",
+        "text": "Pode haver dificuldade na circulação de ar ou no sistema de degelo. Esse padrão é útil para relatar ao técnico."
+      },
+      {
+        "tag": "h3",
+        "text": "Motor parece trabalhar sem parar"
+      },
+      {
+        "tag": "p",
+        "text": "Funcionamento contínuo acompanhado de baixa refrigeração merece avaliação para evitar esforço excessivo."
+      },
+      {
+        "tag": "h3",
+        "text": "Gelo, água ou ruído diferente"
+      },
+      {
+        "tag": "p",
+        "text": "Fotografe ou grave o sintoma. Essas informações ajudam a preparar o atendimento."
+      },
+      {
+        "tag": "h2",
+        "text": "O problema continua mesmo após as verificações básicas?"
+      },
+      {
+        "tag": "p",
+        "text": "A D’orus realiza atendimento em domicílio conforme a área de cobertura."
+      },
+      {
+        "tag": "h2",
+        "text": "Outros guias úteis"
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeira fazendo barulho"
+      },
+      {
+        "tag": "p",
+        "text": "Quando o som é normal e quando merece atenção."
+      },
+      {
+        "tag": "h3",
+        "text": "Freezer não congela direito"
+      },
+      {
+        "tag": "p",
+        "text": "Veja sinais comuns de perda de desempenho."
+      }
+    ],
+    "/curiosidades/maquina-nao-centrifuga/": [
+      {
+        "tag": "h1",
+        "text": "Máquina de lavar não centrifuga? Observe estes sinais."
+      },
+      {
+        "tag": "p",
+        "text": "A centrifugação depende de outras etapas do ciclo. Saber onde a máquina parou ajuda bastante no diagnóstico."
+      },
+      {
+        "tag": "h3",
+        "text": "A água foi drenada?"
+      },
+      {
+        "tag": "p",
+        "text": "Se ainda existe água no cesto, o problema pode estar antes da centrifugação. Observe se a drenagem acontece normalmente."
+      },
+      {
+        "tag": "h3",
+        "text": "A carga está equilibrada?"
+      },
+      {
+        "tag": "p",
+        "text": "Peças pesadas concentradas de um lado podem fazer alguns modelos interromperem ou reduzirem a centrifugação."
+      },
+      {
+        "tag": "h3",
+        "text": "A tampa ou porta trava?"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas no fechamento ou na trava de segurança podem impedir o avanço do ciclo."
+      },
+      {
+        "tag": "h3",
+        "text": "Aparece código de erro?"
+      },
+      {
+        "tag": "p",
+        "text": "Anote o código ou faça uma foto. Essa informação pode indicar em qual etapa o aparelho detectou a falha."
+      },
+      {
+        "tag": "h3",
+        "text": "Há ruído ou vibração forte?"
+      },
+      {
+        "tag": "p",
+        "text": "Batidas, folgas e vibração fora do padrão devem ser relatadas e não ignoradas."
+      },
+      {
+        "tag": "h3",
+        "text": "O ciclo para sempre no mesmo ponto?"
+      },
+      {
+        "tag": "p",
+        "text": "Esse padrão ajuda a diferenciar falhas de drenagem, trava, sensor ou controle."
+      },
+      {
+        "tag": "h2",
+        "text": "Evite repetir o ciclo várias vezes se houver ruído, vazamento ou erro."
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e o comportamento da máquina para a D’orus."
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeira não está gelando?"
+      },
+      {
+        "tag": "p",
+        "text": "Veja outro guia prático da D’orus."
+      }
+    ],
+    "/curiosidades/micro-ondas-nao-aquece/": [
+      {
+        "tag": "h1",
+        "text": "Micro-ondas liga, mas não aquece? Observe estes sinais."
+      },
+      {
+        "tag": "p",
+        "text": "Luz, painel e prato podem funcionar mesmo quando o aquecimento apresenta falha. O diagnóstico interno deve ser feito por profissional."
+      },
+      {
+        "tag": "h3",
+        "text": "Painel funciona, alimento continua frio"
+      },
+      {
+        "tag": "p",
+        "text": "Registre se o problema acontece em todos os ciclos ou de forma intermitente."
+      },
+      {
+        "tag": "h3",
+        "text": "Prato ou luz não funcionam"
+      },
+      {
+        "tag": "p",
+        "text": "Esses sintomas também ajudam a identificar se existe mais de uma função afetada."
+      },
+      {
+        "tag": "h3",
+        "text": "Faísca, cheiro ou ruído anormal"
+      },
+      {
+        "tag": "p",
+        "text": "Interrompa o uso e desligue o aparelho da tomada se isso puder ser feito com segurança."
+      },
+      {
+        "tag": "h2",
+        "text": "Não abra o gabinete do micro-ondas."
+      },
+      {
+        "tag": "p",
+        "text": "Micro-ondas trabalham com alta tensão e podem manter energia armazenada em componentes internos mesmo depois de desligados da tomada. A abertura do gabinete não é uma verificação doméstica segura."
+      },
+      {
+        "tag": "p",
+        "text": "Também não faça testes com o aparelho vazio nem improvise reparos. Envie marca, modelo e descrição do sintoma para avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "O micro-ondas continua sem aquecer?"
+      },
+      {
+        "tag": "p",
+        "text": "Confirme a possibilidade de atendimento com a D’orus."
+      }
+    ],
+    "/fale-conosco/": [
+      {
+        "tag": "h1",
+        "text": "Conte o que está acontecendo com seu aparelho."
+      },
+      {
+        "tag": "p",
+        "text": "Quanto mais detalhes você enviar, melhor conseguimos preparar o primeiro atendimento."
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em domicílio, conforme disponibilidade."
+      },
+      {
+        "tag": "h2",
+        "text": "Prepare sua mensagem"
+      },
+      {
+        "tag": "p",
+        "text": "Ao enviar, você continuará no WhatsApp."
+      }
+    ],
+    "/privacidade/": [
+      {
+        "tag": "h1",
+        "text": "Privacidade e cookies"
+      },
+      {
+        "tag": "p",
+        "text": "Esta página explica quais informações podem ser usadas durante o atendimento pelo site."
+      },
+      {
+        "tag": "h2",
+        "text": "O site coleta apenas o necessário para atendimento e análise de uso."
+      },
+      {
+        "tag": "p",
+        "text": "Os dados preenchidos nos formulários, como nome, telefone, endereço da visita, equipamento e descrição do problema, são usados para preparar a solicitação de atendimento."
+      },
+      {
+        "tag": "p",
+        "text": "Com sua autorização, o site pode ativar o Google Analytics 4 para medir visualizações e interações. Se você escolher somente cookies necessários, o Analytics não é ativado."
+      },
+      {
+        "tag": "p",
+        "text": "Não vendemos dados pessoais. Links para WhatsApp, Instagram e Google Agenda levam a serviços de terceiros, sujeitos às políticas desses serviços."
+      }
+    ],
+    "/servicos/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de eletrodomésticos em Guarulhos"
+      },
+      {
+        "tag": "p",
+        "text": "A D’orus atende os principais aparelhos de linha branca, com diagnóstico técnico, explicação clara e visita em regiões atendidas de Guarulhos e São Paulo sob consulta."
+      },
+      {
+        "tag": "h2",
+        "text": "Escolha o aparelho que precisa de assistência"
+      },
+      {
+        "tag": "p",
+        "text": "Veja sintomas comuns, orientações e os canais para solicitar atendimento."
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeiras"
+      },
+      {
+        "tag": "p",
+        "text": "Refrigeração, gelo, vazamentos e ruídos."
+      },
+      {
+        "tag": "h3",
+        "text": "Máquinas de lavar"
+      },
+      {
+        "tag": "p",
+        "text": "Centrifugação, drenagem, enchimento e ciclos."
+      },
+      {
+        "tag": "h3",
+        "text": "Fogões"
+      },
+      {
+        "tag": "p",
+        "text": "Acendimento, chama, queimadores e forno."
+      },
+      {
+        "tag": "h3",
+        "text": "Freezers"
+      },
+      {
+        "tag": "p",
+        "text": "Rendimento, gelo e refrigeração."
+      },
+      {
+        "tag": "h3",
+        "text": "Lava-louças"
+      },
+      {
+        "tag": "p",
+        "text": "Lavagem, drenagem e interrupções."
+      },
+      {
+        "tag": "h3",
+        "text": "Lava e seca"
+      },
+      {
+        "tag": "p",
+        "text": "Lavagem, centrifugação, drenagem e secagem."
+      },
+      {
+        "tag": "h3",
+        "text": "Fornos"
+      },
+      {
+        "tag": "p",
+        "text": "Aquecimento, acionamento e comandos."
+      },
+      {
+        "tag": "h3",
+        "text": "Micro-ondas"
+      },
+      {
+        "tag": "p",
+        "text": "Aquecimento, painel e funcionamento."
+      },
+      {
+        "tag": "h2",
+        "text": "Do primeiro contato à orientação técnica"
+      },
+      {
+        "tag": "h3",
+        "text": "Conte o que aconteceu"
+      },
+      {
+        "tag": "p",
+        "text": "Informe o aparelho, a marca, o modelo e os sintomas pelo WhatsApp ou agendamento."
+      },
+      {
+        "tag": "h3",
+        "text": "Combine a visita"
+      },
+      {
+        "tag": "p",
+        "text": "A região e a data são verificadas de acordo com a disponibilidade de atendimento."
+      },
+      {
+        "tag": "h3",
+        "text": "Receba o diagnóstico"
+      },
+      {
+        "tag": "p",
+        "text": "O aparelho é avaliado e a necessidade de manutenção é explicada com clareza."
+      },
+      {
+        "tag": "h3",
+        "text": "Alinhe o serviço"
+      },
+      {
+        "tag": "p",
+        "text": "As condições e a previsão são informadas conforme o diagnóstico e a disponibilidade de peças."
+      },
+      {
+        "tag": "h2",
+        "text": "Atendimento multimarcas para linha branca"
+      },
+      {
+        "tag": "p",
+        "text": "Samsung, Brastemp, Electrolux, Consul, GE, LG e Bosch. A possibilidade de atendimento depende do aparelho, modelo e serviço necessário."
+      },
+      {
+        "tag": "li",
+        "text": "Samsung"
+      },
+      {
+        "tag": "li",
+        "text": "Brastemp"
+      },
+      {
+        "tag": "li",
+        "text": "Electrolux"
+      },
+      {
+        "tag": "li",
+        "text": "Consul"
+      },
+      {
+        "tag": "li",
+        "text": "GE"
+      },
+      {
+        "tag": "li",
+        "text": "LG"
+      },
+      {
+        "tag": "li",
+        "text": "Bosch"
+      },
+      {
+        "tag": "h2",
+        "text": "Atendimento em regiões de Guarulhos"
+      },
+      {
+        "tag": "p",
+        "text": "A disponibilidade é confirmada no contato, de acordo com a região e a agenda."
+      },
+      {
+        "tag": "h3",
+        "text": "Centro de Guarulhos"
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em domicílio conforme disponibilidade."
+      },
+      {
+        "tag": "h3",
+        "text": "Lago dos Patos"
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em domicílio conforme disponibilidade."
+      },
+      {
+        "tag": "h3",
+        "text": "Bonsucesso"
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em domicílio conforme disponibilidade."
+      },
+      {
+        "tag": "h3",
+        "text": "Pimentas"
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento em domicílio conforme disponibilidade."
+      },
+      {
+        "tag": "h3",
+        "text": "São Paulo"
+      },
+      {
+        "tag": "p",
+        "text": "Atendimento sob consulta e conforme disponibilidade."
+      },
+      {
+        "tag": "h2",
+        "text": "Diferenciais percebidos nos atendimentos"
+      },
+      {
+        "tag": "p",
+        "text": "Temas relatados por clientes nas avaliações da D’orus no Google."
+      },
+      {
+        "tag": "h3",
+        "text": "Honestidade no diagnóstico"
+      },
+      {
+        "tag": "p",
+        "text": "Explicação clara sobre o defeito identificado e o serviço recomendado."
+      },
+      {
+        "tag": "h3",
+        "text": "Troca somente quando necessária"
+      },
+      {
+        "tag": "p",
+        "text": "Avaliação técnica antes de indicar a substituição de componentes."
+      },
+      {
+        "tag": "h3",
+        "text": "Preço justo"
+      },
+      {
+        "tag": "p",
+        "text": "Condições alinhadas com o cliente após a avaliação do aparelho."
+      },
+      {
+        "tag": "h3",
+        "text": "Rapidez"
+      },
+      {
+        "tag": "p",
+        "text": "Agilidade no contato e no encaminhamento do atendimento."
+      },
+      {
+        "tag": "h3",
+        "text": "Experiência técnica"
+      },
+      {
+        "tag": "p",
+        "text": "Mais de uma década de atuação com equipamentos de linha branca."
+      },
+      {
+        "tag": "h3",
+        "text": "Atendimento cuidadoso"
+      },
+      {
+        "tag": "p",
+        "text": "Cuidado com o cliente, o aparelho e o ambiente da visita."
+      },
+      {
+        "tag": "h2",
+        "text": "Avaliações de clientes da D’orus"
+      },
+      {
+        "tag": "h3",
+        "text": "Romildo Oliveira"
+      },
+      {
+        "tag": "p",
+        "text": "“Bom lugar para consertos de geladeiras e máquinas de lavar”"
+      },
+      {
+        "tag": "h3",
+        "text": "Daiana Marques"
+      },
+      {
+        "tag": "p",
+        "text": "“Ótimo”"
+      },
+      {
+        "tag": "h3",
+        "text": "Ju Kanashiro"
+      },
+      {
+        "tag": "p",
+        "text": "Avaliou a D’orus com 5 estrelas no Google."
+      },
+      {
+        "tag": "h2",
+        "text": "Informações antes de solicitar atendimento"
+      },
+      {
+        "tag": "p",
+        "text": "Você informa o problema e a região. A data é combinada conforme disponibilidade, e a visita é realizada no endereço informado."
+      },
+      {
+        "tag": "p",
+        "text": "As condições do orçamento são alinhadas após a avaliação do aparelho e a explicação do serviço recomendado."
+      },
+      {
+        "tag": "p",
+        "text": "O prazo depende do diagnóstico, da complexidade do reparo e da disponibilidade de peças. A previsão é informada após a avaliação."
+      },
+      {
+        "tag": "p",
+        "text": "Os serviços executados pela D’orus têm garantia mínima de 90 dias, conforme as condições registradas na ordem de serviço."
+      },
+      {
+        "tag": "p",
+        "text": "Há atendimento no Centro de Guarulhos, Lago dos Patos, Bonsucesso e Pimentas. São Paulo é atendida sob consulta e conforme disponibilidade."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o que está acontecendo com seu aparelho"
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e uma descrição do problema para iniciar o atendimento."
+      }
+    ],
+    "/servicos/fogoes/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de fogões em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de acendimento, chama irregular, queimadores que não funcionam ou forno com desempenho diferente podem ser avaliados pela D’orus."
+      },
+      {
+        "tag": "h3",
+        "text": "Acendimento falhando"
+      },
+      {
+        "tag": "p",
+        "text": "Queimadores que não acendem ou ignição intermitente precisam de avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Chama irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Chama amarela, baixa ou instável pode indicar necessidade de limpeza, regulagem ou reparo."
+      },
+      {
+        "tag": "h3",
+        "text": "Queimador não funciona"
+      },
+      {
+        "tag": "p",
+        "text": "Entupimentos, encaixe ou componentes desgastados podem afetar o funcionamento."
+      },
+      {
+        "tag": "h3",
+        "text": "Forno com problema"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas para acender, aquecer ou manter o funcionamento devem ser diagnosticadas."
+      },
+      {
+        "tag": "h3",
+        "text": "Fogão não acende? Veja o que verificar com segurança"
+      },
+      {
+        "tag": "p",
+        "text": "Ler guia →"
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o que está acontecendo com seu fogão."
+      }
+    ],
+    "/servicos/fornos/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de fornos em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Se o forno não aquece corretamente, apresenta funcionamento irregular ou falhas de comando, a D’orus pode avaliar o equipamento."
+      },
+      {
+        "tag": "h3",
+        "text": "Não aquece"
+      },
+      {
+        "tag": "p",
+        "text": "O forno liga, mas não atinge ou mantém a temperatura esperada."
+      },
+      {
+        "tag": "h3",
+        "text": "Aquecimento irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Diferenças de temperatura podem indicar falha de funcionamento."
+      },
+      {
+        "tag": "h3",
+        "text": "Comandos e acionamento"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas ao ligar, desligar ou selecionar funções merecem avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema do seu forno."
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e uma breve descrição do defeito."
+      }
+    ],
+    "/servicos/freezers/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de freezers em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Baixo rendimento, excesso de gelo, demora para congelar ou funcionamento irregular são sinais que merecem avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Não congela direito"
+      },
+      {
+        "tag": "p",
+        "text": "Perda de desempenho compromete a conservação dos alimentos."
+      },
+      {
+        "tag": "h3",
+        "text": "Gelo em excesso"
+      },
+      {
+        "tag": "p",
+        "text": "Acúmulo fora do normal pode indicar falha de vedação ou degelo."
+      },
+      {
+        "tag": "h3",
+        "text": "Funcionamento irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Ruídos, ciclos fora do padrão ou aquecimento excessivo pedem avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Freezer não congela? Veja causas comuns"
+      },
+      {
+        "tag": "p",
+        "text": "Ler guia →"
+      },
+      {
+        "tag": "h2",
+        "text": "Precisa verificar seu freezer?"
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e uma descrição do comportamento do aparelho."
+      }
+    ],
+    "/servicos/geladeiras/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de geladeiras em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho."
+      },
+      {
+        "tag": "h2",
+        "text": "O que observar antes de solicitar assistência"
+      },
+      {
+        "tag": "h3",
+        "text": "Não está gelando"
+      },
+      {
+        "tag": "p",
+        "text": "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Freezer gela, geladeira não"
+      },
+      {
+        "tag": "p",
+        "text": "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção."
+      },
+      {
+        "tag": "h3",
+        "text": "Gelo em excesso"
+      },
+      {
+        "tag": "p",
+        "text": "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna."
+      },
+      {
+        "tag": "h3",
+        "text": "Vazamento de água"
+      },
+      {
+        "tag": "p",
+        "text": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação."
+      },
+      {
+        "tag": "h3",
+        "text": "Ruídos diferentes"
+      },
+      {
+        "tag": "p",
+        "text": "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico."
+      },
+      {
+        "tag": "h3",
+        "text": "Liga e desliga demais"
+      },
+      {
+        "tag": "p",
+        "text": "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle."
+      },
+      {
+        "tag": "h2",
+        "text": "Entenda melhor os sintomas"
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeira não gela: causas comuns"
+      },
+      {
+        "tag": "p",
+        "text": "Ler guia →"
+      },
+      {
+        "tag": "h3",
+        "text": "Geladeira fazendo barulho"
+      },
+      {
+        "tag": "p",
+        "text": "Ler guia →"
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema da sua geladeira."
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo, foto e uma breve descrição do defeito."
+      }
+    ],
+    "/servicos/lava-e-seca/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de lava e seca em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo."
+      },
+      {
+        "tag": "h3",
+        "text": "Não centrifuga"
+      },
+      {
+        "tag": "p",
+        "text": "O ciclo termina com excesso de água ou não chega à etapa de centrifugação."
+      },
+      {
+        "tag": "h3",
+        "text": "Não seca corretamente"
+      },
+      {
+        "tag": "p",
+        "text": "A secagem demora demais ou as roupas continuam úmidas."
+      },
+      {
+        "tag": "h3",
+        "text": "Erros e drenagem"
+      },
+      {
+        "tag": "p",
+        "text": "Códigos no painel, água parada ou interrupções precisam de avaliação."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema da sua lava e seca."
+      },
+      {
+        "tag": "p",
+        "text": "Envie marca, modelo e o erro apresentado."
+      }
+    ],
+    "/servicos/lava-loucas/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de lava‑louças em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de drenagem, lavagem incompleta, aquecimento ou interrupção do ciclo podem ser avaliadas pela D’orus."
+      },
+      {
+        "tag": "h3",
+        "text": "Não drena"
+      },
+      {
+        "tag": "p",
+        "text": "Água parada ou drenagem lenta pode indicar obstrução ou falha no sistema."
+      },
+      {
+        "tag": "h3",
+        "text": "Lavagem incompleta"
+      },
+      {
+        "tag": "p",
+        "text": "Louças permanecem sujas mesmo com programa e abastecimento adequados."
+      },
+      {
+        "tag": "h3",
+        "text": "Erros e interrupções"
+      },
+      {
+        "tag": "p",
+        "text": "Códigos de erro, travamentos e ciclos interrompidos precisam de diagnóstico."
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema da sua lava‑louças."
+      },
+      {
+        "tag": "p",
+        "text": "Se houver código de erro, envie também uma foto."
+      }
+    ],
+    "/servicos/maquinas-de-lavar/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de máquinas de lavar em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. Observe o comportamento antes de insistir no uso."
+      },
+      {
+        "tag": "h2",
+        "text": "Sinais que ajudam no diagnóstico"
+      },
+      {
+        "tag": "h3",
+        "text": "Não centrifuga"
+      },
+      {
+        "tag": "p",
+        "text": "A roupa termina muito molhada ou a máquina não entra na etapa de centrifugação."
+      },
+      {
+        "tag": "h3",
+        "text": "Não drena"
+      },
+      {
+        "tag": "p",
+        "text": "Água parada pode indicar obstrução, bomba ou outro ponto do sistema de drenagem."
+      },
+      {
+        "tag": "h3",
+        "text": "Não enche"
+      },
+      {
+        "tag": "p",
+        "text": "Falhas de entrada de água podem envolver alimentação, filtros, válvulas ou comandos."
+      },
+      {
+        "tag": "h3",
+        "text": "Vaza água"
+      },
+      {
+        "tag": "p",
+        "text": "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem."
+      },
+      {
+        "tag": "h3",
+        "text": "Ruídos e vibração"
+      },
+      {
+        "tag": "p",
+        "text": "Batidas fortes e ruídos persistentes merecem diagnóstico."
+      },
+      {
+        "tag": "h3",
+        "text": "Ciclo para no meio"
+      },
+      {
+        "tag": "p",
+        "text": "Travamentos podem estar ligados a sensores, trava, alimentação ou controle."
+      },
+      {
+        "tag": "h2",
+        "text": "Máquina não centrifuga?"
+      },
+      {
+        "tag": "h3",
+        "text": "Veja o que observar antes da assistência"
+      },
+      {
+        "tag": "p",
+        "text": "Ler guia →"
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema da sua máquina."
+      },
+      {
+        "tag": "p",
+        "text": "Informe marca, modelo e em qual etapa o problema aparece."
+      }
+    ],
+    "/servicos/micro-ondas/": [
+      {
+        "tag": "h1",
+        "text": "Assistência técnica de micro‑ondas em Guarulhos e região."
+      },
+      {
+        "tag": "p",
+        "text": "Problemas de aquecimento, comandos ou funcionamento podem ser avaliados conforme marca, modelo e defeito."
+      },
+      {
+        "tag": "h3",
+        "text": "Não aquece"
+      },
+      {
+        "tag": "p",
+        "text": "O equipamento liga, mas os alimentos não aquecem como deveriam."
+      },
+      {
+        "tag": "h3",
+        "text": "Painel ou comandos"
+      },
+      {
+        "tag": "p",
+        "text": "Teclas, display ou seleção de funções apresentam falhas."
+      },
+      {
+        "tag": "h3",
+        "text": "Funcionamento irregular"
+      },
+      {
+        "tag": "p",
+        "text": "Desligamentos, ruídos anormais ou comportamento diferente precisam de avaliação."
+      },
+      {
+        "tag": "h3",
+        "text": "Micro‑ondas liga, mas não aquece?"
+      },
+      {
+        "tag": "p",
+        "text": "Leia os sinais e cuidados de segurança →"
+      },
+      {
+        "tag": "h2",
+        "text": "Conte o problema do seu micro‑ondas."
+      },
+      {
+        "tag": "p",
+        "text": "Informe marca e modelo para confirmar a possibilidade de atendimento."
+      }
+    ],
+    "/sobre/": [
+      {
+        "tag": "h1",
+        "text": "Experiência que se transforma em confiança."
+      },
+      {
+        "tag": "p",
+        "text": "Desde 2014, a D’orus ajuda famílias a cuidar dos eletrodomésticos que fazem a casa funcionar."
+      },
+      {
+        "tag": "h2",
+        "text": "Atendimento próximo, diagnóstico responsável e respeito."
+      },
+      {
+        "tag": "p",
+        "text": "A D’orus atua com manutenção e conserto de eletrodomésticos de linha branca, com atendimento principalmente em domicílio."
+      },
+      {
+        "tag": "p",
+        "text": "Ao longo de mais de uma década, acumulamos experiência com diferentes marcas e modelos de geladeiras, lavadoras, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas."
+      },
+      {
+        "tag": "p",
+        "text": "Nosso compromisso é explicar o problema com clareza, orientar o cliente e realizar apenas os serviços adequados para cada equipamento."
+      },
+      {
+        "tag": "p",
+        "text": "Atendemos Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+      },
+      {
+        "tag": "h3",
+        "text": "Transparência"
+      },
+      {
+        "tag": "p",
+        "text": "Comunicação clara sobre o problema e a manutenção recomendada."
+      },
+      {
+        "tag": "h3",
+        "text": "Experiência"
+      },
+      {
+        "tag": "p",
+        "text": "Mais de 10 anos de atuação com linha branca."
+      },
+      {
+        "tag": "h3",
+        "text": "Respeito"
+      },
+      {
+        "tag": "p",
+        "text": "Cuidado com o cliente, o aparelho e o ambiente."
+      },
+      {
+        "tag": "h3",
+        "text": "Praticidade"
+      },
+      {
+        "tag": "p",
+        "text": "Contato direto e atendimento no endereço da visita."
+      }
+    ]
+  },
+  "omitted": [
+    {
+      "path": "/",
+      "tag": "p",
+      "text": "Use as setas esquerda e direita para percorrer as marcas. O movimento automático respeita a preferência de reduzir animações do dispositivo.",
+      "reason": "Instrução do carrossel substituído por lista estática"
+    },
+    {
+      "path": "/agendamento/",
+      "tag": "p",
+      "text": "Solicitação preparada. O horário será confirmado pela equipe da D’orus.",
+      "reason": "Mensagem de estado dinâmico, não conteúdo editorial"
+    },
+    {
+      "path": "/servicos/",
+      "tag": "p",
+      "text": "Use as setas esquerda e direita para percorrer as marcas. O movimento automático respeita a preferência de reduzir animações do dispositivo.",
+      "reason": "Instrução do carrossel substituído por lista estática"
+    }
+  ]
+}
