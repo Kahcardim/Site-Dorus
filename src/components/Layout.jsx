@@ -54,7 +54,12 @@ function CookieBanner({ onChoice }) {
   );
 }
 
-export function Layout({ path, children, compactFooter = false }) {
+export function Layout({
+  path,
+  breadcrumbs = [],
+  children,
+  compactFooter = false,
+}) {
   useNativeAccessibility();
   const { consent, saveConsent, reopen } = useConsent();
 
@@ -97,7 +102,27 @@ export function Layout({ path, children, compactFooter = false }) {
           </details>
         </div>
       </header>
-      <main id="conteudo">{children}</main>
+      <main id="conteudo">
+        {breadcrumbs.length > 1 && (
+          <nav
+            className="container breadcrumbs"
+            aria-label="Caminho de navegação"
+          >
+            <ol>
+              {breadcrumbs.map((item, index) => (
+                <li key={item.path}>
+                  {index === breadcrumbs.length - 1 ? (
+                    <span aria-current="page">{item.name}</span>
+                  ) : (
+                    <a href={item.path}>{item.name}</a>
+                  )}
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+        {children}
+      </main>
       <a
         className="whatsapp-float"
         href={SITE.whatsapp}
@@ -120,6 +145,8 @@ export function Layout({ path, children, compactFooter = false }) {
                 Assistência técnica de linha branca com atendimento em
                 domicílio.
               </p>
+              <p>CNPJ 30.204.892/0001-03</p>
+              <p>Garantia mínima de 90 dias nos serviços executados.</p>
             </div>
             <div className="footer-links">
               <h3>Institucional</h3>

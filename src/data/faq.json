@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Quais equipamentos a D’orus atende?",
+    "answer": "Geladeiras, máquinas de lavar, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas, conforme o serviço necessário."
+  },
+  {
+    "question": "Os serviços têm garantia?",
+    "answer": "Sim. Os serviços executados pela D’orus têm garantia mínima de 90 dias, conforme as condições registradas na ordem de serviço."
+  },
+  {
+    "question": "O atendimento é em domicílio?",
+    "answer": "Sim. A visita é realizada no endereço informado pelo cliente, conforme disponibilidade e área de atendimento."
+  },
+  {
+    "question": "Quais cidades são atendidas?",
+    "answer": "Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+  },
+  {
+    "question": "O que enviar antes da visita?",
+    "answer": "Se possível, envie marca, modelo, foto da etiqueta e um vídeo curto mostrando o defeito."
+  }
+]

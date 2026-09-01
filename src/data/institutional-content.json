@@ -1,0 +1,179 @@
+{
+  "sobre": {
+    "title": "Experiência que se transforma em confiança.",
+    "intro": "Desde 2014, a D’orus ajuda famílias a cuidar dos eletrodomésticos que fazem a casa funcionar.",
+    "sections": [
+      {
+        "heading": "Atendimento próximo, diagnóstico responsável e respeito.",
+        "kicker": "D’orus Assistência Técnica",
+        "paragraphs": [
+          "A D’orus atua com manutenção e conserto de eletrodomésticos de linha branca, com atendimento principalmente em domicílio.",
+          "Ao longo de mais de uma década, acumulamos experiência com diferentes marcas e modelos de geladeiras, lavadoras, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas.",
+          "Nosso compromisso é explicar o problema com clareza, orientar o cliente e realizar apenas os serviços adequados para cada equipamento.",
+          "Atendemos Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade."
+        ],
+        "cards": [],
+        "links": []
+      },
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Transparência",
+            "description": "Comunicação clara sobre o problema e a manutenção recomendada."
+          },
+          {
+            "title": "Experiência",
+            "description": "Mais de 10 anos de atuação com linha branca."
+          },
+          {
+            "title": "Respeito",
+            "description": "Cuidado com o cliente, o aparelho e o ambiente."
+          },
+          {
+            "title": "Praticidade",
+            "description": "Contato direto e atendimento no endereço da visita."
+          }
+        ],
+        "links": []
+      }
+    ],
+    "faq": []
+  },
+  "privacidade": {
+    "title": "Privacidade e cookies",
+    "intro": "Esta página explica quais informações podem ser usadas durante o atendimento pelo site.",
+    "sections": [
+      {
+        "heading": "O site coleta apenas o necessário para atendimento e análise de uso.",
+        "kicker": "Resumo",
+        "paragraphs": [
+          "Os dados preenchidos nos formulários, como nome, telefone, endereço da visita, equipamento e descrição do problema, são usados para preparar a solicitação de atendimento.",
+          "Com sua autorização, o site pode ativar o Google Analytics 4 para medir visualizações e interações. Se você escolher somente cookies necessários, o Analytics não é ativado.",
+          "Não vendemos dados pessoais. Links para WhatsApp, Instagram e Google Agenda levam a serviços de terceiros, sujeitos às políticas desses serviços."
+        ],
+        "cards": [],
+        "links": []
+      }
+    ],
+    "faq": []
+  },
+  "servicos": {
+    "title": "Assistência técnica de eletrodomésticos em Guarulhos",
+    "intro": "A D’orus atende os principais aparelhos de linha branca, com diagnóstico técnico, explicação clara e visita em regiões atendidas de Guarulhos e São Paulo sob consulta.",
+    "sections": [
+      {
+        "heading": "Do primeiro contato à orientação técnica",
+        "kicker": "Como funciona o atendimento",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Conte o que aconteceu",
+            "description": "Informe o aparelho, a marca, o modelo e os sintomas pelo WhatsApp ou agendamento."
+          },
+          {
+            "title": "Combine a visita",
+            "description": "A região e a data são verificadas de acordo com a disponibilidade de atendimento."
+          },
+          {
+            "title": "Receba o diagnóstico",
+            "description": "O aparelho é avaliado e a necessidade de manutenção é explicada com clareza."
+          },
+          {
+            "title": "Alinhe o serviço",
+            "description": "As condições e a previsão são informadas conforme o diagnóstico e a disponibilidade de peças."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "Atendimento em regiões de Guarulhos",
+        "kicker": "Áreas atendidas",
+        "paragraphs": [
+          "A disponibilidade é confirmada no contato, de acordo com a região e a agenda."
+        ],
+        "cards": [
+          {
+            "title": "Centro de Guarulhos",
+            "description": "Atendimento em domicílio conforme disponibilidade."
+          },
+          {
+            "title": "Lago dos Patos",
+            "description": "Atendimento em domicílio conforme disponibilidade."
+          },
+          {
+            "title": "Bonsucesso",
+            "description": "Atendimento em domicílio conforme disponibilidade."
+          },
+          {
+            "title": "Pimentas",
+            "description": "Atendimento em domicílio conforme disponibilidade."
+          },
+          {
+            "title": "São Paulo",
+            "description": "Atendimento sob consulta e conforme disponibilidade."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "Diferenciais percebidos nos atendimentos",
+        "kicker": "O que clientes destacam",
+        "paragraphs": [
+          "Temas relatados por clientes nas avaliações da D’orus no Google."
+        ],
+        "cards": [
+          {
+            "title": "Honestidade no diagnóstico",
+            "description": "Explicação clara sobre o defeito identificado e o serviço recomendado."
+          },
+          {
+            "title": "Troca somente quando necessária",
+            "description": "Avaliação técnica antes de indicar a substituição de componentes."
+          },
+          {
+            "title": "Preço justo",
+            "description": "Condições alinhadas com o cliente após a avaliação do aparelho."
+          },
+          {
+            "title": "Rapidez",
+            "description": "Agilidade no contato e no encaminhamento do atendimento."
+          },
+          {
+            "title": "Experiência técnica",
+            "description": "Mais de uma década de atuação com equipamentos de linha branca."
+          },
+          {
+            "title": "Atendimento cuidadoso",
+            "description": "Cuidado com o cliente, o aparelho e o ambiente da visita."
+          }
+        ],
+        "links": []
+      }
+    ],
+    "faq": [
+      {
+        "question": "Como funciona a visita técnica?",
+        "answer": "Você informa o problema e a região. A data é combinada conforme disponibilidade, e a visita é realizada no endereço informado."
+      },
+      {
+        "question": "Como é feito o orçamento?",
+        "answer": "As condições do orçamento são alinhadas após a avaliação do aparelho e a explicação do serviço recomendado."
+      },
+      {
+        "question": "Qual é o prazo do serviço?",
+        "answer": "O prazo depende do diagnóstico, da complexidade do reparo e da disponibilidade de peças. A previsão é informada após a avaliação."
+      },
+      {
+        "question": "Os serviços têm garantia?",
+        "answer": "Os serviços executados pela D’orus têm garantia mínima de 90 dias, conforme as condições registradas na ordem de serviço."
+      },
+      {
+        "question": "Quais regiões recebem atendimento?",
+        "answer": "Há atendimento no Centro de Guarulhos, Lago dos Patos, Bonsucesso e Pimentas. São Paulo é atendida sob consulta e conforme disponibilidade."
+      }
+    ]
+  }
+}

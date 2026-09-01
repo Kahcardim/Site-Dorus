@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { mkdir, readFile, stat } from "node:fs/promises";
+import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { chromium } from "playwright";
 
@@ -40,6 +40,7 @@ const server = createServer(async (request, response) => {
 await new Promise((done) => server.listen(4174, "127.0.0.1", done));
 const browser = await chromium.launch({ headless: true });
 const failures = [];
+const accessibility = [];
 const check = (condition, message) => {
   if (!condition) failures.push(message);
 };
@@ -55,10 +56,36 @@ async function loadLazyImages(targetPage) {
 }
 
 try {
+  const noScript = await browser.newContext({ javaScriptEnabled: false });
+  const crawlPage = await noScript.newPage();
+  for (const path of routePaths) {
+    await crawlPage.goto(`http://127.0.0.1:4174${path}`);
+    check(
+      (await crawlPage.locator("main h1").count()) === 1,
+      `${path}: conteúdo depende de JavaScript`,
+    );
+    check(
+      (await crawlPage.locator("main").innerText()).length > 150,
+      `${path}: HTML sem conteúdo suficiente`,
+    );
+    check(
+      (await crawlPage.locator('a[href^="/servicos/"]').count()) > 0,
+      `${path}: links não rastreáveis`,
+    );
+  }
+  await noScript.close();
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
   });
   const page = await context.newPage();
+  page.on("pageerror", (error) => failures.push(`Runtime: ${error.message}`));
+  page.on("console", (message) => {
+    if (
+      message.type() === "error" &&
+      /hydration|Minified React error|didn't match/i.test(message.text())
+    )
+      failures.push(message.text());
+  });
   await page.route("https://script.google.com/**", (route) => route.abort());
 
   for (const path of routePaths) {
@@ -160,33 +187,40 @@ try {
     resolve(root, "..", "node_modules", "axe-core", "axe.min.js"),
     "utf8",
   );
-  for (const path of [
-    "/",
-    "/servicos/",
-    "/servicos/geladeiras/",
-    "/agendamento/",
-    "/fale-conosco/",
-  ]) {
-    await page.goto(`http://127.0.0.1:4174${path}`, {
-      waitUntil: "networkidle",
-    });
-    await page.addScriptTag({ content: axeSource });
-    const result = await page.evaluate(() =>
-      axe.run(document, {
-        runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] },
-      }),
-    );
-    const severe = result.violations.filter((violation) =>
-      ["critical", "serious"].includes(violation.impact),
-    );
-    check(
-      severe.length === 0,
-      `${path}: axe ${severe.map((item) => item.id).join(", ")}`,
-    );
+  for (const width of [390, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const path of routePaths) {
+      await page.goto(`http://127.0.0.1:4174${path}`, {
+        waitUntil: "networkidle",
+      });
+      await page.addScriptTag({ content: axeSource });
+      const result = await page.evaluate(() =>
+        axe.run(document, {
+          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] },
+        }),
+      );
+      const severe = result.violations;
+      accessibility.push({ path, width, violations: severe });
+      check(
+        severe.length === 0,
+        `${path} (${width}px): axe ${severe.map((item) => item.id).join(", ")}`,
+      );
+      check(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+        `${path} (${width}px): overflow`,
+      );
+    }
   }
 
   const screenshots = resolve(root, "..", "test-results");
   await mkdir(screenshots, { recursive: true });
+  await writeFile(
+    resolve(screenshots, "accessibility.json"),
+    JSON.stringify(accessibility, null, 2),
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
   await loadLazyImages(page);
   await page.screenshot({
@@ -213,7 +247,7 @@ try {
   if (failures.length)
     throw new Error(`Regressão falhou:\n- ${failures.join("\n- ")}`);
   console.log(
-    "OK: 21 rotas, navegação, formulários, WhatsApp, responsividade e acessibilidade WCAG validados.",
+    "OK: 21 rotas sem JS, navegação, formulários e WhatsApp; 42 verificações axe WCAG A/AA sem violações automáticas. Validação manual ainda complementar.",
   );
 } finally {
   await browser.close();

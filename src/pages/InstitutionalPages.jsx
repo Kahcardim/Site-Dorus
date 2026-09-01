@@ -1,57 +1,24 @@
-import { useMemo, useState } from "react";
+import institutionalContent from "../data/institutional-content.json";
+import { ContentSections } from "../components/ContentSections.jsx";
+import { useEffect, useState } from "react";
 import { equipmentOptions, SITE } from "../data/site.js";
 import { CtaPanel, InternalHero } from "../components/Layout.jsx";
 
+function InstitutionalContent({ name, eyebrow }) {
+  const content = institutionalContent[name];
+  return (
+    <>
+      <InternalHero eyebrow={eyebrow} title={content.title}>
+        <p>{content.intro}</p>
+      </InternalHero>
+      <ContentSections sections={content.sections} />
+    </>
+  );
+}
 export function AboutPage() {
   return (
     <>
-      <InternalHero
-        eyebrow="Sobre a D’orus"
-        title="Experiência técnica com atendimento próximo e responsável."
-      >
-        <p>
-          A D’orus atende eletrodomésticos de linha branca em domicílio, com
-          comunicação direta e diagnóstico explicado de forma clara.
-        </p>
-      </InternalHero>
-      <section className="section">
-        <div className="container content-grid">
-          <div>
-            <span className="kicker">Nossa história</span>
-            <h2>Mais de 10 anos cuidando dos equipamentos das famílias.</h2>
-          </div>
-          <div className="prose">
-            <p>
-              O trabalho combina conhecimento técnico, atenção aos sintomas
-              relatados e orientação honesta sobre o serviço necessário.
-            </p>
-            <p>
-              Atendemos {SITE.serviceArea}, conforme disponibilidade e categoria
-              do equipamento.
-            </p>
-          </div>
-        </div>
-      </section>
-      <section className="section section-soft">
-        <div className="container values about-values">
-          <article className="card">
-            <h3>Clareza</h3>
-            <p>Explicação direta sobre diagnóstico e serviço.</p>
-          </article>
-          <article className="card">
-            <h3>Responsabilidade</h3>
-            <p>Cuidados com o equipamento e o ambiente do cliente.</p>
-          </article>
-          <article className="card">
-            <h3>Proximidade</h3>
-            <p>Contato direto antes e depois do atendimento.</p>
-          </article>
-          <article className="card">
-            <h3>Garantia</h3>
-            <p>Garantia mínima de 90 dias conforme a ordem de serviço.</p>
-          </article>
-        </div>
-      </section>
+      <InstitutionalContent name="sobre" eyebrow="Nossa história" />
       <CtaPanel />
     </>
   );
@@ -147,7 +114,13 @@ export function ContactPage() {
 
 export function SchedulePage() {
   const [status, setStatus] = useState("");
-  const minDate = useMemo(() => new Date().toISOString().slice(0, 10), []);
+  const [minDate, setMinDate] = useState("");
+  useEffect(() => {
+    const today = new Date();
+    setMinDate(
+      `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`,
+    );
+  }, []);
   const submit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -310,44 +283,7 @@ export function SchedulePage() {
 }
 
 export function PrivacyPage() {
-  return (
-    <>
-      <InternalHero
-        eyebrow="Privacidade"
-        title="Seus dados são usados somente para atender sua solicitação."
-      >
-        <p>
-          Esta política explica quais informações são tratadas durante a
-          navegação e o contato com a D’orus.
-        </p>
-      </InternalHero>
-      <section className="section">
-        <div className="container prose">
-          <h2>Dados fornecidos por você</h2>
-          <p>
-            Nome, telefone, endereço, equipamento e descrição do problema são
-            enviados ao WhatsApp somente quando você decide continuar o
-            atendimento.
-          </p>
-          <h2>Cookies e métricas</h2>
-          <p>
-            Cookies necessários guardam preferências. Métricas opcionais só são
-            ativadas conforme seu consentimento.
-          </p>
-          <h2>Agenda</h2>
-          <p>
-            Dados de agendamento são utilizados para consultar disponibilidade e
-            preparar o atendimento solicitado.
-          </p>
-          <h2>Contato</h2>
-          <p>
-            Para esclarecer dúvidas, fale diretamente com a D’orus pelo
-            WhatsApp.
-          </p>
-        </div>
-      </section>
-    </>
-  );
+  return <InstitutionalContent name="privacidade" eyebrow="Privacidade" />;
 }
 
 export function NotFoundPage() {

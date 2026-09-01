@@ -35,6 +35,10 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Validar componentes, build, rotas e acessibilidade
         run: npm run check
+      - name: Instalar auditoria de desempenho
+        run: npm install --global lighthouse@12
+      - name: Comparar desempenho antes da publicação
+        run: node scripts/audit-performance.mjs
       - name: Salvar capturas da homologação
         if: always()
         uses: actions/upload-artifact@v4
@@ -92,18 +96,22 @@ jobs:
           export CHROME_PATH
           for tentativa in {1..18}; do
             HTML="$(curl -fsSL "https://assistenciadorus.com.br/?revision=${GITHUB_SHA}&tentativa=${tentativa}")"
-            grep -q 'id="root"' <<< "$HTML" && break
+            grep -q "name=\"dorus-revision\" content=\"${GITHUB_SHA}\"" <<< "$HTML" && break
             test "$tentativa" -lt 18 || { echo 'A revisao publicada nao foi confirmada.'; exit 1; }
             sleep 5
           done
           lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-mobile.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
           lighthouse "https://assistenciadorus.com.br/?lh=${GITHUB_RUN_ID}" --preset=desktop --only-categories=performance,accessibility,best-practices,seo --output=json --output-path=./lighthouse-desktop.json --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
           python scripts/summarize_lighthouse.py
+      - name: Comparar publicação com a base anterior à migração
+        run: node scripts/validate-deployment.mjs
       - name: Salvar relatorios Lighthouse
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-${{ github.run_id }}
           path: |
             lighthouse-mobile.json
             lighthouse-desktop.json
+            test-results/post-deploy.json
           retention-days: 14

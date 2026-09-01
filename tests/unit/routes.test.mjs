@@ -19,6 +19,11 @@ test("mantém as 21 rotas indexáveis e a página 404", () => {
 test("normaliza URLs sem barra final", () => {
   assert.equal(normalizePath("/servicos"), "/servicos/");
   assert.equal(findRoute("/servicos/geladeiras").path, "/servicos/geladeiras/");
+  assert.equal(
+    findRoute("/servicos/geladeiras/index.html?origem=teste").path,
+    "/servicos/geladeiras/",
+  );
+  assert.equal(findRoute("/index.html?origem=teste").path, "/");
 });
 
 test("cada rota indexável possui metadados essenciais", () => {

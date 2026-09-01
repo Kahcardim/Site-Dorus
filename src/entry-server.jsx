@@ -2,6 +2,7 @@ import { renderToString } from "react-dom/server";
 import { App } from "./App.jsx";
 import { findRoute, routes } from "./routes.jsx";
 import { SITE } from "./data/site.js";
+import { structuredData } from "./seo.js";
 
 const escape = (value) =>
   String(value)
@@ -9,59 +10,6 @@ const escape = (value) =>
     .replaceAll('"', "&quot;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
-
-function schema(route) {
-  if (route.path === "/")
-    return {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "@id": `${SITE.origin}/#organization`,
-      name: SITE.name,
-      url: `${SITE.origin}/`,
-      telephone: "+55-11-91357-3932",
-      foundingDate: "2014",
-      logo: `${SITE.origin}/assets/dorus-logo-3d.webp`,
-      areaServed: SITE.serviceArea
-        .split(", ")
-        .map((name) => ({ "@type": "City", name })),
-    };
-  if (route.kind === "article")
-    return {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      headline: route.title.split("|")[0].trim(),
-      description: route.description,
-      mainEntityOfPage: `${SITE.origin}${route.path}`,
-      author: { "@id": `${SITE.origin}/#organization` },
-    };
-  if (route.kind === "service")
-    return {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      name: route.title.split("|")[0].trim(),
-      description: route.description,
-      provider: { "@id": `${SITE.origin}/#organization` },
-      areaServed: SITE.serviceArea,
-    };
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Início",
-        item: `${SITE.origin}/`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: route.title.split("|")[0].trim(),
-        item: `${SITE.origin}${route.path}`,
-      },
-    ],
-  };
-}
 
 export function render(path) {
   const route = findRoute(path);
@@ -73,7 +21,7 @@ export function render(path) {
   const head = [
     `<title>${escape(route.title)}</title>`,
     `<meta name="description" content="${escape(route.description)}">`,
-    `<meta name="robots" content="${route.index ? "index, follow, max-image-preview:large" : "noindex, follow"}">`,
+    `<meta name="robots" content="${route.index ? "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" : "noindex, follow"}">`,
     `<link rel="canonical" href="${canonical}">`,
     `<meta property="og:type" content="${route.kind === "article" ? "article" : "website"}">`,
     `<meta property="og:locale" content="pt_BR">`,
@@ -82,12 +30,24 @@ export function render(path) {
     `<meta property="og:description" content="${escape(route.description)}">`,
     `<meta property="og:url" content="${canonical}">`,
     `<meta property="og:image" content="${image}">`,
+    ...(route.imageWidth
+      ? [
+          `<meta property="og:image:width" content="${route.imageWidth}">`,
+          `<meta property="og:image:height" content="${route.imageHeight}">`,
+        ]
+      : []),
+    `<meta property="og:image:alt" content="${escape(route.imageAlt || SITE.name)}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
+    `<meta name="twitter:title" content="${escape(route.title)}">`,
+    `<meta name="twitter:description" content="${escape(route.description)}">`,
+    `<meta name="twitter:image" content="${image}">`,
+    `<meta name="twitter:image:alt" content="${escape(route.imageAlt || SITE.name)}">`,
     `<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">`,
     `<link rel="apple-touch-icon" href="/favicon-192x192.png">`,
     `<link rel="manifest" href="/site.webmanifest">`,
     `<link rel="alternate" hreflang="pt-BR" href="${canonical}">`,
-    `<script type="application/ld+json">${JSON.stringify(schema(route)).replaceAll("<", "\\u003c")}</script>`,
+    `<link rel="alternate" hreflang="x-default" href="${canonical}">`,
+    `<script type="application/ld+json">${JSON.stringify(structuredData(route)).replaceAll("<", "\\u003c")}</script>`,
   ].join("\n    ");
   return { html: renderToString(<App path={route.path} />), head, route };
 }

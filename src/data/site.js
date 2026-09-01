@@ -7,6 +7,7 @@ export const SITE = {
   whatsapp: "https://wa.me/5511913573932",
   instagram: "https://instagram.com/assistenciadorus",
   serviceArea: "Guarulhos, Arujá, Itaquaquecetuba e São Paulo",
+  cities: ["Guarulhos", "Arujá", "Itaquaquecetuba", "São Paulo"],
   description:
     "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
 };
@@ -273,6 +274,7 @@ export const brands = [
   ["Philco", "philco"],
   ["Panasonic", "panasonic"],
   ["GE", "ge-appliances"],
+  ["Bosch", null],
 ];
 
 export const reviews = [

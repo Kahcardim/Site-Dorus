@@ -9,6 +9,7 @@ import {
 } from "./pages/InstitutionalPages.jsx";
 import { ServiceDetailPage, ServicesPage } from "./pages/ServicePages.jsx";
 import { guides, services, SITE } from "./data/site.js";
+import seoMetadata from "./data/seo-metadata.json";
 
 const common = { image: "/assets/banner-principal-dorus.webp", index: true };
 
@@ -93,11 +94,14 @@ export const routes = [
     image: common.image,
     index: false,
   },
-];
+].map((route) => ({ ...route, ...seoMetadata[route.path] }));
 
 export function normalizePath(value) {
   if (!value || value === "/index.html") return "/";
-  const clean = value.split("?")[0].split("#")[0];
+  const clean = value
+    .split("?")[0]
+    .split("#")[0]
+    .replace(/\/index\.html$/, "/");
   if (clean === "/404.html") return clean;
   return clean.endsWith("/") ? clean : `${clean}/`;
 }

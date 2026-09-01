@@ -1,0 +1,385 @@
+{
+  "fogao-nao-acende": {
+    "title": "Fogão não acende? Faça apenas verificações seguras.",
+    "intro": "Falhas no acendimento podem ser simples, mas qualquer sinal relacionado ao gás exige cuidado.",
+    "sections": [
+      {
+        "heading": "Observe sem desmontar nem improvisar.",
+        "kicker": "Antes da assistência",
+        "paragraphs": [
+          "Se o acendimento elétrico não funciona, confira se o aparelho está conectado à energia quando o modelo depende de ignição elétrica. Veja também se as peças removíveis do queimador estão limpas, secas e corretamente encaixadas.",
+          "Não use objetos para alargar furos, não altere regulagens de gás e não desmonte válvulas. Chama persistentemente amarela, muito baixa ou instável merece avaliação.",
+          "Se houver cheiro de gás: feche o registro se isso puder ser feito com segurança, ventile o ambiente, não acenda chamas e evite acionar interruptores ou equipamentos elétricos. Procure o suporte apropriado para a instalação de gás."
+        ],
+        "cards": [],
+        "links": []
+      },
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Um queimador falha",
+            "description": "Compare o encaixe e a limpeza com os demais queimadores sem desmontar componentes internos."
+          },
+          {
+            "title": "Todos falham",
+            "description": "Observe energia, fornecimento de gás e se houve mudança recente no comportamento do aparelho."
+          },
+          {
+            "title": "Chama irregular",
+            "description": "Registre em foto ou vídeo apenas se for seguro e interrompa o uso se houver risco."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "O fogão continua com falha de acendimento?",
+        "kicker": "",
+        "paragraphs": [
+          "A D’orus pode avaliar o equipamento conforme a área de atendimento."
+        ],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/fogoes/",
+            "title": "Assistência para fogões",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      }
+    ]
+  },
+  "freezer-nao-congela": {
+    "title": "Freezer não congela direito? Veja o que observar.",
+    "intro": "Perda de desempenho pode vir de condições de uso ou de falhas que precisam de diagnóstico técnico.",
+    "sections": [
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Confira o ajuste de temperatura",
+            "description": "Veja se o controle não foi alterado e aguarde o tempo adequado após mudanças de configuração."
+          },
+          {
+            "title": "Observe a vedação",
+            "description": "Porta mal fechada ou borracha deformada deixa entrar ar quente e aumenta o esforço do aparelho."
+          },
+          {
+            "title": "Evite abrir toda hora",
+            "description": "Aberturas frequentes dificultam a recuperação da temperatura, principalmente em dias quentes."
+          },
+          {
+            "title": "Excesso de gelo",
+            "description": "Acúmulo anormal pode prejudicar circulação e indicar problema de vedação ou degelo."
+          },
+          {
+            "title": "Deixe ventilação externa",
+            "description": "Respeite os espaços indicados pelo fabricante para dissipação de calor."
+          },
+          {
+            "title": "Perda persistente de desempenho",
+            "description": "Se alimentos deixam de congelar mesmo com uso normal, procure avaliação."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "O freezer continua sem congelar?",
+        "kicker": "",
+        "paragraphs": ["Envie marca, modelo e uma descrição do comportamento."],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/freezers/",
+            "title": "Assistência para freezers",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      }
+    ]
+  },
+  "geladeira-fazendo-barulho": {
+    "title": "Geladeira fazendo barulho: quando o som merece atenção?",
+    "intro": "Geladeiras produzem sons durante o funcionamento. O importante é perceber quando aparece um ruído novo, forte ou acompanhado de outro sintoma.",
+    "sections": [
+      {
+        "heading": "Nem todo estalo ou vibração significa defeito.",
+        "kicker": "Sons do dia a dia",
+        "paragraphs": [
+          "Pequenos estalos podem ocorrer pela dilatação de materiais e mudanças de temperatura. Sons de circulação também podem aparecer quando ventiladores ou o sistema de refrigeração entram em funcionamento.",
+          "Verifique se o aparelho está nivelado e se objetos, paredes ou móveis não estão encostando e amplificando vibrações.",
+          "Se o ruído surgiu recentemente, ficou muito mais alto ou aparece junto com perda de refrigeração, aquecimento excessivo ou funcionamento contínuo, vale procurar avaliação técnica."
+        ],
+        "cards": [],
+        "links": []
+      },
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Grave o som",
+            "description": "Um vídeo curto ajuda o técnico a entender quando e como o ruído acontece."
+          },
+          {
+            "title": "Observe se ainda está gelando",
+            "description": "Ruído acompanhado de queda de refrigeração é uma informação importante."
+          },
+          {
+            "title": "Não desmonte o equipamento",
+            "description": "Evite remover tampas ou acessar componentes elétricos e de refrigeração."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "O barulho mudou e não voltou ao normal?",
+        "kicker": "",
+        "paragraphs": ["Conte o sintoma para a D’orus."],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/geladeiras/",
+            "title": "Assistência para geladeiras",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      }
+    ]
+  },
+  "geladeira-nao-gela": {
+    "title": "Geladeira não está gelando? Veja o que observar antes da assistência.",
+    "intro": "Nem toda perda de refrigeração tem a mesma causa. Alguns sinais ajudam a entender o cenário sem desmontar o aparelho.",
+    "sections": [
+      {
+        "heading": "Comece pelo que é simples e seguro.",
+        "kicker": "Primeiras verificações",
+        "paragraphs": [
+          "Confira se o aparelho está energizado e se o controle de temperatura não foi alterado por engano. Em seguida, veja se a porta fecha completamente e se a borracha de vedação está limpa e sem deformações evidentes.",
+          "Evite bloquear saídas internas de ar com alimentos encostados nas paredes. A circulação de ar é importante para distribuir a refrigeração pelo gabinete.",
+          "Se houver gelo em excesso, queda forte de temperatura, ruído novo ou funcionamento contínuo fora do padrão, não force o aparelho nem tente acessar componentes internos."
+        ],
+        "cards": [],
+        "links": []
+      },
+      {
+        "heading": "O comportamento do aparelho ajuda no diagnóstico",
+        "kicker": "Sinais importantes",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Freezer gela, parte inferior não",
+            "description": "Pode haver dificuldade na circulação de ar ou no sistema de degelo. Esse padrão é útil para relatar ao técnico."
+          },
+          {
+            "title": "Motor parece trabalhar sem parar",
+            "description": "Funcionamento contínuo acompanhado de baixa refrigeração merece avaliação para evitar esforço excessivo."
+          },
+          {
+            "title": "Gelo, água ou ruído diferente",
+            "description": "Fotografe ou grave o sintoma. Essas informações ajudam a preparar o atendimento."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "O problema continua mesmo após as verificações básicas?",
+        "kicker": "Quando chamar assistência",
+        "paragraphs": [
+          "A D’orus realiza atendimento em domicílio conforme a área de cobertura."
+        ],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/geladeiras/",
+            "title": "Ver assistência para geladeiras",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932?text=Ol%C3%A1%2C%20minha%20geladeira%20n%C3%A3o%20est%C3%A1%20gelando.",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      },
+      {
+        "heading": "Outros guias úteis",
+        "kicker": "Leia também",
+        "paragraphs": [],
+        "cards": [],
+        "links": [
+          {
+            "href": "/curiosidades/geladeira-fazendo-barulho/",
+            "title": "Geladeira fazendo barulho",
+            "description": "Quando o som é normal e quando merece atenção.",
+            "card": true
+          },
+          {
+            "href": "/curiosidades/freezer-nao-congela/",
+            "title": "Freezer não congela direito",
+            "description": "Veja sinais comuns de perda de desempenho.",
+            "card": true
+          }
+        ]
+      }
+    ]
+  },
+  "maquina-nao-centrifuga": {
+    "title": "Máquina de lavar não centrifuga? Observe estes sinais.",
+    "intro": "A centrifugação depende de outras etapas do ciclo. Saber onde a máquina parou ajuda bastante no diagnóstico.",
+    "sections": [
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "A água foi drenada?",
+            "description": "Se ainda existe água no cesto, o problema pode estar antes da centrifugação. Observe se a drenagem acontece normalmente."
+          },
+          {
+            "title": "A carga está equilibrada?",
+            "description": "Peças pesadas concentradas de um lado podem fazer alguns modelos interromperem ou reduzirem a centrifugação."
+          },
+          {
+            "title": "A tampa ou porta trava?",
+            "description": "Falhas no fechamento ou na trava de segurança podem impedir o avanço do ciclo."
+          },
+          {
+            "title": "Aparece código de erro?",
+            "description": "Anote o código ou faça uma foto. Essa informação pode indicar em qual etapa o aparelho detectou a falha."
+          },
+          {
+            "title": "Há ruído ou vibração forte?",
+            "description": "Batidas, folgas e vibração fora do padrão devem ser relatadas e não ignoradas."
+          },
+          {
+            "title": "O ciclo para sempre no mesmo ponto?",
+            "description": "Esse padrão ajuda a diferenciar falhas de drenagem, trava, sensor ou controle."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "Evite repetir o ciclo várias vezes se houver ruído, vazamento ou erro.",
+        "kicker": "Persistiu?",
+        "paragraphs": [
+          "Envie marca, modelo e o comportamento da máquina para a D’orus."
+        ],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/maquinas-de-lavar/",
+            "title": "Assistência para máquinas de lavar",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932?text=Ol%C3%A1%2C%20minha%20m%C3%A1quina%20n%C3%A3o%20est%C3%A1%20centrifugando.",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      },
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [],
+        "links": [
+          {
+            "href": "/curiosidades/geladeira-nao-gela/",
+            "title": "Geladeira não está gelando?",
+            "description": "Veja outro guia prático da D’orus.",
+            "card": true
+          }
+        ]
+      }
+    ]
+  },
+  "micro-ondas-nao-aquece": {
+    "title": "Micro-ondas liga, mas não aquece? Observe estes sinais.",
+    "intro": "Luz, painel e prato podem funcionar mesmo quando o aquecimento apresenta falha. O diagnóstico interno deve ser feito por profissional.",
+    "sections": [
+      {
+        "heading": "",
+        "kicker": "",
+        "paragraphs": [],
+        "cards": [
+          {
+            "title": "Painel funciona, alimento continua frio",
+            "description": "Registre se o problema acontece em todos os ciclos ou de forma intermitente."
+          },
+          {
+            "title": "Prato ou luz não funcionam",
+            "description": "Esses sintomas também ajudam a identificar se existe mais de uma função afetada."
+          },
+          {
+            "title": "Faísca, cheiro ou ruído anormal",
+            "description": "Interrompa o uso e desligue o aparelho da tomada se isso puder ser feito com segurança."
+          }
+        ],
+        "links": []
+      },
+      {
+        "heading": "Não abra o gabinete do micro-ondas.",
+        "kicker": "Segurança",
+        "paragraphs": [
+          "Micro-ondas trabalham com alta tensão e podem manter energia armazenada em componentes internos mesmo depois de desligados da tomada. A abertura do gabinete não é uma verificação doméstica segura.",
+          "Também não faça testes com o aparelho vazio nem improvise reparos. Envie marca, modelo e descrição do sintoma para avaliação."
+        ],
+        "cards": [],
+        "links": []
+      },
+      {
+        "heading": "O micro-ondas continua sem aquecer?",
+        "kicker": "",
+        "paragraphs": ["Confirme a possibilidade de atendimento com a D’orus."],
+        "cards": [],
+        "links": [
+          {
+            "href": "/servicos/micro-ondas/",
+            "title": "Assistência para micro-ondas",
+            "description": "",
+            "card": false
+          },
+          {
+            "href": "https://wa.me/5511913573932",
+            "title": "Falar no WhatsApp",
+            "description": "",
+            "card": false
+          }
+        ]
+      }
+    ]
+  }
+}

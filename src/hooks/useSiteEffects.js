@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import initialRating from "../../public/google-rating.json";
 
 const CONSENT_KEY = "dorus_consent";
 
 export function useGoogleRating() {
-  const [rating, setRating] = useState({ rating: 4.9, reviews: 45 });
+  const [rating, setRating] = useState({
+    rating: Number(initialRating.rating),
+    reviews: Number(initialRating.reviews),
+  });
 
   useEffect(() => {
     const controller = new AbortController();

@@ -1,6 +1,8 @@
 import { brands, guides, reviews, services, SITE } from "../data/site.js";
 import { useGoogleRating } from "../hooks/useSiteEffects.js";
 import { CtaPanel } from "../components/Layout.jsx";
+import { Faq } from "../components/ContentSections.jsx";
+import faq from "../data/faq.json";
 
 function ServiceCards() {
   return (
@@ -20,6 +22,8 @@ function ServiceCards() {
               src={`/assets/servicos/${service.image}.webp`}
               alt={service.name}
               loading="lazy"
+              width="1254"
+              height="1254"
             />
           </picture>
           <div className="service-card-copy">
@@ -33,7 +37,7 @@ function ServiceCards() {
   );
 }
 
-function BrandCarousel() {
+export function BrandCarousel() {
   return (
     <section
       className="section section-soft brands-section"
@@ -54,12 +58,17 @@ function BrandCarousel() {
         </div>
         <ul className="brand-list" role="list">
           {brands.map(([name, file]) => (
-            <li className="brand-logo" key={name}>
-              <img
-                src={`/assets/brands/${file}.webp`}
-                alt={name}
-                loading="lazy"
-              />
+            <li
+              className={`brand-logo${file ? "" : " is-text-only"}`}
+              key={name}
+            >
+              {file && (
+                <img
+                  src={`/assets/brands/${file}.webp`}
+                  alt={name}
+                  loading="lazy"
+                />
+              )}
               <span className="brand-fallback">{name}</span>
             </li>
           ))}
@@ -69,7 +78,7 @@ function BrandCarousel() {
   );
 }
 
-function Reviews() {
+export function Reviews() {
   const { rating, reviews: count } = useGoogleRating();
   return (
     <section className="section reviews-section">
@@ -78,6 +87,13 @@ function Reviews() {
           <div>
             <span className="kicker">Avaliações do Google</span>
             <h2>Experiências de clientes da D’orus</h2>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ver perfil no Google
+            </a>
             <div className="google-score">
               <strong>
                 {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
@@ -123,10 +139,13 @@ export function HomePage() {
           <div className="hero-copy">
             <span className="eyebrow">Assistência técnica em domicílio</span>
             <h1>
-              Seu eletrodoméstico funcionando de novo, com atendimento direto e
-              responsável.
+              Seu eletrodoméstico apresentou problema? Fale com quem entende.
             </h1>
-            <p>{SITE.description}</p>
+            <p>
+              Há mais de 10 anos, a D’orus atende linha branca com diagnóstico
+              técnico, comunicação clara e atendimento em domicílio em{" "}
+              {SITE.serviceArea}.
+            </p>
             <div className="actions">
               <a
                 className="button button-green"
@@ -266,6 +285,7 @@ export function HomePage() {
           </div>
         </div>
       </section>
+      <Faq items={faq} />
       <Reviews />
       <CtaPanel />
     </>

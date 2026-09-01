@@ -29,7 +29,10 @@ try {
       .filter(Boolean)
       .join("\n    ");
     const document = template
-      .replace("<!--app-head-->", `${head}\n    ${integrations}`)
+      .replace(
+        "<!--app-head-->",
+        `${head}\n    <meta name="dorus-revision" content="${process.env.GITHUB_SHA || "local"}">\n    ${integrations}`,
+      )
       .replace("<!--app-html-->", html);
 
     const output =

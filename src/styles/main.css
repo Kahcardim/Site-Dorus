@@ -40,6 +40,27 @@
   font-weight: 800;
 }
 
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  margin: 0;
+  list-style: none;
+}
+.breadcrumbs li {
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.breadcrumbs li + li::before {
+  content: "/";
+}
+.breadcrumbs a {
+  text-decoration: underline;
+}
+
 @media (max-width: 900px) {
   .brand-list {
     grid-template-columns: repeat(3, minmax(0, 1fr));

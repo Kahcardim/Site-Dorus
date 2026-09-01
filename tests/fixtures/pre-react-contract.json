@@ -1,0 +1,334 @@
+{
+  "backupCommit": "32ddda2730660f12d38e5b55736558b1814cb030",
+  "sourceCommit": "0aba6dbd5f4b44831b3c313cc12eee8b0c31a657",
+  "gitTree": "45dea93395e97dee870e35dfafcceaafc80f9796",
+  "metadata": {
+    "/": {
+      "description": "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeiras, lavadoras, fogões e mais.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "D’orus Assistência Técnica em Guarulhos | Linha Branca"
+    },
+    "/agendamento/": {
+      "description": "Solicite uma visita técnica da D’orus para atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Agendamento de Assistência Técnica em Guarulhos | D’orus"
+    },
+    "/curiosidades/": {
+      "description": "Guias sobre problemas comuns em geladeiras, lavadoras, fogões, freezers, lava-louças, lava e seca, fornos e micro-ondas, com cuidados seguros.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Guias de Linha Branca e Problemas Comuns | D’orus"
+    },
+    "/curiosidades/fogao-nao-acende/": {
+      "description": "Fogão não acende? Veja verificações simples de queimadores e acendimento, sinais de chama irregular e cuidados importantes em caso de cheiro de gás.",
+      "image": "/assets/servicos/servico-fogao.webp",
+      "imageAlt": "Fogão atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Fogão Não Acende? O Que Verificar com Segurança | D’orus"
+    },
+    "/curiosidades/freezer-nao-congela/": {
+      "description": "Freezer não congela direito? Veja o que observar na temperatura, vedação, excesso de gelo e ventilação antes de solicitar assistência técnica.",
+      "image": "/assets/servicos/servico-freezer.webp",
+      "imageAlt": "Freezer atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Freezer Não Congela Direito? Veja Causas Comuns | D’orus"
+    },
+    "/curiosidades/geladeira-fazendo-barulho/": {
+      "description": "Geladeira fazendo barulho? Entenda quais sons podem ocorrer no funcionamento normal e quais mudanças merecem atenção ou avaliação técnica.",
+      "image": "/assets/servicos/servico-geladeira.webp",
+      "imageAlt": "Geladeira atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Geladeira Fazendo Barulho: Quando se Preocupar | D’orus"
+    },
+    "/curiosidades/geladeira-nao-gela/": {
+      "description": "Geladeira não está gelando? Veja causas comuns, sinais que você pode observar com segurança e quando procurar assistência técnica em Guarulhos e região.",
+      "image": "/assets/servicos/servico-geladeira.webp",
+      "imageAlt": "Geladeira atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Geladeira Não Gela? Causas Comuns e Cuidados | D’orus"
+    },
+    "/curiosidades/maquina-nao-centrifuga/": {
+      "description": "Máquina de lavar não centrifuga? Veja sinais de drenagem, carga, trava e ruídos que ajudam a entender o problema antes da assistência técnica.",
+      "image": "/assets/servicos/servico-lavadora.webp",
+      "imageAlt": "Máquina de lavar atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Máquina de Lavar Não Centrifuga? Veja o Que Observar | D’orus"
+    },
+    "/curiosidades/micro-ondas-nao-aquece/": {
+      "description": "Micro-ondas liga mas não aquece? Veja sinais que ajudam no diagnóstico, quando interromper o uso e por que o gabinete nunca deve ser aberto em casa.",
+      "image": "/assets/servicos/servico-microondas.webp",
+      "imageAlt": "Micro-ondas atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Micro-ondas Liga mas Não Aquece? Veja os Sinais | D’orus"
+    },
+    "/fale-conosco/": {
+      "description": "Fale com a D’orus Assistência Técnica pelo WhatsApp ou formulário e solicite atendimento em domicílio em Guarulhos e região.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Fale com a D’orus Assistência Técnica | Guarulhos"
+    },
+    "/privacidade/": {
+      "description": "Saiba como a D’orus Assistência Técnica trata informações enviadas pelo site, preferências de cookies e dados de contato.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Privacidade e Cookies | D’orus Assistência Técnica"
+    },
+    "/servicos/": {
+      "description": "Assistência técnica de eletrodomésticos em Guarulhos, com atendimento em domicílio para geladeiras, lavadoras, fogões e outros aparelhos de linha branca.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Assistência Técnica de Eletrodomésticos em Guarulhos | D’orus"
+    },
+    "/servicos/fogoes/": {
+      "description": "Assistência técnica de fogões em Guarulhos e região para falhas de acendimento, chama irregular, queimadores e funcionamento do forno. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-fogao.webp",
+      "imageAlt": "Fogão atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Fogão em Guarulhos | D’orus"
+    },
+    "/servicos/fornos/": {
+      "description": "Assistência técnica de fornos em Guarulhos e região para falhas de aquecimento, comandos e funcionamento irregular. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-forno.webp",
+      "imageAlt": "Forno atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Forno em Guarulhos | D’orus"
+    },
+    "/servicos/freezers/": {
+      "description": "Assistência técnica de freezers em Guarulhos e região para baixo rendimento, excesso de gelo, ruídos e falhas de refrigeração. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-freezer.webp",
+      "imageAlt": "Freezer atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Freezer em Guarulhos | D’orus"
+    },
+    "/servicos/geladeiras/": {
+      "description": "Conserto e manutenção de geladeiras em Guarulhos e região. Falhas de refrigeração, excesso de gelo, vazamentos, ruídos e outros sintomas. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-geladeira.webp",
+      "imageAlt": "Geladeira atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Geladeira em Guarulhos | D’orus"
+    },
+    "/servicos/lava-e-seca/": {
+      "description": "Assistência técnica de lava e seca em Guarulhos e região para falhas de lavagem, centrifugação, drenagem e secagem. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-lava-e-seca.webp",
+      "imageAlt": "Lava e seca atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Lava e Seca em Guarulhos | D’orus"
+    },
+    "/servicos/lava-loucas/": {
+      "description": "Assistência técnica de lava-louças em Guarulhos e região para falhas de lavagem, drenagem, aquecimento e interrupções de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-lava-loucas.webp",
+      "imageAlt": "Lava-louças atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Lava-Louças em Guarulhos | D’orus"
+    },
+    "/servicos/maquinas-de-lavar/": {
+      "description": "Conserto de máquinas de lavar em Guarulhos e região. Centrifugação, drenagem, enchimento, vazamentos, ruídos e falhas de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-lavadora.webp",
+      "imageAlt": "Máquina de lavar atendida pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Máquina de Lavar em Guarulhos | D’orus"
+    },
+    "/servicos/micro-ondas/": {
+      "description": "Assistência técnica de micro-ondas em Guarulhos e região para falhas de aquecimento, painel, prato giratório e funcionamento. Garantia mínima de 90 dias nos serviços executados.",
+      "image": "/assets/servicos/servico-microondas.webp",
+      "imageAlt": "Micro-ondas atendido pela D’orus",
+      "imageHeight": 1254,
+      "imageWidth": 1254,
+      "title": "Conserto de Micro-ondas em Guarulhos | D’orus"
+    },
+    "/sobre/": {
+      "description": "Conheça a D’orus Assistência Técnica, com mais de 10 anos de experiência em linha branca e atendimento em domicílio em Guarulhos e região.",
+      "image": "/assets/banner-principal-dorus.webp",
+      "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
+      "imageHeight": 929,
+      "imageWidth": 1693,
+      "title": "Sobre a D’orus Assistência Técnica | Mais de 10 anos"
+    }
+  },
+  "content": {
+    "/curiosidades/fogao-nao-acende/": [
+      "Falhas no acendimento podem ser simples, mas qualquer sinal relacionado ao gás exige cuidado.",
+      "Se o acendimento elétrico não funciona, confira se o aparelho está conectado à energia quando o modelo depende de ignição elétrica. Veja também se as peças removíveis do queimador estão limpas, secas e corretamente encaixadas.",
+      "Não use objetos para alargar furos, não altere regulagens de gás e não desmonte válvulas. Chama persistentemente amarela, muito baixa ou instável merece avaliação.",
+      "Se houver cheiro de gás: feche o registro se isso puder ser feito com segurança, ventile o ambiente, não acenda chamas e evite acionar interruptores ou equipamentos elétricos. Procure o suporte apropriado para a instalação de gás.",
+      "Compare o encaixe e a limpeza com os demais queimadores sem desmontar componentes internos.",
+      "Observe energia, fornecimento de gás e se houve mudança recente no comportamento do aparelho.",
+      "Registre em foto ou vídeo apenas se for seguro e interrompa o uso se houver risco.",
+      "A D’orus pode avaliar o equipamento conforme a área de atendimento."
+    ],
+    "/curiosidades/freezer-nao-congela/": [
+      "Perda de desempenho pode vir de condições de uso ou de falhas que precisam de diagnóstico técnico.",
+      "Veja se o controle não foi alterado e aguarde o tempo adequado após mudanças de configuração.",
+      "Porta mal fechada ou borracha deformada deixa entrar ar quente e aumenta o esforço do aparelho.",
+      "Aberturas frequentes dificultam a recuperação da temperatura, principalmente em dias quentes.",
+      "Acúmulo anormal pode prejudicar circulação e indicar problema de vedação ou degelo.",
+      "Respeite os espaços indicados pelo fabricante para dissipação de calor.",
+      "Se alimentos deixam de congelar mesmo com uso normal, procure avaliação.",
+      "Envie marca, modelo e uma descrição do comportamento."
+    ],
+    "/curiosidades/geladeira-fazendo-barulho/": [
+      "Geladeiras produzem sons durante o funcionamento. O importante é perceber quando aparece um ruído novo, forte ou acompanhado de outro sintoma.",
+      "Pequenos estalos podem ocorrer pela dilatação de materiais e mudanças de temperatura. Sons de circulação também podem aparecer quando ventiladores ou o sistema de refrigeração entram em funcionamento.",
+      "Verifique se o aparelho está nivelado e se objetos, paredes ou móveis não estão encostando e amplificando vibrações.",
+      "Se o ruído surgiu recentemente, ficou muito mais alto ou aparece junto com perda de refrigeração, aquecimento excessivo ou funcionamento contínuo, vale procurar avaliação técnica.",
+      "Um vídeo curto ajuda o técnico a entender quando e como o ruído acontece.",
+      "Ruído acompanhado de queda de refrigeração é uma informação importante.",
+      "Evite remover tampas ou acessar componentes elétricos e de refrigeração.",
+      "Conte o sintoma para a D’orus."
+    ],
+    "/curiosidades/geladeira-nao-gela/": [
+      "Nem toda perda de refrigeração tem a mesma causa. Alguns sinais ajudam a entender o cenário sem desmontar o aparelho.",
+      "Confira se o aparelho está energizado e se o controle de temperatura não foi alterado por engano. Em seguida, veja se a porta fecha completamente e se a borracha de vedação está limpa e sem deformações evidentes.",
+      "Evite bloquear saídas internas de ar com alimentos encostados nas paredes. A circulação de ar é importante para distribuir a refrigeração pelo gabinete.",
+      "Se houver gelo em excesso, queda forte de temperatura, ruído novo ou funcionamento contínuo fora do padrão, não force o aparelho nem tente acessar componentes internos.",
+      "Pode haver dificuldade na circulação de ar ou no sistema de degelo. Esse padrão é útil para relatar ao técnico.",
+      "Funcionamento contínuo acompanhado de baixa refrigeração merece avaliação para evitar esforço excessivo.",
+      "Fotografe ou grave o sintoma. Essas informações ajudam a preparar o atendimento.",
+      "A D’orus realiza atendimento em domicílio conforme a área de cobertura.",
+      "Quando o som é normal e quando merece atenção.",
+      "Veja sinais comuns de perda de desempenho."
+    ],
+    "/curiosidades/maquina-nao-centrifuga/": [
+      "A centrifugação depende de outras etapas do ciclo. Saber onde a máquina parou ajuda bastante no diagnóstico.",
+      "Se ainda existe água no cesto, o problema pode estar antes da centrifugação. Observe se a drenagem acontece normalmente.",
+      "Peças pesadas concentradas de um lado podem fazer alguns modelos interromperem ou reduzirem a centrifugação.",
+      "Falhas no fechamento ou na trava de segurança podem impedir o avanço do ciclo.",
+      "Anote o código ou faça uma foto. Essa informação pode indicar em qual etapa o aparelho detectou a falha.",
+      "Batidas, folgas e vibração fora do padrão devem ser relatadas e não ignoradas.",
+      "Esse padrão ajuda a diferenciar falhas de drenagem, trava, sensor ou controle.",
+      "Envie marca, modelo e o comportamento da máquina para a D’orus.",
+      "Veja outro guia prático da D’orus."
+    ],
+    "/curiosidades/micro-ondas-nao-aquece/": [
+      "Luz, painel e prato podem funcionar mesmo quando o aquecimento apresenta falha. O diagnóstico interno deve ser feito por profissional.",
+      "Registre se o problema acontece em todos os ciclos ou de forma intermitente.",
+      "Esses sintomas também ajudam a identificar se existe mais de uma função afetada.",
+      "Interrompa o uso e desligue o aparelho da tomada se isso puder ser feito com segurança.",
+      "Micro-ondas trabalham com alta tensão e podem manter energia armazenada em componentes internos mesmo depois de desligados da tomada. A abertura do gabinete não é uma verificação doméstica segura.",
+      "Também não faça testes com o aparelho vazio nem improvise reparos. Envie marca, modelo e descrição do sintoma para avaliação.",
+      "Confirme a possibilidade de atendimento com a D’orus."
+    ],
+    "/privacidade/": [
+      "Esta página explica quais informações podem ser usadas durante o atendimento pelo site.",
+      "Os dados preenchidos nos formulários, como nome, telefone, endereço da visita, equipamento e descrição do problema, são usados para preparar a solicitação de atendimento.",
+      "Com sua autorização, o site pode ativar o Google Analytics 4 para medir visualizações e interações. Se você escolher somente cookies necessários, o Analytics não é ativado.",
+      "Não vendemos dados pessoais. Links para WhatsApp, Instagram e Google Agenda levam a serviços de terceiros, sujeitos às políticas desses serviços."
+    ],
+    "/servicos/fogoes/": [
+      "Falhas de acendimento, chama irregular, queimadores que não funcionam ou forno com desempenho diferente podem ser avaliados pela D’orus.",
+      "Queimadores que não acendem ou ignição intermitente precisam de avaliação.",
+      "Chama amarela, baixa ou instável pode indicar necessidade de limpeza, regulagem ou reparo.",
+      "Entupimentos, encaixe ou componentes desgastados podem afetar o funcionamento.",
+      "Falhas para acender, aquecer ou manter o funcionamento devem ser diagnosticadas.",
+      "Ler guia →"
+    ],
+    "/servicos/fornos/": [
+      "Se o forno não aquece corretamente, apresenta funcionamento irregular ou falhas de comando, a D’orus pode avaliar o equipamento.",
+      "O forno liga, mas não atinge ou mantém a temperatura esperada.",
+      "Diferenças de temperatura podem indicar falha de funcionamento.",
+      "Falhas ao ligar, desligar ou selecionar funções merecem avaliação.",
+      "Envie marca, modelo e uma breve descrição do defeito."
+    ],
+    "/servicos/freezers/": [
+      "Baixo rendimento, excesso de gelo, demora para congelar ou funcionamento irregular são sinais que merecem avaliação.",
+      "Perda de desempenho compromete a conservação dos alimentos.",
+      "Acúmulo fora do normal pode indicar falha de vedação ou degelo.",
+      "Ruídos, ciclos fora do padrão ou aquecimento excessivo pedem avaliação.",
+      "Ler guia →",
+      "Envie marca, modelo e uma descrição do comportamento do aparelho."
+    ],
+    "/servicos/geladeiras/": [
+      "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
+      "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação.",
+      "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção.",
+      "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna.",
+      "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação.",
+      "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico.",
+      "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
+      "Ler guia →",
+      "Ler guia →",
+      "Envie marca, modelo, foto e uma breve descrição do defeito."
+    ],
+    "/servicos/lava-e-seca/": [
+      "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+      "O ciclo termina com excesso de água ou não chega à etapa de centrifugação.",
+      "A secagem demora demais ou as roupas continuam úmidas.",
+      "Códigos no painel, água parada ou interrupções precisam de avaliação.",
+      "Envie marca, modelo e o erro apresentado."
+    ],
+    "/servicos/lava-loucas/": [
+      "Falhas de drenagem, lavagem incompleta, aquecimento ou interrupção do ciclo podem ser avaliadas pela D’orus.",
+      "Água parada ou drenagem lenta pode indicar obstrução ou falha no sistema.",
+      "Louças permanecem sujas mesmo com programa e abastecimento adequados.",
+      "Códigos de erro, travamentos e ciclos interrompidos precisam de diagnóstico.",
+      "Se houver código de erro, envie também uma foto."
+    ],
+    "/servicos/maquinas-de-lavar/": [
+      "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. Observe o comportamento antes de insistir no uso.",
+      "A roupa termina muito molhada ou a máquina não entra na etapa de centrifugação.",
+      "Água parada pode indicar obstrução, bomba ou outro ponto do sistema de drenagem.",
+      "Falhas de entrada de água podem envolver alimentação, filtros, válvulas ou comandos.",
+      "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem.",
+      "Batidas fortes e ruídos persistentes merecem diagnóstico.",
+      "Travamentos podem estar ligados a sensores, trava, alimentação ou controle.",
+      "Ler guia →",
+      "Informe marca, modelo e em qual etapa o problema aparece."
+    ],
+    "/servicos/micro-ondas/": [
+      "Problemas de aquecimento, comandos ou funcionamento podem ser avaliados conforme marca, modelo e defeito.",
+      "O equipamento liga, mas os alimentos não aquecem como deveriam.",
+      "Teclas, display ou seleção de funções apresentam falhas.",
+      "Desligamentos, ruídos anormais ou comportamento diferente precisam de avaliação.",
+      "Leia os sinais e cuidados de segurança →",
+      "Informe marca e modelo para confirmar a possibilidade de atendimento."
+    ],
+    "/sobre/": [
+      "Desde 2014, a D’orus ajuda famílias a cuidar dos eletrodomésticos que fazem a casa funcionar.",
+      "A D’orus atua com manutenção e conserto de eletrodomésticos de linha branca, com atendimento principalmente em domicílio.",
+      "Ao longo de mais de uma década, acumulamos experiência com diferentes marcas e modelos de geladeiras, lavadoras, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas.",
+      "Nosso compromisso é explicar o problema com clareza, orientar o cliente e realizar apenas os serviços adequados para cada equipamento.",
+      "Atendemos Guarulhos, Arujá, Itaquaquecetuba e São Paulo, conforme disponibilidade.",
+      "Comunicação clara sobre o problema e a manutenção recomendada.",
+      "Mais de 10 anos de atuação com linha branca.",
+      "Cuidado com o cliente, o aparelho e o ambiente.",
+      "Contato direto e atendimento no endereço da visita."
+    ]
+  },
+  "integrationHashes": {
+    "/integrations/analytics.js": "ad008e92800bd3595a7797bc6e01c8cf2cdc0aca4a93b53120fdf6ff92c11afc",
+    "/integrations/calendar.js": "cfffc7db1fa4f3838a669e45da27c333dbcb2ef21b4b095d0f18135b08a599b6"
+  },
+  "rating": {
+    "rating": 4.9,
+    "reviews": 47,
+    "source": "Google",
+    "updatedAt": "2026-09-01T05:03:10Z"
+  }
+}

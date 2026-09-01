@@ -8,7 +8,7 @@
     "build": "node scripts/build-react.mjs",
     "preview": "vite preview",
     "test": "node --test tests/unit/*.test.mjs",
-    "test:static": "node scripts/test-static.mjs",
+    "test:static": "node scripts/test-static.mjs && node scripts/test-seo.mjs",
     "test:regression": "node scripts/test-regression.mjs",
     "check:static": "npm run test && npm run build && npm run test:static",
     "check": "npm run check:static && npm run test:regression"
