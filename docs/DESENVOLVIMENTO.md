@@ -38,7 +38,8 @@ As imagens e integrações publicadas ficam em `public/`. Não publique credenci
 | `npm run test:static` | Verificação do conteúdo gerado e SEO; exige build |
 | `npm run check:static` | Testes unitários, build e verificações estáticas |
 | `npm run test:regression` | Regressão no navegador; exige build e Chromium |
-| `npm run check` | Conjunto de verificações estáticas e regressão |
+| `npm run test:maintenance` | Testes da sincronização de avaliações, sem acesso externo |
+| `npm run check` | Verificações estáticas, manutenção e regressão |
 
 Para preparar o navegador de testes:
 
@@ -74,7 +75,7 @@ Os testes de regressão interceptam os fluxos externos para não criar visitas n
 5. Revisar o diff e manter apenas alterações relacionadas à tarefa.
 6. Após uma publicação, confirmar a revisão entregue e a validação no domínio público.
 
-Use o roteiro em [TESTES.md](TESTE-MANUAL-REACT.md) como complemento aos testes automatizados.
+Use o roteiro em [TESTES.md](TESTES.md) como complemento aos testes automatizados.
 
 ## Publicações e refatorações
 

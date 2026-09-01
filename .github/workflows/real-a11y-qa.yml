@@ -2,6 +2,12 @@ name: QA acessibilidade nativa
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "scripts/test-native-a11y.mjs"
+      - ".github/workflows/real-a11y-qa.yml"
 
 permissions:
   contents: read

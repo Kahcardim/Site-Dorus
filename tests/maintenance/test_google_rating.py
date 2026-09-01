@@ -47,7 +47,8 @@ class GoogleRatingTests(unittest.TestCase):
 
     def test_network_failure_does_not_overwrite_snapshot(self):
         before = self.output.read_bytes()
-        with patch.dict(module.os.environ, {"GOOGLE_PLACES_API_KEY": "test-only", "GOOGLE_PLACE_ID": module.EXPECTED_PLACE_ID}), patch.object(module.urllib.request, "urlopen", side_effect=OSError("offline")):
+        with patch.dict(module.os.environ, {"GOOGLE_PLACES_API_KEY": "test-only", "GOOGLE_PLACE_ID": module.EXPECTED_PLACE_ID}), patch.object(module.urllib.request, "urlopen", side_effect=OSError("offline")), patch.object(module, "save_rating") as save:
             with self.assertRaises(SystemExit):
                 module.main()
+            save.assert_not_called()
         self.assertEqual(before, self.output.read_bytes())
