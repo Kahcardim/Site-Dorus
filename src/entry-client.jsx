@@ -1,11 +1,13 @@
-import { StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
-import { App } from "./App.jsx";
 import "./styles/main.css";
 
-hydrateRoot(
-  document.getElementById("root"),
-  <StrictMode>
-    <App path={window.location.pathname} />
-  </StrictMode>,
-);
+// Paint the pre-rendered content before downloading interactive components.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    import("./hydrate.jsx").catch((error) => {
+      console.error(
+        "Não foi possível iniciar os componentes interativos.",
+        error,
+      );
+    });
+  });
+});
