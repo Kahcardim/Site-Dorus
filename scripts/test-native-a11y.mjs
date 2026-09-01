@@ -32,7 +32,8 @@ for(const [size,width,height] of sizes){
         widget:document.querySelectorAll('.a11y-tools,[data-a11y-launcher]').length,
         h1:document.querySelectorAll('main h1').length,
         overflow:Math.max(document.documentElement.scrollWidth,document.body.scrollWidth)-innerWidth,
-        clipped
+        clipped,
+        outside:[...document.querySelectorAll('main h1,main h2,main h3,main p,main button')].filter(e=>visible(e)&&!e.closest('.carousel-track')&&e.getBoundingClientRect().right>innerWidth+1).map(e=>({tag:e.tagName,text:e.textContent.trim().slice(0,80),right:Math.round(e.getBoundingClientRect().right),width:Math.round(e.getBoundingClientRect().width)})).slice(0,15)
       };
     });
     const reasons=[];

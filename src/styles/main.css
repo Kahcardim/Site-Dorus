@@ -476,3 +476,10 @@
     scroll-behavior: auto !important;
   }
 }
+
+#root h1,
+#root h2,
+#root h3,
+#root h4 {
+  overflow-wrap: anywhere !important;
+}

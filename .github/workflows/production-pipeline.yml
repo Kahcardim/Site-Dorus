@@ -80,18 +80,15 @@ jobs:
       - name: Comparar arquivos entregues
         run: node scripts/compare-builds.mjs .baseline/dist dist
 
-  deploy:
-    name: Publicar GitHub Pages
+  preparar:
+    name: Preparar publicação
     if: github.event_name != 'pull_request'
     needs: qualidade
     runs-on: ubuntu-latest
     env:
       DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
     outputs:
-      published: ${{ steps.changed.outputs.changed }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      changed: ${{ steps.changed.outputs.changed }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -115,8 +112,18 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+  deploy:
+    name: Publicar GitHub Pages
+    if: github.event_name != 'pull_request' && needs.preparar.outputs.changed == 'true'
+    needs: [qualidade, preparar]
+    runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.deployment.outcome == 'success' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
-        if: steps.changed.outputs.changed == 'true'
         uses: actions/deploy-pages@v4
 
   lighthouse:
