@@ -1,15 +1,56 @@
-import { HomePage } from "./pages/HomePage.jsx";
-import { GuideDetailPage, GuidesPage } from "./pages/GuidePages.jsx";
-import {
-  AboutPage,
-  ContactPage,
-  NotFoundPage,
-  PrivacyPage,
-  SchedulePage,
-} from "./pages/InstitutionalPages.jsx";
-import { ServiceDetailPage, ServicesPage } from "./pages/ServicePages.jsx";
+import { lazy } from "react";
 import { guides, services, SITE } from "./data/site.js";
 import seoMetadata from "./data/seo-metadata.json";
+
+// Resolve pages during static generation; split them into route chunks in browsers.
+const serverPages = import.meta.env.SSR
+  ? Object.assign(
+      {},
+      ...(await Promise.all([
+        import("./pages/HomePage.jsx"),
+        import("./pages/GuidePages.jsx"),
+        import("./pages/InstitutionalPages.jsx"),
+        import("./pages/ServicePages.jsx"),
+      ])),
+    )
+  : {};
+const page = (load, name) =>
+  serverPages[name] ||
+  lazy(() => load().then((module) => ({ default: module[name] })));
+const HomePage = page(() => import("./pages/HomePage.jsx"), "HomePage");
+const GuidesPage = page(() => import("./pages/GuidePages.jsx"), "GuidesPage");
+const GuideDetailPage = page(
+  () => import("./pages/GuidePages.jsx"),
+  "GuideDetailPage",
+);
+const AboutPage = page(
+  () => import("./pages/InstitutionalPages.jsx"),
+  "AboutPage",
+);
+const ContactPage = page(
+  () => import("./pages/InstitutionalPages.jsx"),
+  "ContactPage",
+);
+const SchedulePage = page(
+  () => import("./pages/InstitutionalPages.jsx"),
+  "SchedulePage",
+);
+const PrivacyPage = page(
+  () => import("./pages/InstitutionalPages.jsx"),
+  "PrivacyPage",
+);
+const NotFoundPage = page(
+  () => import("./pages/InstitutionalPages.jsx"),
+  "NotFoundPage",
+);
+const ServicesPage = page(
+  () => import("./pages/ServicePages.jsx"),
+  "ServicesPage",
+);
+const ServiceDetailPage = page(
+  () => import("./pages/ServicePages.jsx"),
+  "ServiceDetailPage",
+);
 
 const common = { image: "/assets/banner-principal-dorus.webp", index: true };
 
