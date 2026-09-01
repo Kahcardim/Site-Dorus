@@ -165,6 +165,8 @@ export function SchedulePage() {
       `*Data preferida:* ${displayDate}`,
       `*Período solicitado:* ${data.get("periodo")}`,
       "",
+      "*Visita técnica e diagnóstico:* Estou ciente de que a D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor será informado antes da confirmação do agendamento e, quando o reparo for aprovado, será abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e será confirmado antes da visita.",
+      "",
       "A data e o horário serão confirmados pela equipe.",
     ].join("\n");
     setStatus(
@@ -270,6 +272,23 @@ export function SchedulePage() {
                 <textarea name="problema" required />
               </label>
             </fieldset>
+            <div className="schedule-disclaimer">
+              <strong>Visita técnica e diagnóstico</strong>
+              <p>
+                A D’orus cobra uma visita técnica que inclui deslocamento e
+                diagnóstico. O valor é informado antes do agendamento e, quando
+                o reparo é aprovado, é abatido do serviço. Para áreas fora da
+                região principal de atendimento, o valor pode variar conforme a
+                localização e deve ser confirmado antes da visita.
+              </p>
+            </div>
+            <label className="consent">
+              <input name="ciencia_visita" type="checkbox" required />
+              <span>
+                Estou ciente das condições da visita técnica e de que o valor
+                será informado antes da confirmação do agendamento.
+              </span>
+            </label>
             <label className="consent">
               <input name="consentimento" type="checkbox" required />
               <span>
