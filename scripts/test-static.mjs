@@ -24,6 +24,11 @@ for (const path of paths) {
     `${path}: deve conter um h1`,
   );
   assert.match(html, /<main id="conteudo">/, `${path}: main sem id`);
+  assert.doesNotMatch(
+    html,
+    /<!--\$\?-->|<div hidden id="S:/,
+    `${path}: conteúdo não pode depender de resolver Suspense no navegador`,
+  );
   assert.match(
     html,
     /<script type="module" fetchpriority="low"/,
@@ -100,6 +105,28 @@ assert.match(
 const contact = await readFile(
   resolve(dist, "fale-conosco", "index.html"),
   "utf8",
+);
+const home = await readFile(resolve(dist, "index.html"), "utf8");
+assert.match(
+  home,
+  /class="hero-rating" href="#avaliacoes"/,
+  "Home: resumo de avaliações ausente do topo",
+);
+assert.match(home, /data-google-rating/, "Home: nota do Google ausente");
+assert.match(
+  home,
+  /data-google-review-count/,
+  "Home: quantidade de avaliações ausente",
+);
+assert.match(
+  home,
+  /<figcaption><strong>Assistência multimarcas<\/strong>/,
+  "Home: identificação multimarcas ausente da foto",
+);
+assert.equal(
+  (home.match(/class="review-card"/g) || []).length,
+  3,
+  "Home: depoimentos originais removidos",
 );
 assert.match(
   contact,

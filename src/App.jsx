@@ -11,7 +11,10 @@ export function App({ path }) {
       breadcrumbs={route.index ? breadcrumbsFor(route) : []}
       compactFooter={route.path === "/404.html"}
     >
-      <Page />
+      <Suspense fallback={null}>
+        <Page />
+      </Suspense>
     </Layout>
   );
 }
+import { Suspense } from "react";

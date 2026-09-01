@@ -6,6 +6,24 @@ import faq from "../data/faq.json";
 import catalogCopy from "../data/catalog-copy.json";
 import { Carousel } from "../components/Carousel.jsx";
 
+function HeroRating() {
+  const { rating, reviews: count } = useGoogleRating();
+  return (
+    <a className="hero-rating" href="#avaliacoes">
+      <strong>
+        <span data-google-rating>
+          {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
+        </span>{" "}
+        <span aria-hidden="true">★</span>
+      </strong>
+      <span>
+        <span data-google-review-count>{count.toLocaleString("pt-BR")}</span>{" "}
+        avaliações no Google
+      </span>
+    </a>
+  );
+}
+
 function ServiceCards() {
   return (
     <div className="service-grid">
@@ -84,12 +102,16 @@ export function BrandCarousel({
 export function Reviews({ title = "Experiências de clientes da D’orus" }) {
   const { rating, reviews: count } = useGoogleRating();
   return (
-    <section className="section reviews-section">
+    <section
+      className="section reviews-section"
+      id="avaliacoes"
+      aria-labelledby="avaliacoes-titulo"
+    >
       <div className="container">
         <div className="section-head compact-head">
           <div>
             <span className="kicker">Avaliações do Google</span>
-            <h2>{title}</h2>
+            <h2 id="avaliacoes-titulo">{title}</h2>
             <a
               href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg"
               target="_blank"
@@ -163,11 +185,25 @@ export function HomePage() {
               </a>
             </div>
             <div className="hero-points">
-              <span>Mais de 10 anos de experiência</span>
-              <span>Garantia mínima de 90 dias</span>
+              <HeroRating />
+              <div>
+                <strong>+10 anos</strong>
+                <span>Mais de 10 anos de experiência</span>
+              </div>
+              <div>
+                <strong>Garantia</strong>
+                <span>Garantia mínima de 90 dias</span>
+              </div>
             </div>
           </div>
           <figure className="hero-media">
+            <figcaption>
+              <strong>Assistência multimarcas</strong>
+              <span>
+                Geladeiras, lavadoras, fogões e outros equipamentos de linha
+                branca.
+              </span>
+            </figcaption>
             <picture>
               <source
                 media="(max-width:680px)"

@@ -116,6 +116,27 @@ try {
   }
 
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+  const chunks = await page.evaluate(() =>
+    performance.getEntriesByType("resource").map((entry) => entry.name),
+  );
+  check(
+    !chunks.some((url) =>
+      /\/(InstitutionalPages|ServicePages|GuidePages)-/.test(url),
+    ),
+    "Home: carregou código de páginas não visitadas",
+  );
+  check(
+    chunks.filter((url) => url.includes("/google-rating.json")).length === 1,
+    "Home: requisições duplicadas para a avaliação",
+  );
+  check(
+    await page.locator(".hero-rating [data-google-rating]").isVisible(),
+    "Home: nota ausente do topo",
+  );
+  check(
+    (await page.locator("#avaliacoes .review-card").count()) === 3,
+    "Home: depoimentos ausentes",
+  );
   await page.keyboard.press("Tab");
   check(
     (await page.locator(":focus").textContent())?.includes("Pular"),
@@ -391,6 +412,41 @@ try {
     path: resolve(screenshots, "home-desktop.png"),
     fullPage: true,
   });
+  for (const width of [390, 1440, 1920]) {
+    await desktop.setViewportSize({ width, height: 1000 });
+    await desktop.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+    const hero = await desktop.locator(".hero").evaluate((element) => {
+      const title = element.querySelector("h1");
+      const copy = element.querySelector(".hero-copy").getBoundingClientRect();
+      const heading = title.getBoundingClientRect();
+      const caption = element
+        .querySelector("figcaption")
+        .getBoundingClientRect();
+      const media = element
+        .querySelector(".hero-media")
+        .getBoundingClientRect();
+      return {
+        centered:
+          getComputedStyle(title).textAlign === "center" &&
+          Math.abs(
+            heading.left + heading.width / 2 - copy.left - copy.width / 2,
+          ) < 2,
+        captionInside:
+          caption.left >= media.left &&
+          caption.right <= media.right &&
+          caption.top >= media.top &&
+          caption.bottom <= media.bottom,
+      };
+    });
+    check(hero.centered, `Home (${width}px): texto não centralizado`);
+    check(
+      hero.captionInside,
+      `Home (${width}px): identificação multimarcas fora da foto`,
+    );
+    await desktop
+      .locator(".hero")
+      .screenshot({ path: resolve(screenshots, `hero-${width}.png`) });
+  }
   for (const width of [390, 1440]) {
     await desktop.setViewportSize({ width, height: 1000 });
     for (const [name, path] of Object.entries({

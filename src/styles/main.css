@@ -15,6 +15,59 @@
   padding-left: 22px;
 }
 
+#root .hero-points > .hero-rating {
+  display: block;
+  padding: 10px 12px;
+  border: 1px solid var(--line, #d8e2ed);
+  border-radius: 14px;
+  background: #fff;
+  color: #123e79;
+  text-decoration: none;
+}
+#root .hero-rating strong {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35em;
+}
+#root .hero-rating strong > span {
+  display: inline !important;
+  margin: 0 !important;
+  font-size: inherit !important;
+}
+#root .hero-rating strong > [aria-hidden] {
+  color: #8a6000 !important;
+}
+#root .hero-rating > span {
+  display: block;
+  margin-top: 4px;
+}
+#root .hero-rating:focus-visible {
+  outline: 3px solid #0d3b8e;
+  outline-offset: 3px;
+}
+#root #avaliacoes {
+  scroll-margin-top: 110px;
+}
+
+#root .hero-copy {
+  text-align: center;
+  margin-inline: auto;
+}
+#root .hero-copy h1,
+#root .hero-copy > p {
+  margin-inline: auto !important;
+}
+#root .hero-copy .actions {
+  justify-content: center;
+}
+#root .hero-points {
+  text-align: center;
+}
+#root .hero-media figcaption {
+  text-align: center;
+}
+
 .whatsapp-float {
   font-size: 0.82rem;
   font-weight: 800;
