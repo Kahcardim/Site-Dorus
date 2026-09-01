@@ -275,14 +275,50 @@ try {
   await form.locator('[name="data"]').fill(tomorrow);
   await form.locator('[name="periodo"]').selectOption({ index: 1 });
   await form.locator('[name="problema"]').fill("Não está gelando");
-  await form.locator('[name="consentimento"]').check();
-  await form.getByRole("button", { name: /WhatsApp/ }).click();
+  const visitConsent = form.locator('[name="ciencia_visita"]');
+  const privacyConsent = form.locator('[name="consentimento"]');
+  const submitSchedule = form.getByRole("button", { name: /WhatsApp/ });
   check(
-    (await page.evaluate(() => window.__dorusOpened || "")).includes(
-      "wa.me/5511913573932",
-    ),
+    await visitConsent.evaluate((input) => input.required && !input.checked),
+    "Agenda: ciência da visita deve ser obrigatória e desmarcada inicialmente",
+  );
+  await privacyConsent.check();
+  await submitSchedule.click();
+  check(
+    (await visitConsent.evaluate((input) => input.validity.valueMissing)) &&
+      !(await page.evaluate(() => window.__dorusOpened)),
+    "Agenda: não deve abrir WhatsApp sem ciência das condições da visita",
+  );
+  await visitConsent.check();
+  await privacyConsent.uncheck();
+  await submitSchedule.click();
+  check(
+    (await privacyConsent.evaluate((input) => input.validity.valueMissing)) &&
+      !(await page.evaluate(() => window.__dorusOpened)),
+    "Agenda: ciência da visita não substitui o consentimento de privacidade",
+  );
+  await privacyConsent.check();
+  await submitSchedule.click();
+  const scheduleUrl = await page.evaluate(() => window.__dorusOpened || "");
+  check(
+    scheduleUrl.includes("wa.me/5511913573932"),
     "Agenda: fallback do WhatsApp falhou",
   );
+  const scheduleMessage = scheduleUrl
+    ? new URL(scheduleUrl).searchParams.get("text") || ""
+    : "";
+  for (const condition of [
+    "Estou ciente",
+    "deslocamento e diagnóstico",
+    "valor será informado antes da confirmação do agendamento",
+    "será abatido do serviço",
+    "valor pode variar conforme a localização",
+  ]) {
+    check(
+      scheduleMessage.includes(condition),
+      `Agenda: mensagem sem condição da visita: ${condition}`,
+    );
+  }
 
   const axeSource = await readFile(
     resolve(root, "..", "node_modules", "axe-core", "axe.min.js"),
