@@ -231,10 +231,11 @@
   display: flex !important;
   gap: 16px !important;
   overflow-x: auto !important;
-  scroll-snap-type: x mandatory;
+  scroll-snap-type: none !important;
+  scroll-padding-inline: 0;
   overscroll-behavior-inline: contain;
   scrollbar-width: thin;
-  padding: 10px 2px 20px !important;
+  padding: 10px 0 20px !important;
   margin: 0;
 }
 #root .carousel-track > * {

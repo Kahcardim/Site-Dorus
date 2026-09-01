@@ -28,32 +28,6 @@ const serve = async (directory, port) => {
       if ((await stat(file)).isDirectory()) file = resolve(file, "index.html");
       let body = await readFile(file);
       const type = mime[extname(file)] || "application/octet-stream";
-      if (type === "text/html" && url.searchParams.has("diagnose")) {
-        const mode = url.searchParams.get("diagnose");
-        const selectors = {
-          carousel: ".accessible-carousel",
-          cookie: ".cookie-banner",
-          cards: ".service-grid",
-        };
-        if (selectors[mode])
-          body = Buffer.from(
-            body
-              .toString()
-              .replace(
-                "</head>",
-                `<style>${selectors[mode]}{display:none!important}</style></head>`,
-              ),
-          );
-        if (mode === "scripts")
-          body = Buffer.from(
-            body
-              .toString()
-              .replace(
-                /<script(?![^>]*application\/ld\+json)[^>]*>[\s\S]*?<\/script>/g,
-                "",
-              ),
-          );
-      }
       const headers = {
         "content-type": type,
         "cache-control": "public, max-age=3600",
@@ -117,38 +91,6 @@ try {
       );
     });
     const report = JSON.parse(await readFile(reportPath, "utf8"));
-    if (
-      report.categories.performance.score === null &&
-      scenario.version === "react"
-    ) {
-      for (const mode of ["carousel", "cookie", "cards", "scripts"]) {
-        const diagnosticPath = resolve(output, `diagnostic-${mode}.json`);
-        const diagnosticArgs = [...args];
-        diagnosticArgs[0] += `?diagnose=${mode}`;
-        diagnosticArgs[3] = `--output-path=${diagnosticPath}`;
-        await new Promise((done, reject) => {
-          const child = spawn("lighthouse", diagnosticArgs, {
-            stdio: "inherit",
-          });
-          child.on("error", reject);
-          child.on("exit", (code) =>
-            code === 0 ? done() : reject(new Error(`Diagnóstico: ${code}`)),
-          );
-        });
-        const diagnostic = JSON.parse(await readFile(diagnosticPath, "utf8"));
-        console.log(
-          JSON.stringify({
-            diagnostic: mode,
-            performance: diagnostic.categories.performance.score,
-            lcp: diagnostic.audits["largest-contentful-paint"].numericValue,
-            error: diagnostic.audits["largest-contentful-paint"].errorMessage,
-          }),
-        );
-      }
-      throw new Error(
-        "Medição LCP inválida; diagnósticos salvos sem alterar critérios de publicação.",
-      );
-    }
     if (report.runtimeError)
       throw new Error(JSON.stringify(report.runtimeError));
     const row = {
