@@ -47,7 +47,7 @@ const serve = async (directory, port) => {
   await new Promise((done) => server.listen(port, "127.0.0.1", done));
   return server;
 };
-const legacy = await serve(root, 4180);
+const legacy = await serve(resolve(root, "tests/fixtures/legacy"), 4180);
 const react = await serve(resolve(root, "dist"), 4181);
 const results = [];
 try {

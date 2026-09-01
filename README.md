@@ -28,7 +28,7 @@ As integrações utilizam Google Apps Script e scripts Python executados nos flu
 
 ## Executar localmente
 
-Requisito: Node.js 22, versão utilizada na integração contínua.
+Requisitos: Node.js 22 e Python 3.12 para os testes de manutenção. As versões das dependências estão fixadas no projeto.
 
 ```bash
 npm ci
@@ -50,19 +50,18 @@ npm run preview
 | `src/components/` | Componentes compartilhados |
 | `src/data/` | Conteúdo editorial, catálogo e metadados |
 | `src/hooks/` | Avaliações, consentimento e preferências de acessibilidade |
-| `src/styles/` | Entrada dos estilos da aplicação |
+| `src/styles/` | Estilos organizados por responsabilidade |
 | `public/` | Arquivos públicos, imagens e integrações do navegador |
 | `scripts/` | Geração estática, validações e manutenção |
-| `tests/` | Testes unitários e contratos de conteúdo |
+| `tests/` | Testes unitários, manutenção e referências isoladas |
 | `integrations/google-calendar/` | Código da integração com a agenda |
 | `.github/workflows/` | Qualidade, publicação e sincronização de avaliações |
 
 ## Qualidade
 
 ```bash
-npm run check:static
 npx playwright install chromium
-npm run test:regression
+npm run check
 ```
 
 A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core.
@@ -71,10 +70,12 @@ Os testes automatizados complementam a revisão manual; não representam uma cer
 
 ## Publicação e integrações
 
-O GitHub Pages recebe o conteúdo gerado em `dist/` após a aprovação da pipeline. A validação pós-publicação confere a revisão entregue, as páginas, os dados de conteúdo e o SEO técnico.
+O GitHub Pages recebe o conteúdo gerado em `dist/` após a aprovação da pipeline. Mudanças apenas de documentação e builds equivalentes não exigem uma nova publicação. A validação pós-publicação confere a revisão entregue, as páginas, os dados de conteúdo e o SEO técnico.
 
 As credenciais do Google ficam nos secrets do GitHub Actions ou na configuração do serviço correspondente, nunca no código enviado ao navegador. Instruções de desenvolvimento e manutenção estão em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md).
 
 ## Autor
 
 Desenvolvido por [Kauan Cardim](https://github.com/Kahcardim) para a D’orus Assistência Técnica.
+
+Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md)

@@ -1,2 +1,0 @@
-Cache refresh marker for GitHub Pages.
-2026-08-29

@@ -19,18 +19,13 @@ Edite o conteúdo em `src/data/` e os componentes em `src/`. Evite manter cópia
 
 As imagens e integrações publicadas ficam em `public/`. Não publique credenciais nesse diretório: seus arquivos são acessíveis pelo navegador.
 
-## Dependências que exigem cuidado
+## Organização dos estilos e referências
 
-A árvore atual ainda mantém arquivos de referência na raiz. Eles não devem ser confundidos com a saída publicada, que é `dist/`.
+`src/styles/base/` reúne os módulos de fundação, layout, componentes, consentimento, acessibilidade e páginas. A ordem de importação em `src/styles/main.css` faz parte da cascata e deve ser preservada em uma reorganização sem mudança visual.
 
-Antes de mover ou excluir arquivos, confira estas dependências:
+`tests/fixtures/legacy/` contém exclusivamente a base estática utilizada pela comparação de desempenho. Ela não é publicada. Seu manifesto registra os hashes Git dos arquivos e um teste detecta alterações acidentais.
 
-- `src/styles/main.css` importa folhas de estilo da raiz; elas participam do build.
-- `scripts/audit-performance.mjs` utiliza a versão de referência da raiz para comparação de desempenho.
-- `tests/fixtures/` contém contratos usados na verificação de conteúdo, identidade e SEO.
-- Workflows adicionais e scripts de manutenção podem referenciar caminhos antigos.
-
-A organização dessas referências deve manter os testes reproduzíveis e a aparência da aplicação. Ausência de importação em um componente React, isoladamente, não prova que um arquivo seja dispensável.
+`tests/fixtures/pre-react-*.json` conserva os contratos de conteúdo, identidade, SEO e integrações. Não altere esses contratos apenas para eliminar uma falha de regressão.
 
 ## Comandos
 
@@ -55,7 +50,7 @@ As capturas e relatórios locais são gerados em `test-results/`. Não substitue
 
 ## Avaliações do Google
 
-O workflow `Sincronizar avaliações Google` consulta a Places API (New) a cada seis horas ou por acionamento manual. O arquivo publicado é `public/google-rating.json`, usado como valor inicial no HTML e consultado também pelo navegador.
+O workflow `Sincronizar avaliações Google` consulta a Places API (New) a cada seis horas ou por acionamento manual. Se nota, quantidade e fonte não mudarem, o arquivo e sua data são preservados, evitando commits sem alteração útil. O arquivo publicado é `public/google-rating.json`, usado como valor inicial no HTML e consultado também pelo navegador.
 
 Configure no GitHub Actions:
 
@@ -79,4 +74,14 @@ Os testes de regressão interceptam os fluxos externos para não criar visitas n
 5. Revisar o diff e manter apenas alterações relacionadas à tarefa.
 6. Após uma publicação, confirmar a revisão entregue e a validação no domínio público.
 
-Use o roteiro em [TESTE-MANUAL-REACT.md](TESTE-MANUAL-REACT.md) como complemento aos testes automatizados.
+Use o roteiro em [TESTES.md](TESTE-MANUAL-REACT.md) como complemento aos testes automatizados.
+
+## Publicações e refatorações
+
+Alterações somente em Markdown não acionam publicação automática. Para as demais, a pipeline calcula um manifesto do build e compara com o publicado. Um build equivalente não gera novo deploy. A primeira publicação com esse mecanismo cria `build-fingerprint.json`.
+
+O manifesto ignora apenas o identificador da revisão, nomes de assets com hash e mapas de código; compara o conteúdo efetivo de HTML, CSS, JavaScript, JSON e mídias. Falha de leitura do manifesto público não é interpretada como igualdade: a publicação segue com validação posterior.
+
+PRs com título iniciado por `refactor:` executam também a comparação do build com a branch base. Mudanças funcionais intencionais devem ser tratadas como features ou correções, com critérios de aceite próprios.
+
+Integrações usam squash para reunir os commits de trabalho. Não é necessário reescrever a história da branch principal ou apagar registros de deploy para manter novas alterações organizadas.

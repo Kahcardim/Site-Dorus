@@ -11,17 +11,21 @@
     "test:static": "node scripts/test-static.mjs && node scripts/test-seo.mjs",
     "test:regression": "node scripts/test-regression.mjs",
     "check:static": "npm run test && npm run build && npm run test:static",
-    "check": "npm run check:static && npm run test:regression"
+    "check": "npm run check:static && npm run test:maintenance && npm run test:regression",
+    "test:maintenance": "python3 -m unittest discover -s tests/maintenance -p 'test_*.py'"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "react": "latest",
-    "react-dom": "latest",
-    "vite": "latest"
+    "@vitejs/plugin-react": "6.1.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "vite": "8.2.2"
   },
   "devDependencies": {
-    "axe-core": "latest",
-    "playwright": "^1.62.1",
-    "prettier": "^3.9.6"
+    "axe-core": "4.13.0",
+    "playwright": "1.62.1",
+    "prettier": "3.9.6"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

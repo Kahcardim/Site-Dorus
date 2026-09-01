@@ -93,6 +93,22 @@ def discover_candidates(api_key: str) -> list[dict]:
     return candidates
 
 
+def save_rating(rating: float, reviews: int, output: Path = OUTPUT) -> bool:
+    current = {"rating": round(rating, 1), "reviews": reviews, "source": "Google"}
+    try:
+        previous = json.loads(output.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        previous = None
+    if isinstance(previous, dict) and all(previous.get(key) == value for key, value in current.items()):
+        print("[google-rating] nota e quantidade sem alteração.")
+        return False
+
+    current["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    output.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"[google-rating] atualizado: {current['rating']} / {current['reviews']} avaliações")
+    return True
+
+
 def main() -> None:
     api_key = os.environ.get("GOOGLE_PLACES_API_KEY", "").strip()
     place_id = os.environ.get("GOOGLE_PLACE_ID", "").strip()
@@ -141,15 +157,7 @@ def main() -> None:
     if reviews < 0:
         fail(f"Quantidade de avaliações inválida: {reviews}")
 
-    result = {
-        "rating": round(rating, 1),
-        "reviews": reviews,
-        "source": "Google",
-        "updatedAt": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-    }
-
-    OUTPUT.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"[google-rating] atualizado: {result['rating']} / {result['reviews']} avaliações")
+    save_rating(rating, reviews)
 
 
 if __name__ == "__main__":
