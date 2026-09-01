@@ -1,5 +1,5 @@
 import { guides, services, SITE } from "../data/site.js";
-import { CtaPanel, InternalHero } from "../components/Layout.jsx";
+import { CtaPanel, InternalHero, Warranty } from "../components/Layout.jsx";
 import { ContentSections, Faq } from "../components/ContentSections.jsx";
 import { BrandCarousel, Reviews } from "./HomePage.jsx";
 import serviceContent from "../data/service-content.json";
@@ -35,7 +35,7 @@ export function ServicesPage() {
               <picture className="service-card-media">
                 <source
                   media="(max-width:680px)"
-                  srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp`}
+                  srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp 1x, /assets/servicos/${service.image}.webp 2x`}
                 />
                 <img
                   src={`/assets/servicos/${service.image}.webp`}
@@ -45,7 +45,7 @@ export function ServicesPage() {
                   height="1254"
                 />
               </picture>
-              <div className="service-card-copy">
+              <div className="service-card-body">
                 <h2>{service.name}</h2>
                 <p>{catalogCopy.serviceSummaries[service.slug]}</p>
                 <span>Conhecer o serviço →</span>
@@ -84,7 +84,7 @@ export function ServiceDetailPage({ service }) {
     <>
       <section className="internal service-detail-hero">
         <div className="container service-hero-grid">
-          <div className="service-hero-copy">
+          <div className="service-hero-copy service-hero-copy-centered">
             <span className="eyebrow">{service.name}</span>
             <h1>{content.title}</h1>
             <p>{content.intro}</p>
@@ -98,11 +98,12 @@ export function ServiceDetailPage({ service }) {
                 Chamar no WhatsApp
               </a>
             </div>
+            <Warranty />
           </div>
           <picture className="service-hero-media">
             <source
               media="(max-width:680px)"
-              srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp`}
+              srcSet={`/assets/servicos/mobile/${service.image}-mobile.webp 1x, /assets/servicos/${service.image}.webp 2x`}
             />
             <img
               src={`/assets/servicos/${service.image}.webp`}

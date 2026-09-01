@@ -9,26 +9,6 @@
 @import "../../home-ux.css";
 @import "../../accessibility-contrast.css";
 
-/* React components use the same design tokens while keeping behavior explicit. */
-.brand-list {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 16px;
-  padding: 0;
-  list-style: none;
-}
-
-.brand-list .brand-logo {
-  min-width: 0;
-  width: auto;
-}
-
-.brand-list .brand-logo img {
-  max-width: 100%;
-  max-height: 54px;
-  object-fit: contain;
-}
-
 .prose ul {
   display: grid;
   gap: 12px;
@@ -63,26 +43,383 @@
 
 #root .service-card-media {
   position: relative;
+  flex: 0 0 auto;
+  display: block !important;
+  aspect-ratio: 1 !important;
+  padding: 0 !important;
+  width: 100% !important;
 }
 #root .service-card-media img {
   position: absolute;
-  inset: 10px;
-  width: calc(100% - 20px) !important;
-  height: calc(100% - 20px) !important;
+  inset: 0;
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  aspect-ratio: 1;
   max-width: none !important;
   max-height: none !important;
   object-fit: contain !important;
   margin: 0 !important;
 }
 
-@media (max-width: 900px) {
-  .brand-list {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+#root .service-card {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(13 59 142 / 7%);
+}
+#root .service-card-body {
+  text-align: center;
+}
+#root .service-card-body > span {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--primary);
+}
+#root .service-hero-media {
+  padding: 0 !important;
+}
+#root .service-hero-media img {
+  width: 100% !important;
+  max-width: none !important;
 }
 
-@media (max-width: 520px) {
-  .brand-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+#root .centered-hero > .container,
+#root .service-hero-copy-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+#root .centered-hero h1,
+#root .centered-hero p,
+#root .service-hero-copy h1,
+#root .service-hero-copy p {
+  margin-inline: auto !important;
+  text-wrap: pretty;
+}
+#root .centered-hero h1 {
+  max-width: 24ch !important;
+  text-wrap: balance;
+}
+#root .centered-hero > .container > p {
+  max-width: 760px !important;
+}
+#root .centered-hero .actions {
+  justify-content: center;
+  margin-top: 20px;
+}
+#root .warranty-notice {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: fit-content;
+  max-width: 600px !important;
+  margin: 22px auto 0 !important;
+  padding: 12px 18px;
+  border: 1px solid #bddfcf;
+  border-radius: 14px;
+  background: #edf8f1;
+  color: #20543a !important;
+  font-size: 0.88rem !important;
+  line-height: 1.5 !important;
+  text-align: center;
+}
+#root .warranty-notice strong {
+  color: #125432;
+  font-size: 1rem;
+}
+#root .section-head {
+  flex-direction: column;
+  align-items: center !important;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+}
+#root .section-head > div {
+  width: 100%;
+}
+#root .section-head h2,
+#root .section-head p {
+  margin-inline: auto !important;
+  max-width: 850px;
+}
+#root .cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+#root .cards > .card {
+  flex: 0 1 calc((100% - 40px) / 3);
+  text-align: center;
+}
+#root .cards:has(> :nth-child(4):last-child) > .card {
+  flex-basis: calc((100% - 20px) / 2);
+}
+#root .content-section .prose,
+#root .section > .prose {
+  max-width: 820px;
+  margin-inline: auto;
+  text-align: center;
+}
+#root .content-section .actions {
+  justify-content: center;
+}
+
+#root .professional-cta {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 260px !important;
+  align-items: center !important;
+  gap: 28px !important;
+  width: min(1040px, calc(100% - 40px)) !important;
+  padding: 28px !important;
+  border: 0 !important;
+  border-radius: 20px;
+  background: linear-gradient(125deg, #0d2747, #123b68) !important;
+  box-shadow: 0 16px 36px rgb(8 30 57 / 15%);
+}
+#root .professional-cta .cta-copy {
+  text-align: center;
+  max-width: none !important;
+}
+#root .professional-cta .kicker {
+  color: #acd7ff !important;
+}
+#root .professional-cta h2 {
+  color: #fff !important;
+  max-width: 28ch !important;
+  margin: 6px auto 10px !important;
+  font-size: clamp(1.45rem, 2.3vw, 2rem) !important;
+  line-height: 1.18 !important;
+  text-wrap: balance;
+}
+#root .professional-cta p {
+  color: #dfebf7 !important;
+  margin: 0 auto !important;
+  max-width: 60ch !important;
+}
+#root .professional-cta .actions {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+#root .professional-cta .button {
+  width: 100% !important;
+  min-width: 0 !important;
+  white-space: normal !important;
+}
+#root .cta-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 18px;
+  margin-top: 14px;
+  color: #fff;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+#root .cta-trust span::before {
+  content: "✓ ";
+  color: #69e6a4;
+}
+
+#root .carousel-track {
+  display: flex !important;
+  gap: 16px !important;
+  overflow-x: auto !important;
+  scroll-snap-type: none !important;
+  scroll-padding-inline: 0;
+  overscroll-behavior-inline: contain;
+  scrollbar-width: thin;
+  padding: 10px 0 20px !important;
+  margin: 0;
+}
+#root .carousel-track > * {
+  scroll-snap-align: start;
+}
+#root .brand-list .brand-logo {
+  flex: 0 0 180px;
+  height: 110px;
+  padding: 18px;
+}
+#root .brand-logo img {
+  opacity: 1;
+  filter: none;
+  max-width: 100%;
+  max-height: 54px;
+  object-fit: contain;
+}
+#root .carousel-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+#root .carousel-toolbar p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+#root .carousel-buttons {
+  display: flex;
+  gap: 8px;
+}
+#root .carousel-buttons button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #c4d6eb;
+  border-radius: 12px;
+  background: #fff;
+  color: #133e70;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+#root .carousel-buttons button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+#root .carousel-track:focus-visible,
+#root .carousel-buttons button:focus-visible {
+  outline: 3px solid #075dcc;
+  outline-offset: 3px;
+}
+
+#root .journey-switch {
+  max-width: 800px;
+  margin: 22px auto 0;
+  text-align: left;
+}
+#root .journey-switch a,
+#root .journey-switch span {
+  min-height: 86px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+}
+#root .reviews-section .google-score {
+  justify-content: center;
+}
+#root .contact-hero {
+  background: #f0faf5;
+}
+#root .journey-lead {
+  margin-top: 12px !important;
+  font-weight: 700;
+}
+#root .contact-grid {
+  grid-template-columns: 1fr !important;
+  max-width: 960px;
+}
+#root .contact-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: none;
+  width: 100%;
+}
+#root .contact-item {
+  text-align: center;
+}
+#root .contact-message {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+}
+#root .contact-message > summary {
+  cursor: pointer;
+  padding: 20px;
+  font-weight: 700;
+  color: var(--primary);
+}
+#root .contact-message .form {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+#root .schedule-fields {
+  margin: 0 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+#root .schedule-fields legend {
+  font-weight: 800;
+  color: #154a7c;
+  padding: 0 8px;
+}
+#root .schedule-fields > label {
+  margin-top: 14px;
+}
+#root .footer-bottom {
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+#root .footer-credit {
+  color: #e2edff;
+}
+
+@media (max-width: 980px) {
+  #root .cards > .card {
+    flex-basis: calc((100% - 20px) / 2);
+  }
+}
+@media (max-width: 760px) {
+  #root .professional-cta {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+    padding: 22px !important;
+  }
+  #root .professional-cta .actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  #root .contact-list {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 600px) {
+  #root .cards > .card,
+  #root .cards:has(> :nth-child(4):last-child) > .card {
+    flex-basis: 100%;
+  }
+  #root .professional-cta {
+    width: calc(100% - 28px) !important;
+    padding: 20px 16px !important;
+  }
+  #root .professional-cta .actions {
+    grid-template-columns: 1fr !important;
+  }
+  #root .brand-list .brand-logo {
+    flex-basis: 150px;
+    height: 96px;
+  }
+  #root .carousel-toolbar {
+    justify-content: center;
+    text-align: center;
+  }
+  #root .schedule-fields {
+    padding: 14px 10px;
+  }
+  #root .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #root .carousel-track {
+    scroll-behavior: auto !important;
   }
 }

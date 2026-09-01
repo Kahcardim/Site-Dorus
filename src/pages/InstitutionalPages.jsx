@@ -8,7 +8,11 @@ function InstitutionalContent({ name, eyebrow }) {
   const content = institutionalContent[name];
   return (
     <>
-      <InternalHero eyebrow={eyebrow} title={content.title}>
+      <InternalHero
+        eyebrow={eyebrow}
+        title={content.title}
+        warranty={name !== "privacidade"}
+      >
         <p>{content.intro}</p>
       </InternalHero>
       <ContentSections sections={content.sections} />
@@ -45,6 +49,7 @@ export function ContactPage() {
   return (
     <>
       <InternalHero
+        className="contact-hero"
         eyebrow="Fale conosco"
         title="Conte o que está acontecendo com seu aparelho."
       >
@@ -52,6 +57,23 @@ export function ContactPage() {
           Quanto mais detalhes você enviar, melhor conseguimos preparar o
           primeiro atendimento.
         </p>
+        <p className="journey-lead">
+          Converse primeiro com a equipe, sem precisar escolher uma data.
+        </p>
+        <div className="actions">
+          <a
+            className="button button-green"
+            href={SITE.whatsapp}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Tirar dúvidas pelo WhatsApp
+          </a>
+          <a className="button button-white" href={SITE.phoneHref}>
+            Ligar para a D’orus
+          </a>
+        </div>
+        <JourneySwitch current="contact" />
       </InternalHero>
       <section className="section">
         <div className="container contact-grid">
@@ -80,32 +102,37 @@ export function ContactPage() {
               <strong>@assistenciadorus</strong>
             </a>
           </div>
-          <form
-            className="form"
-            onSubmit={submit}
-            aria-labelledby="contact-title"
-          >
-            <div>
-              <span className="kicker">Solicitar atendimento</span>
-              <h2 id="contact-title">Prepare sua mensagem</h2>
-              <p>Ao enviar, você continuará no WhatsApp.</p>
-            </div>
-            <label htmlFor="nome">Seu nome</label>
-            <input id="nome" name="nome" autoComplete="name" required />
-            <label htmlFor="equipamento">Equipamento</label>
-            <select id="equipamento" name="equipamento">
-              {equipmentOptions.map((option) => (
-                <option key={option}>{option}</option>
-              ))}
-            </select>
-            <label htmlFor="modelo">Marca ou modelo</label>
-            <input id="modelo" name="modelo" />
-            <label htmlFor="problema">Descreva o problema</label>
-            <textarea id="problema" name="problema" required />
-            <button className="button button-green" type="submit">
-              Continuar no WhatsApp →
-            </button>
-          </form>
+          <details className="contact-message">
+            <summary>
+              Prefere preparar uma mensagem com os dados do aparelho?
+            </summary>
+            <form
+              className="form"
+              onSubmit={submit}
+              aria-labelledby="contact-title"
+            >
+              <div>
+                <span className="kicker">Solicitar atendimento</span>
+                <h2 id="contact-title">Prepare sua mensagem</h2>
+                <p>Ao enviar, você continuará no WhatsApp.</p>
+              </div>
+              <label htmlFor="nome">Seu nome</label>
+              <input id="nome" name="nome" autoComplete="name" required />
+              <label htmlFor="equipamento">Equipamento</label>
+              <select id="equipamento" name="equipamento">
+                {equipmentOptions.map((option) => (
+                  <option key={option}>{option}</option>
+                ))}
+              </select>
+              <label htmlFor="modelo">Marca ou modelo</label>
+              <input id="modelo" name="modelo" />
+              <label htmlFor="problema">Descreva o problema</label>
+              <textarea id="problema" name="problema" required />
+              <button className="button button-green" type="submit">
+                Continuar no WhatsApp →
+              </button>
+            </form>
+          </details>
         </div>
       </section>
     </>
@@ -152,6 +179,7 @@ export function SchedulePage() {
   return (
     <>
       <InternalHero
+        className="schedule-hero"
         eyebrow="Agendamento"
         title="Solicite o melhor horário para sua visita."
       >
@@ -159,6 +187,7 @@ export function SchedulePage() {
           Informe o aparelho, o problema e o endereço onde o atendimento deverá
           ser realizado. A disponibilidade é confirmada pelo WhatsApp.
         </p>
+        <JourneySwitch current="schedule" />
       </InternalHero>
       <section className="section">
         <div className="container schedule-layout">
@@ -171,54 +200,76 @@ export function SchedulePage() {
               <span className="kicker">Solicitar horário</span>
               <h2>Conte o que aconteceu</h2>
             </div>
-            <div className="form-grid">
+            <fieldset className="schedule-fields">
+              <legend>1. Data e período da visita</legend>
+              <div className="form-grid">
+                <label>
+                  Data preferida
+                  <input name="data" type="date" min={minDate} required />
+                </label>
+                <label>
+                  Período
+                  <select name="periodo" required>
+                    <option value="">Selecione</option>
+                    <option>Manhã — 8h às 12h</option>
+                    <option>Tarde — 13h às 17h</option>
+                    <option>Horário comercial — 8h às 17h</option>
+                  </select>
+                </label>
+              </div>
+            </fieldset>
+            <fieldset className="schedule-fields">
+              <legend>2. Contato e endereço</legend>
+              <div className="form-grid">
+                <label>
+                  Nome completo
+                  <input name="nome" autoComplete="name" required />
+                </label>
+                <label>
+                  Seu WhatsApp
+                  <input
+                    name="telefone"
+                    type="tel"
+                    autoComplete="tel"
+                    required
+                  />
+                </label>
+                <label>
+                  Bairro
+                  <input name="bairro" required />
+                </label>
+                <label>
+                  Endereço da visita
+                  <input
+                    name="endereco"
+                    autoComplete="street-address"
+                    required
+                  />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset className="schedule-fields">
+              <legend>3. Aparelho e problema</legend>
+              <div className="form-grid">
+                <label>
+                  Equipamento
+                  <select name="equipamento" required>
+                    <option value="">Selecione</option>
+                    {equipmentOptions.map((option) => (
+                      <option key={option}>{option}</option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  Marca e modelo
+                  <input name="marca" />
+                </label>
+              </div>
               <label>
-                Nome completo
-                <input name="nome" autoComplete="name" required />
+                Descreva o problema
+                <textarea name="problema" required />
               </label>
-              <label>
-                Seu WhatsApp
-                <input name="telefone" type="tel" autoComplete="tel" required />
-              </label>
-              <label>
-                Bairro
-                <input name="bairro" required />
-              </label>
-              <label>
-                Endereço da visita
-                <input name="endereco" autoComplete="street-address" required />
-              </label>
-              <label>
-                Equipamento
-                <select name="equipamento" required>
-                  <option value="">Selecione</option>
-                  {equipmentOptions.map((option) => (
-                    <option key={option}>{option}</option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Marca e modelo
-                <input name="marca" />
-              </label>
-              <label>
-                Data preferida
-                <input name="data" type="date" min={minDate} required />
-              </label>
-              <label>
-                Período
-                <select name="periodo" required>
-                  <option value="">Selecione</option>
-                  <option>Manhã — 8h às 12h</option>
-                  <option>Tarde — 13h às 17h</option>
-                  <option>Horário comercial — 8h às 17h</option>
-                </select>
-              </label>
-            </div>
-            <label>
-              Descreva o problema
-              <textarea name="problema" required />
-            </label>
+            </fieldset>
             <label className="consent">
               <input name="consentimento" type="checkbox" required />
               <span>
@@ -280,6 +331,39 @@ export function SchedulePage() {
         </div>
       </section>
     </>
+  );
+}
+
+function JourneySwitch({ current }) {
+  return (
+    <nav className="journey-switch" aria-label="Escolha o tipo de atendimento">
+      {[
+        {
+          key: "contact",
+          href: "/fale-conosco/",
+          title: "Falar com a equipe",
+          description: "Tirar dúvidas, sem escolher uma data",
+        },
+        {
+          key: "schedule",
+          href: "/agendamento/",
+          title: "Solicitar uma visita",
+          description: "Informar endereço, data e período",
+        },
+      ].map((item) =>
+        current === item.key ? (
+          <span key={item.key} aria-current="page">
+            {item.title}
+            <small>{item.description}</small>
+          </span>
+        ) : (
+          <a key={item.key} href={item.href}>
+            {item.title}
+            <small>{item.description}</small>
+          </a>
+        ),
+      )}
+    </nav>
   );
 }
 
