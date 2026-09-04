@@ -4,13 +4,43 @@ import { build, createServer } from "vite";
 
 const root = resolve(import.meta.dirname, "..");
 const dist = resolve(root, "dist");
+const MAX_INLINE_STYLESHEET_BYTES = 32 * 1024;
+
+async function inlineSmallStylesheets(template) {
+  const stylesheetTags = template.match(/<link\b[^>]*>/g) || [];
+  let document = template;
+
+  for (const tag of stylesheetTags) {
+    if (!/\brel=["']stylesheet["']/.test(tag)) continue;
+
+    const href = tag.match(/\bhref=["']([^"']+\.css)["']/)?.[1];
+    if (!href?.startsWith("/assets/")) continue;
+
+    const css = await readFile(resolve(dist, href.slice(1)), "utf8");
+    if (Buffer.byteLength(css, "utf8") > MAX_INLINE_STYLESHEET_BYTES) continue;
+
+    document = document.replace(
+      tag,
+      `<style data-inlined-stylesheet="${href}">${css}</style>`,
+    );
+  }
+
+  return document;
+}
 
 await rm(dist, { recursive: true, force: true });
 await build({ root });
 
 const templatePath = resolve(dist, "app.html");
+// The generated application stylesheet is currently small (~16 KiB). Inlining
+// it removes the HTML -> CSS render-blocking network hop reported by Lighthouse.
+// Keep a conservative size guard so a future CSS growth does not bloat every
+// prerendered page indefinitely.
+const templateWithStyles = await inlineSmallStylesheets(
+  await readFile(templatePath, "utf8"),
+);
 // Vite omits the entry's fetchpriority attribute; preserve the SSG-first priority.
-const template = (await readFile(templatePath, "utf8")).replace(
+const template = templateWithStyles.replace(
   '<script type="module"',
   '<script type="module" fetchpriority="low"',
 );
