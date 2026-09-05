@@ -25,7 +25,7 @@
         <section class="social-proof" aria-label="Avaliações e garantia">
           <a class="google-proof" href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg" target="_blank" rel="noopener noreferrer">
             <span class="stars" aria-hidden="true">★★★★★</span>
-            <span><strong>4,9 no Google</strong><small>50 avaliações · ver perfil</small></span>
+            <span><strong><span data-google-rating>4,9</span> no Google</strong><small><span data-google-reviews>50</span> avaliações · ver perfil</small></span>
           </a>
           <div class="warranty-proof">
             <span aria-hidden="true">✓</span>
@@ -83,5 +83,20 @@
         </footer>
       </section>
     </main>
+    <script>
+      fetch('/google-rating.json', { cache: 'no-store' })
+        .then((response) => response.ok ? response.json() : Promise.reject())
+        .then((data) => {
+          const rating = Number(data.rating);
+          const reviews = Number(data.reviews);
+          if (Number.isFinite(rating)) {
+            document.querySelector('[data-google-rating]').textContent = rating.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+          }
+          if (Number.isFinite(reviews)) {
+            document.querySelector('[data-google-reviews]').textContent = reviews.toLocaleString('pt-BR');
+          }
+        })
+        .catch(() => {});
+    </script>
   </body>
 </html>
