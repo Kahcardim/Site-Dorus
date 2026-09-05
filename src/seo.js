@@ -51,6 +51,12 @@ export function structuredData(route) {
     inLanguage: "pt-BR",
     isPartOf: { "@id": websiteId },
     about: { "@id": orgId },
+    primaryImageOfPage: route.image
+      ? {
+          "@type": "ImageObject",
+          url: SITE.origin + route.image,
+        }
+      : undefined,
   };
   const graph = [organization, website, page];
   if (route.path !== "/" && route.index) {
@@ -89,6 +95,11 @@ export function structuredData(route) {
       description: route.description,
       provider: { "@id": orgId },
       areaServed,
+      availableChannel: {
+        "@type": "ServiceChannel",
+        serviceUrl: SITE.whatsapp,
+        servicePhone: "+55-11-91357-3932",
+      },
       mainEntityOfPage: { "@id": page["@id"] },
     });
   graph.push(...(listingSchema[route.path] || []));
