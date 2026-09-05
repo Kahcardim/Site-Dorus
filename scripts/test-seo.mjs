@@ -65,7 +65,7 @@ for (const [path, expected] of Object.entries(metadata)) {
   );
   assert.deepEqual(
     organization.areaServed.map((city) => city.name),
-    ["Guarulhos", "Arujá", "Itaquaquecetuba", "São Paulo"],
+    ["Guarulhos", "São Paulo"],
   );
   assert(
     organization.sameAs.includes("https://instagram.com/assistenciadorus"),
