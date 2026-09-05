@@ -6,10 +6,11 @@ export const SITE = {
   phoneHref: "tel:+5511913573932",
   whatsapp: "https://wa.me/5511913573932",
   instagram: "https://instagram.com/assistenciadorus",
-  serviceArea: "Guarulhos e São Paulo sob consulta",
+  serviceArea: "Guarulhos; São Paulo sob consulta",
   cities: ["Guarulhos", "São Paulo"],
+  neighborhoods: ["Centro de Guarulhos", "Lago dos Patos", "Bonsucesso", "Pimentas"],
   description:
-    "Conserto e assistência técnica de eletrodomésticos com atendimento em domicílio em Guarulhos. São Paulo sob consulta e conforme disponibilidade.",
+    "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos. São Paulo sob consulta e conforme disponibilidade.",
 };
 
 export const equipmentOptions = [
@@ -31,7 +32,7 @@ export const services = [
     image: "servico-geladeira",
     title: "Conserto de geladeira em Guarulhos",
     summary:
-      "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? A D’orus realiza diagnóstico e conserto em domicílio em Guarulhos.",
+      "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
     issues: [
       "Não está gelando",
       "Freezer gela, geladeira não",
@@ -48,7 +49,7 @@ export const services = [
     image: "servico-lavadora",
     title: "Conserto de máquina de lavar e lavadora em Guarulhos",
     summary:
-      "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. A D’orus atende máquinas de lavar e lavadoras em Guarulhos.",
+      "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes.",
     issues: [
       "Não centrifuga",
       "Não drena",
@@ -58,6 +59,23 @@ export const services = [
       "Ciclo para no meio",
     ],
     guideSlugs: ["maquina-nao-centrifuga"],
+  },
+  {
+    slug: "lava-e-seca",
+    name: "Lava e seca",
+    image: "servico-lava-e-seca",
+    title: "Conserto de lava e seca em Guarulhos",
+    summary:
+      "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+    issues: [
+      "Não centrifuga",
+      "Não seca corretamente",
+      "Não drena",
+      "Código no painel",
+      "Vazamento",
+      "Programa interrompido",
+    ],
+    guideSlugs: [],
   },
   {
     slug: "fogoes",
@@ -107,23 +125,6 @@ export const services = [
       "Louças continuam sujas",
       "Vazamento",
       "Ciclo interrompido",
-    ],
-    guideSlugs: [],
-  },
-  {
-    slug: "lava-e-seca",
-    name: "Lava e seca",
-    image: "servico-lava-e-seca",
-    title: "Conserto de lava e seca em Guarulhos",
-    summary:
-      "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo, com atendimento em Guarulhos.",
-    issues: [
-      "Não centrifuga",
-      "Não seca corretamente",
-      "Não drena",
-      "Código no painel",
-      "Vazamento",
-      "Programa interrompido",
     ],
     guideSlugs: [],
   },
