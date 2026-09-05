@@ -20,6 +20,7 @@ const institutional = await json("institutional-content");
 const faq = await json("faq");
 const intentionalContentChanges = new Set([
   "/",
+  "/agendamento/",
   "/servicos/",
   "/servicos/geladeiras/",
   "/servicos/maquinas-de-lavar/",
