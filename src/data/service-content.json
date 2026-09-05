@@ -64,56 +64,56 @@
     "title": "Assistência técnica de freezers em Guarulhos e região."
   },
   "geladeiras": {
-    "ctaDescription": "Envie marca, modelo, foto e uma breve descrição do defeito.",
-    "ctaTitle": "Conte o problema da sua geladeira.",
-    "intro": "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
+    "ctaDescription": "Envie marca, modelo, foto e uma breve descrição do defeito para confirmar o atendimento.",
+    "ctaTitle": "Precisa de conserto de geladeira em Guarulhos?",
+    "intro": "A D’orus realiza conserto e assistência técnica de geladeiras em Guarulhos, com atendimento em domicílio. Geladeira que não gela, excesso de gelo, vazamento de água, ruídos e funcionamento irregular são alguns dos sintomas avaliados.",
     "issues": [
       {
-        "description": "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação.",
-        "title": "Não está gelando"
+        "description": "Quando a geladeira perde refrigeração, o diagnóstico pode envolver regulagem, vedação, circulação de ar, degelo ou componentes internos.",
+        "title": "Geladeira não está gelando"
       },
       {
-        "description": "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção.",
+        "description": "Quando o freezer continua frio e o refrigerador perde desempenho, circulação de ar e sistema de degelo são pontos importantes da avaliação.",
         "title": "Freezer gela, geladeira não"
       },
       {
-        "description": "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna.",
+        "description": "Acúmulo fora do normal pode estar relacionado à vedação, degelo ou circulação interna de ar.",
         "title": "Gelo em excesso"
       },
       {
-        "description": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação.",
+        "description": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado, vedação ou outro ponto que precisa ser localizado no diagnóstico.",
         "title": "Vazamento de água"
       },
       {
-        "description": "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico.",
-        "title": "Ruídos diferentes"
+        "description": "Ruídos novos, fortes ou contínuos ajudam a identificar mudanças no funcionamento e devem ser informados no atendimento.",
+        "title": "Geladeira fazendo barulho"
       },
       {
-        "description": "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
-        "title": "Liga e desliga demais"
+        "description": "Ciclos muito frequentes, funcionamento contínuo ou desligamentos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
+        "title": "Funcionamento irregular"
       }
     ],
-    "title": "Assistência técnica de geladeiras em Guarulhos e região."
+    "title": "Conserto de geladeira em Guarulhos"
   },
   "lava-e-seca": {
-    "ctaDescription": "Envie marca, modelo e o erro apresentado.",
-    "ctaTitle": "Conte o problema da sua lava e seca.",
-    "intro": "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+    "ctaDescription": "Envie marca, modelo e o erro apresentado para confirmar a possibilidade de atendimento.",
+    "ctaTitle": "Precisa de conserto de lava e seca em Guarulhos?",
+    "intro": "A D’orus atende lava e seca em Guarulhos para falhas de lavagem, centrifugação, drenagem, secagem, vazamentos e códigos de erro, conforme marca e modelo.",
     "issues": [
       {
-        "description": "O ciclo termina com excesso de água ou não chega à etapa de centrifugação.",
+        "description": "O ciclo termina com excesso de água, a roupa fica muito molhada ou o equipamento não chega à etapa de centrifugação.",
         "title": "Não centrifuga"
       },
       {
-        "description": "A secagem demora demais ou as roupas continuam úmidas.",
+        "description": "A secagem demora demais, interrompe antes do fim ou as roupas permanecem úmidas depois do ciclo.",
         "title": "Não seca corretamente"
       },
       {
-        "description": "Códigos no painel, água parada ou interrupções precisam de avaliação.",
+        "description": "Códigos no painel, água parada, falha para drenar ou ciclos interrompidos são informações importantes para o diagnóstico.",
         "title": "Erros e drenagem"
       }
     ],
-    "title": "Assistência técnica de lava e seca em Guarulhos e região."
+    "title": "Conserto de lava e seca em Guarulhos"
   },
   "lava-loucas": {
     "ctaDescription": "Se houver código de erro, envie também uma foto.",
@@ -136,36 +136,36 @@
     "title": "Assistência técnica de lava‑louças em Guarulhos e região."
   },
   "maquinas-de-lavar": {
-    "ctaDescription": "Informe marca, modelo e em qual etapa o problema aparece.",
-    "ctaTitle": "Conte o problema da sua máquina.",
-    "intro": "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. Observe o comportamento antes de insistir no uso.",
+    "ctaDescription": "Informe marca, modelo e em qual etapa o problema aparece para confirmar o atendimento.",
+    "ctaTitle": "Precisa de conserto de máquina de lavar em Guarulhos?",
+    "intro": "A D’orus realiza conserto e assistência técnica de máquina de lavar e lavadora em Guarulhos, com atendimento em domicílio. Falhas de centrifugação, drenagem, enchimento, vazamentos, ruídos e ciclos interrompidos são avaliadas conforme o sintoma.",
     "issues": [
       {
-        "description": "A roupa termina muito molhada ou a máquina não entra na etapa de centrifugação.",
-        "title": "Não centrifuga"
+        "description": "A roupa termina muito molhada, o cesto não ganha rotação ou a máquina não entra na etapa de centrifugação.",
+        "title": "Máquina não centrifuga"
       },
       {
-        "description": "Água parada pode indicar obstrução, bomba ou outro ponto do sistema de drenagem.",
-        "title": "Não drena"
+        "description": "Água parada no cesto pode indicar obstrução, bomba ou outro ponto do sistema de drenagem que precisa ser avaliado.",
+        "title": "Máquina não drena"
       },
       {
-        "description": "Falhas de entrada de água podem envolver alimentação, filtros, válvulas ou comandos.",
-        "title": "Não enche"
+        "description": "Falhas de entrada de água podem envolver alimentação, filtros, válvulas ou comandos do equipamento.",
+        "title": "Máquina não enche"
       },
       {
-        "description": "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem.",
-        "title": "Vaza água"
+        "description": "Mangueiras, vedações e conexões precisam ser avaliadas para localizar a origem do vazamento.",
+        "title": "Máquina vazando água"
       },
       {
-        "description": "Batidas fortes e ruídos persistentes merecem diagnóstico.",
+        "description": "Batidas fortes, vibração excessiva ou ruídos persistentes são sinais úteis para o diagnóstico da lavadora.",
         "title": "Ruídos e vibração"
       },
       {
-        "description": "Travamentos podem estar ligados a sensores, trava, alimentação ou controle.",
+        "description": "Quando o programa trava ou para antes do fim, sensores, trava, alimentação e controle podem precisar de avaliação.",
         "title": "Ciclo para no meio"
       }
     ],
-    "title": "Assistência técnica de máquinas de lavar em Guarulhos e região."
+    "title": "Conserto de máquina de lavar e lavadora em Guarulhos"
   },
   "micro-ondas": {
     "ctaDescription": "Informe marca e modelo para confirmar a possibilidade de atendimento.",

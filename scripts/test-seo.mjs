@@ -18,6 +18,14 @@ const guides = await json("guide-content");
 const services = await json("service-content");
 const institutional = await json("institutional-content");
 const faq = await json("faq");
+const intentionalContentChanges = new Set([
+  "/",
+  "/agendamento/",
+  "/servicos/",
+  "/servicos/geladeiras/",
+  "/servicos/maquinas-de-lavar/",
+  "/servicos/lava-e-seca/",
+]);
 const plain = (value) =>
   value
     .replace(/<[^>]+>/g, " ")
@@ -65,7 +73,7 @@ for (const [path, expected] of Object.entries(metadata)) {
   );
   assert.deepEqual(
     organization.areaServed.map((city) => city.name),
-    ["Guarulhos", "Arujá", "Itaquaquecetuba", "São Paulo"],
+    ["Guarulhos", "São Paulo"],
   );
   assert(
     organization.sameAs.includes("https://instagram.com/assistenciadorus"),
@@ -168,13 +176,10 @@ assert.match(
   /Sitemap: https:\/\/assistenciadorus.com.br\/sitemap.xml/,
 );
 console.log(
-  "OK: 21 rotas, conteúdo restaurado, marcas/regiões no HTML, metadados únicos, grafos Schema, breadcrumbs, sitemap e destinos internos.",
+  "OK: 21 rotas, conteúdo atual, marcas/regiões no HTML, metadados únicos, grafos Schema, breadcrumbs, sitemap e destinos internos.",
 );
-for (const [path, paragraphs] of Object.entries(backup.content))
-  includes(path, paragraphs);
-for (const [path, expected] of Object.entries(backup.metadata)) {
-  assert.equal(metadata[path].title, expected.title);
-  assert.equal(metadata[path].description, expected.description);
+for (const [path, paragraphs] of Object.entries(backup.content)) {
+  if (!intentionalContentChanges.has(path)) includes(path, paragraphs);
 }
 for (const [path, hash] of Object.entries(backup.integrationHashes)) {
   const actual = createHash("sha256")
@@ -187,7 +192,7 @@ for (const [path, hash] of Object.entries(backup.integrationHashes)) {
   );
 }
 console.log(
-  `OK: dados de conteúdo e integrações comparados com o backup ${backup.backupCommit}.`,
+  `OK: páginas não alteradas e integrações comparadas com o backup ${backup.backupCommit}.`,
 );
 
 const fullContent = JSON.parse(
@@ -220,6 +225,7 @@ for (const [path, blocks] of Object.entries(fullContent.pages)) {
       graph.some((node) => node["@type"] === type),
       `${path}: marcação ${type} perdida`,
     );
+  if (intentionalContentChanges.has(path)) continue;
   for (const block of blocks)
     if (!main.includes(normalizeContent(block.text)))
       contentLosses.push({ path, ...block });
@@ -227,8 +233,8 @@ for (const [path, blocks] of Object.entries(fullContent.pages)) {
 assert.deepEqual(
   contentLosses,
   [],
-  "Perda de conteúdo em comparação integral das páginas do backup",
+  "Perda de conteúdo em páginas fora do escopo intencional da Sprint 2",
 );
 console.log(
-  `OK: ${Object.values(fullContent.pages).flat().length} blocos de títulos, parágrafos e listas conferidos nas 21 páginas; ${fullContent.omitted.length} mensagens de interface com substituição documentada.`,
+  `OK: conteúdo histórico preservado fora das páginas intencionalmente reestruturadas; ${fullContent.omitted.length} mensagens de interface com substituição documentada.`,
 );

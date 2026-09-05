@@ -1,5 +1,9 @@
 import { SITE } from "../data/site.js";
-import { useConsent, useNativeAccessibility } from "../hooks/useSiteEffects.js";
+import {
+  useConsent,
+  useConversionTracking,
+  useNativeAccessibility,
+} from "../hooks/useSiteEffects.js";
 
 const navigation = [
   ["/", "Início"],
@@ -61,6 +65,7 @@ export function Layout({
   compactFooter = false,
 }) {
   useNativeAccessibility();
+  useConversionTracking();
   const { consent, saveConsent, reopen } = useConsent();
 
   return (

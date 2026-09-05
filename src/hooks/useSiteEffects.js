@@ -104,3 +104,38 @@ export function useConsent() {
   };
   return { consent, saveConsent, reopen: () => setConsent(null) };
 }
+
+export function useConversionTracking() {
+  useEffect(() => {
+    const track = (event) => {
+      const link = event.target.closest?.("a[href]");
+      if (!link || document.documentElement.dataset.cookieConsent !== "all") return;
+
+      const href = link.getAttribute("href") || "";
+      const isWhatsApp = href.includes("wa.me/") || href.includes("whatsapp.com/");
+      const isPhone = href.startsWith("tel:");
+      if (!isWhatsApp && !isPhone) return;
+
+      const eventName = isWhatsApp ? "whatsapp_click" : "phone_click";
+      const payload = {
+        event: eventName,
+        link_url: href,
+        link_text: (link.textContent || "").trim().slice(0, 120),
+        page_path: window.location.pathname,
+      };
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(payload);
+      if (typeof window.gtag === "function") {
+        window.gtag("event", eventName, {
+          link_url: payload.link_url,
+          link_text: payload.link_text,
+          page_path: payload.page_path,
+        });
+      }
+    };
+
+    document.addEventListener("click", track);
+    return () => document.removeEventListener("click", track);
+  }, []);
+}

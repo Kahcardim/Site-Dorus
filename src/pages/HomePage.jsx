@@ -25,14 +25,20 @@ function HeroRating() {
 }
 
 function ServiceCards() {
+  const priority = ["geladeiras", "maquinas-de-lavar", "lava-e-seca"];
+  const ordered = [...services].sort((a, b) => {
+    const ai = priority.indexOf(a.slug);
+    const bi = priority.indexOf(b.slug);
+    if (ai === -1 && bi === -1) return 0;
+    if (ai === -1) return 1;
+    if (bi === -1) return -1;
+    return ai - bi;
+  });
+
   return (
     <div className="service-grid">
-      {services.map((service) => (
-        <a
-          className="service-card"
-          href={`/servicos/${service.slug}/`}
-          key={service.slug}
-        >
+      {ordered.map((service) => (
+        <a className="service-card" href={`/servicos/${service.slug}/`} key={service.slug}>
           <picture className="service-card-media">
             <source
               media="(max-width:680px)"
@@ -47,6 +53,7 @@ function ServiceCards() {
             />
           </picture>
           <div className="service-card-body">
+            {priority.includes(service.slug) && <span className="kicker">Serviço em destaque</span>}
             <h3>{service.name}</h3>
             <p>
               {catalogCopy.homeSummaries[service.slug] ||
@@ -65,10 +72,7 @@ export function BrandCarousel({
   description = "O atendimento depende do equipamento, modelo e disponibilidade de serviço.",
 }) {
   return (
-    <section
-      className="section section-soft brands-section"
-      aria-labelledby="brands-title"
-    >
+    <section className="section section-soft brands-section" aria-labelledby="brands-title">
       <div className="container">
         <div className="section-head">
           <div>
@@ -79,17 +83,8 @@ export function BrandCarousel({
         </div>
         <Carousel label="Marcas atendidas" className="brand-list" autoPlay>
           {brands.map(([name, file]) => (
-            <div
-              className={`brand-logo${file ? "" : " is-text-only"}`}
-              key={name}
-            >
-              {file && (
-                <img
-                  src={`/assets/brands/${file}.webp`}
-                  alt={name}
-                  loading="lazy"
-                />
-              )}
+            <div className={`brand-logo${file ? "" : " is-text-only"}`} key={name}>
+              {file && <img src={`/assets/brands/${file}.webp`} alt={name} loading="lazy" />}
               <span className="brand-fallback">{name}</span>
             </div>
           ))}
@@ -102,11 +97,7 @@ export function BrandCarousel({
 export function Reviews({ title = "Experiências de clientes da D’orus" }) {
   const { rating, reviews: count } = useGoogleRating();
   return (
-    <section
-      className="section reviews-section"
-      id="avaliacoes"
-      aria-labelledby="avaliacoes-titulo"
-    >
+    <section className="section reviews-section" id="avaliacoes" aria-labelledby="avaliacoes-titulo">
       <div className="container">
         <div className="section-head compact-head">
           <div>
@@ -120,15 +111,8 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
               Ver perfil no Google
             </a>
             <div className="google-score">
-              <strong>
-                {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
-              </strong>
-              <span
-                className="score-stars"
-                aria-label={`${rating} de 5 estrelas`}
-              >
-                ★★★★★
-              </span>
+              <strong>{rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}</strong>
+              <span className="score-stars" aria-label={`${rating} de 5 estrelas`}>★★★★★</span>
               <small>{count.toLocaleString("pt-BR")} avaliações</small>
             </div>
           </div>
@@ -144,9 +128,7 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
                 </div>
                 <span className="google-mark">G</span>
               </div>
-              <div className="stars" aria-label="5 estrelas">
-                ★★★★★
-              </div>
+              <div className="stars" aria-label="5 estrelas">★★★★★</div>
               <p>“{text}”</p>
             </article>
           ))}
@@ -162,27 +144,18 @@ export function HomePage() {
       <section className="hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <span className="eyebrow">Assistência técnica em domicílio</span>
-            <h1>
-              Seu eletrodoméstico apresentou problema? Fale com quem entende.
-            </h1>
+            <span className="eyebrow">Assistência técnica em domicílio em Guarulhos</span>
+            <h1>Conserto de eletrodomésticos em Guarulhos com atendimento em domicílio</h1>
             <p>
-              Há mais de 10 anos, a D’orus atende linha branca com diagnóstico
-              técnico, comunicação clara e atendimento em domicílio em{" "}
-              {SITE.serviceArea}.
+              Há mais de 10 anos, a D’orus atende linha branca com diagnóstico técnico,
+              comunicação clara e atendimento em domicílio. Geladeiras, máquinas de lavar e
+              lava e seca são prioridades, além de outros equipamentos de linha branca.
             </p>
             <div className="actions">
-              <a
-                className="button button-green"
-                href={SITE.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a className="button button-green" href={SITE.whatsapp} target="_blank" rel="noopener noreferrer">
                 Falar no WhatsApp
               </a>
-              <a className="button button-white" href="/agendamento/">
-                Agendar visita
-              </a>
+              <a className="button button-white" href="/agendamento/">Agendar visita</a>
             </div>
             <div className="hero-points">
               <HeroRating />
@@ -191,24 +164,18 @@ export function HomePage() {
                 <span>Mais de 10 anos de experiência</span>
               </div>
               <div>
-                <strong>Garantia</strong>
-                <span>Garantia mínima de 90 dias</span>
+                <strong>90 dias</strong>
+                <span>Garantia mínima nos serviços executados</span>
               </div>
             </div>
           </div>
           <figure className="hero-media">
             <figcaption>
               <strong>Assistência multimarcas</strong>
-              <span>
-                Geladeiras, lavadoras, fogões e outros equipamentos de linha
-                branca.
-              </span>
+              <span>Geladeiras, lavadoras, lava e seca, fogões e outros equipamentos de linha branca.</span>
             </figcaption>
             <picture>
-              <source
-                media="(max-width:680px)"
-                srcSet="/assets/banner-principal-dorus-mobile.webp"
-              />
+              <source media="(max-width:680px)" srcSet="/assets/banner-principal-dorus-mobile.webp" />
               <img
                 src="/assets/banner-principal-dorus.webp"
                 alt="Eletrodomésticos de linha branca atendidos pela D’orus"
@@ -220,145 +187,80 @@ export function HomePage() {
           </figure>
         </div>
       </section>
+
       <section className="section">
         <div className="container">
           <div className="section-head">
             <div>
-              <span className="kicker">Serviços</span>
-              <h2>
-                Assistência para os aparelhos que fazem parte da sua rotina
-              </h2>
+              <span className="kicker">Principais serviços</span>
+              <h2>Conserto de geladeira, máquina de lavar e lava e seca em Guarulhos</h2>
               <p>
-                Escolha o aparelho para conhecer problemas comuns e preparar o
-                atendimento.
+                Escolha o aparelho para ver sintomas comuns, entender como funciona o atendimento
+                e falar diretamente com a D’orus.
               </p>
             </div>
-            <a className="text-link" href="/servicos/">
-              Ver todos os serviços →
-            </a>
+            <a className="text-link" href="/servicos/">Ver todos os serviços →</a>
           </div>
           <ServiceCards />
-          <div className="prose">
-            <h3>Outros equipamentos</h3>
-            <p>Lava e seca, fornos e micro-ondas, conforme avaliação.</p>
-          </div>
         </div>
       </section>
+
+      <section className="section section-soft">
+        <div className="container prose">
+          <span className="kicker">Atendimento local</span>
+          <h2>Assistência técnica em Guarulhos e regiões próximas</h2>
+          <p>
+            A D’orus atende em domicílio no Centro de Guarulhos, região do Lago dos Patos,
+            Bonsucesso e Pimentas. Outros pontos de Guarulhos são confirmados no contato.
+            Atendimento em São Paulo é realizado sob consulta e conforme disponibilidade.
+          </p>
+          <p>
+            Informe o aparelho, marca, modelo e o defeito percebido. Isso ajuda a preparar o
+            atendimento e torna o diagnóstico mais objetivo desde o primeiro contato.
+          </p>
+        </div>
+      </section>
+
       <BrandCarousel />
+      <Reviews title="Avaliações reais de quem já chamou a D’orus" />
+
       <section className="section">
         <div className="container">
           <div className="section-head">
             <div>
-              <span className="kicker">Atendimento local</span>
-              <h2>Uma assistência preparada para ir até você</h2>
+              <span className="kicker">Como funciona</span>
+              <h2>Do primeiro contato ao serviço executado</h2>
             </div>
           </div>
           <div className="trust-grid">
             <article className="trust-card">
               <div className="icon">01</div>
-              <h3>Atendimento em domicílio</h3>
-              <p>O endereço é informado apenas no agendamento da visita.</p>
+              <h3>Conte o problema</h3>
+              <p>Envie aparelho, marca, modelo e o sintoma pelo WhatsApp ou agendamento.</p>
             </article>
             <article className="trust-card">
               <div className="icon">02</div>
-              <h3>Diagnóstico responsável</h3>
-              <p>
-                Os sintomas são avaliados e a necessidade de manutenção é
-                explicada de forma clara.
-              </p>
+              <h3>Agende a visita</h3>
+              <p>A região, disponibilidade e condições da visita são confirmadas antes do atendimento.</p>
             </article>
             <article className="trust-card">
               <div className="icon">03</div>
-              <h3>Contato direto</h3>
-              <p>
-                WhatsApp e agendamento simples para reduzir o tempo entre o
-                problema e o atendimento.
-              </p>
+              <h3>Diagnóstico e orçamento</h3>
+              <p>O diagnóstico orienta o serviço recomendado e o orçamento antes da execução.</p>
+            </article>
+            <article className="trust-card">
+              <div className="icon">04</div>
+              <h3>Serviço com garantia</h3>
+              <p>Os serviços executados têm garantia mínima de 90 dias, conforme a ordem de serviço.</p>
             </article>
           </div>
         </div>
       </section>
-      <section className="section section-soft">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="kicker">Guias práticos</span>
-              <h2>Entenda o problema antes de solicitar assistência</h2>
-              <p>
-                Conteúdo direto para reconhecer sinais comuns e saber quando
-                buscar avaliação técnica.
-              </p>
-            </div>
-            <a className="text-link" href="/curiosidades/">
-              Ver todos os guias →
-            </a>
-          </div>
-          <div className="cards">
-            {[
-              {
-                slug: "geladeira-nao-gela",
-                title: "Geladeira não gela",
-                description: "Veja causas comuns e quando chamar assistência.",
-              },
-              {
-                slug: "maquina-nao-centrifuga",
-                title: "Máquina não centrifuga",
-                description: "Entenda os sintomas mais frequentes.",
-              },
-              {
-                slug: "micro-ondas-nao-aquece",
-                title: "Micro-ondas não aquece",
-                description: "Saiba quais sinais pedem avaliação.",
-              },
-            ].map((guide) => (
-              <a
-                className="card"
-                href={`/curiosidades/${guide.slug}/`}
-                key={guide.slug}
-              >
-                <h3>{guide.title}</h3>
-                <p>{guide.description}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="section section-blue">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="kicker">Como funciona</span>
-              <h2>Da pesquisa ao atendimento</h2>
-            </div>
-          </div>
-          <div className="steps">
-            <article className="step">
-              <span className="num">01</span>
-              <h3>Identifique o sintoma</h3>
-              <p>Consulte os guias ou descreva o comportamento do aparelho.</p>
-            </article>
-            <article className="step">
-              <span className="num">02</span>
-              <h3>Envie as informações</h3>
-              <p>
-                Marca, modelo, foto e vídeo ajudam a preparar o primeiro
-                contato.
-              </p>
-            </article>
-            <article className="step">
-              <span className="num">03</span>
-              <h3>Combine a visita</h3>
-              <p>
-                A disponibilidade é confirmada e o atendimento é realizado no
-                endereço informado.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-      <Faq items={faq} />
-      <Reviews />
-      <CtaPanel />
+
+      <Faq items={faq} title="Dúvidas antes de pedir atendimento" />
+      <CtaPanel title="Seu eletrodoméstico apresentou problema?">
+        Fale com a D’orus e informe aparelho, marca, modelo e sintoma para iniciar o atendimento.
+      </CtaPanel>
     </>
   );
 }

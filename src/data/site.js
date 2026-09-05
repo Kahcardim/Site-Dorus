@@ -6,10 +6,11 @@ export const SITE = {
   phoneHref: "tel:+5511913573932",
   whatsapp: "https://wa.me/5511913573932",
   instagram: "https://instagram.com/assistenciadorus",
-  serviceArea: "Guarulhos, Arujá, Itaquaquecetuba e São Paulo",
-  cities: ["Guarulhos", "Arujá", "Itaquaquecetuba", "São Paulo"],
+  serviceArea: "Guarulhos; São Paulo sob consulta",
+  cities: ["Guarulhos", "São Paulo"],
+  neighborhoods: ["Centro de Guarulhos", "Lago dos Patos", "Bonsucesso", "Pimentas"],
   description:
-    "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+    "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos. São Paulo sob consulta e conforme disponibilidade.",
 };
 
 export const equipmentOptions = [
@@ -29,7 +30,7 @@ export const services = [
     slug: "geladeiras",
     name: "Geladeiras",
     image: "servico-geladeira",
-    title: "Assistência técnica de geladeiras em Guarulhos e região",
+    title: "Conserto de geladeira em Guarulhos",
     summary:
       "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
     issues: [
@@ -46,7 +47,7 @@ export const services = [
     slug: "maquinas-de-lavar",
     name: "Máquinas de lavar",
     image: "servico-lavadora",
-    title: "Assistência técnica de máquinas de lavar em Guarulhos e região",
+    title: "Conserto de máquina de lavar e lavadora em Guarulhos",
     summary:
       "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes.",
     issues: [
@@ -58,6 +59,23 @@ export const services = [
       "Ciclo para no meio",
     ],
     guideSlugs: ["maquina-nao-centrifuga"],
+  },
+  {
+    slug: "lava-e-seca",
+    name: "Lava e seca",
+    image: "servico-lava-e-seca",
+    title: "Conserto de lava e seca em Guarulhos",
+    summary:
+      "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+    issues: [
+      "Não centrifuga",
+      "Não seca corretamente",
+      "Não drena",
+      "Código no painel",
+      "Vazamento",
+      "Programa interrompido",
+    ],
+    guideSlugs: [],
   },
   {
     slug: "fogoes",
@@ -107,23 +125,6 @@ export const services = [
       "Louças continuam sujas",
       "Vazamento",
       "Ciclo interrompido",
-    ],
-    guideSlugs: [],
-  },
-  {
-    slug: "lava-e-seca",
-    name: "Lava e seca",
-    image: "servico-lava-e-seca",
-    title: "Assistência técnica de lava e seca em Guarulhos e região",
-    summary:
-      "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
-    issues: [
-      "Não centrifuga",
-      "Não seca corretamente",
-      "Não drena",
-      "Código no painel",
-      "Vazamento",
-      "Programa interrompido",
     ],
     guideSlugs: [],
   },
