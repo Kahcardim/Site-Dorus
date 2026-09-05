@@ -1,14 +1,14 @@
 {
   "/": {
-    "description": "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeiras, lavadoras, fogões e mais.",
+    "description": "Conserto e assistência técnica de eletrodomésticos em Guarulhos, com atendimento em domicílio para geladeiras, máquinas de lavar, lava e seca, fogões e mais.",
     "image": "/assets/banner-principal-dorus.webp",
     "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
     "imageHeight": 929,
     "imageWidth": 1693,
-    "title": "D’orus Assistência Técnica em Guarulhos | Linha Branca"
+    "title": "Conserto de Eletrodomésticos em Guarulhos | D’orus"
   },
   "/agendamento/": {
-    "description": "Solicite uma visita técnica da D’orus para atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+    "description": "Solicite uma visita técnica da D’orus para atendimento em domicílio em Guarulhos. Atendimento em São Paulo sob consulta e conforme disponibilidade.",
     "image": "/assets/banner-principal-dorus.webp",
     "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
     "imageHeight": 929,
@@ -16,12 +16,12 @@
     "title": "Agendamento de Assistência Técnica em Guarulhos | D’orus"
   },
   "/curiosidades/": {
-    "description": "Guias sobre problemas comuns em geladeiras, lavadoras, fogões, freezers, lava-louças, lava e seca, fornos e micro-ondas, com cuidados seguros.",
+    "description": "Guias sobre problemas comuns em geladeiras, máquinas de lavar, lava e seca, fogões, freezers, lava-louças, fornos e micro-ondas, com cuidados seguros.",
     "image": "/assets/banner-principal-dorus.webp",
     "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
     "imageHeight": 929,
     "imageWidth": 1693,
-    "title": "Guias de Linha Branca e Problemas Comuns | D’orus"
+    "title": "Guias de Eletrodomésticos e Problemas Comuns | D’orus"
   },
   "/curiosidades/fogao-nao-acende/": {
     "description": "Fogão não acende? Veja verificações simples de queimadores e acendimento, sinais de chama irregular e cuidados importantes em caso de cheiro de gás.",
@@ -48,7 +48,7 @@
     "title": "Geladeira Fazendo Barulho: Quando se Preocupar | D’orus"
   },
   "/curiosidades/geladeira-nao-gela/": {
-    "description": "Geladeira não está gelando? Veja causas comuns, sinais que você pode observar com segurança e quando procurar assistência técnica em Guarulhos e região.",
+    "description": "Geladeira não está gelando? Veja causas comuns, sinais que você pode observar com segurança e quando procurar assistência técnica em Guarulhos.",
     "image": "/assets/servicos/servico-geladeira.webp",
     "imageAlt": "Geladeira atendida pela D’orus",
     "imageHeight": 1254,
@@ -88,7 +88,7 @@
     "title": "Privacidade e Cookies | D’orus Assistência Técnica"
   },
   "/servicos/": {
-    "description": "Assistência técnica de eletrodomésticos em Guarulhos, com atendimento em domicílio para geladeiras, lavadoras, fogões e outros aparelhos de linha branca.",
+    "description": "Assistência técnica e conserto de eletrodomésticos em Guarulhos. Atendimento em domicílio para geladeiras, máquinas de lavar, lava e seca, fogões e outros aparelhos de linha branca.",
     "image": "/assets/banner-principal-dorus.webp",
     "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
     "imageHeight": 929,
@@ -96,7 +96,7 @@
     "title": "Assistência Técnica de Eletrodomésticos em Guarulhos | D’orus"
   },
   "/servicos/fogoes/": {
-    "description": "Assistência técnica de fogões em Guarulhos e região para falhas de acendimento, chama irregular, queimadores e funcionamento do forno. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de fogões em Guarulhos para falhas de acendimento, chama irregular, queimadores e funcionamento do forno.",
     "image": "/assets/servicos/servico-fogao.webp",
     "imageAlt": "Fogão atendido pela D’orus",
     "imageHeight": 1254,
@@ -104,7 +104,7 @@
     "title": "Conserto de Fogão em Guarulhos | D’orus"
   },
   "/servicos/fornos/": {
-    "description": "Assistência técnica de fornos em Guarulhos e região para falhas de aquecimento, comandos e funcionamento irregular. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de fornos em Guarulhos para falhas de aquecimento, comandos e funcionamento irregular.",
     "image": "/assets/servicos/servico-forno.webp",
     "imageAlt": "Forno atendido pela D’orus",
     "imageHeight": 1254,
@@ -112,7 +112,7 @@
     "title": "Conserto de Forno em Guarulhos | D’orus"
   },
   "/servicos/freezers/": {
-    "description": "Assistência técnica de freezers em Guarulhos e região para baixo rendimento, excesso de gelo, ruídos e falhas de refrigeração. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de freezers em Guarulhos para baixo rendimento, excesso de gelo, ruídos e falhas de refrigeração.",
     "image": "/assets/servicos/servico-freezer.webp",
     "imageAlt": "Freezer atendido pela D’orus",
     "imageHeight": 1254,
@@ -120,7 +120,7 @@
     "title": "Conserto de Freezer em Guarulhos | D’orus"
   },
   "/servicos/geladeiras/": {
-    "description": "Conserto e manutenção de geladeiras em Guarulhos e região. Falhas de refrigeração, excesso de gelo, vazamentos, ruídos e outros sintomas. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto de geladeira em Guarulhos com atendimento em domicílio. Assistência para geladeira que não gela, excesso de gelo, vazamentos, ruídos e outras falhas.",
     "image": "/assets/servicos/servico-geladeira.webp",
     "imageAlt": "Geladeira atendida pela D’orus",
     "imageHeight": 1254,
@@ -128,7 +128,7 @@
     "title": "Conserto de Geladeira em Guarulhos | D’orus"
   },
   "/servicos/lava-e-seca/": {
-    "description": "Assistência técnica de lava e seca em Guarulhos e região para falhas de lavagem, centrifugação, drenagem e secagem. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de lava e seca em Guarulhos para falhas de lavagem, centrifugação, drenagem, secagem e códigos no painel.",
     "image": "/assets/servicos/servico-lava-e-seca.webp",
     "imageAlt": "Lava e seca atendida pela D’orus",
     "imageHeight": 1254,
@@ -136,7 +136,7 @@
     "title": "Conserto de Lava e Seca em Guarulhos | D’orus"
   },
   "/servicos/lava-loucas/": {
-    "description": "Assistência técnica de lava-louças em Guarulhos e região para falhas de lavagem, drenagem, aquecimento e interrupções de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de lava-louças em Guarulhos para falhas de lavagem, drenagem, aquecimento e interrupções de ciclo.",
     "image": "/assets/servicos/servico-lava-loucas.webp",
     "imageAlt": "Lava-louças atendida pela D’orus",
     "imageHeight": 1254,
@@ -144,7 +144,7 @@
     "title": "Conserto de Lava-Louças em Guarulhos | D’orus"
   },
   "/servicos/maquinas-de-lavar/": {
-    "description": "Conserto de máquinas de lavar em Guarulhos e região. Centrifugação, drenagem, enchimento, vazamentos, ruídos e falhas de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto de máquina de lavar e lavadora em Guarulhos com atendimento em domicílio. Assistência para centrifugação, drenagem, enchimento, vazamentos, ruídos e falhas de ciclo.",
     "image": "/assets/servicos/servico-lavadora.webp",
     "imageAlt": "Máquina de lavar atendida pela D’orus",
     "imageHeight": 1254,
@@ -152,7 +152,7 @@
     "title": "Conserto de Máquina de Lavar em Guarulhos | D’orus"
   },
   "/servicos/micro-ondas/": {
-    "description": "Assistência técnica de micro-ondas em Guarulhos e região para falhas de aquecimento, painel, prato giratório e funcionamento. Garantia mínima de 90 dias nos serviços executados.",
+    "description": "Conserto e assistência técnica de micro-ondas em Guarulhos para falhas de aquecimento, painel, prato giratório e funcionamento irregular.",
     "image": "/assets/servicos/servico-microondas.webp",
     "imageAlt": "Micro-ondas atendido pela D’orus",
     "imageHeight": 1254,
