@@ -117,7 +117,13 @@ export function ContactPage() {
                 <p>Ao enviar, você continuará no WhatsApp.</p>
               </div>
               <label htmlFor="nome">Seu nome</label>
-              <input id="nome" name="nome" autoComplete="name" required />
+              <input
+                id="nome"
+                name="nome"
+                autoComplete="name"
+                maxLength="100"
+                required
+              />
               <label htmlFor="equipamento">Equipamento</label>
               <select id="equipamento" name="equipamento">
                 {equipmentOptions.map((option) => (
@@ -125,9 +131,14 @@ export function ContactPage() {
                 ))}
               </select>
               <label htmlFor="modelo">Marca ou modelo</label>
-              <input id="modelo" name="modelo" />
+              <input id="modelo" name="modelo" maxLength="120" />
               <label htmlFor="problema">Descreva o problema</label>
-              <textarea id="problema" name="problema" required />
+              <textarea
+                id="problema"
+                name="problema"
+                maxLength="1500"
+                required
+              />
               <button className="button button-green" type="submit">
                 Continuar no WhatsApp →
               </button>
@@ -142,11 +153,15 @@ export function ContactPage() {
 export function SchedulePage() {
   const [status, setStatus] = useState("");
   const [minDate, setMinDate] = useState("");
+  const [maxDate, setMaxDate] = useState("");
   useEffect(() => {
     const today = new Date();
-    setMinDate(
-      `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`,
-    );
+    const maximum = new Date(today);
+    maximum.setDate(maximum.getDate() + 60);
+    const formatDate = (date) =>
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    setMinDate(formatDate(today));
+    setMaxDate(formatDate(maximum));
   }, []);
   const submit = (event) => {
     event.preventDefault();
@@ -207,15 +222,21 @@ export function SchedulePage() {
               <div className="form-grid">
                 <label>
                   Data preferida
-                  <input name="data" type="date" min={minDate} required />
+                  <input
+                    name="data"
+                    type="date"
+                    min={minDate}
+                    max={maxDate}
+                    required
+                  />
                 </label>
                 <label>
                   Período
                   <select name="periodo" required>
                     <option value="">Selecione</option>
-                    <option>Manhã — 8h às 12h</option>
-                    <option>Tarde — 13h às 17h</option>
-                    <option>Horário comercial — 8h às 17h</option>
+                    <option value="manha">Manhã — 8h às 13h</option>
+                    <option value="tarde">Tarde — 13h às 18h</option>
+                    <option value="integral">Dia inteiro — 8h às 18h</option>
                   </select>
                 </label>
               </div>
@@ -225,7 +246,12 @@ export function SchedulePage() {
               <div className="form-grid">
                 <label>
                   Nome completo
-                  <input name="nome" autoComplete="name" required />
+                  <input
+                    name="nome"
+                    autoComplete="name"
+                    maxLength="100"
+                    required
+                  />
                 </label>
                 <label>
                   Seu WhatsApp
@@ -233,18 +259,22 @@ export function SchedulePage() {
                     name="telefone"
                     type="tel"
                     autoComplete="tel"
+                    inputMode="tel"
+                    pattern="[0-9 ()+\\-]{10,20}"
+                    maxLength="20"
                     required
                   />
                 </label>
                 <label>
                   Bairro
-                  <input name="bairro" required />
+                  <input name="bairro" maxLength="120" required />
                 </label>
                 <label>
                   Endereço da visita
                   <input
                     name="endereco"
                     autoComplete="street-address"
+                    maxLength="250"
                     required
                   />
                 </label>
@@ -264,12 +294,12 @@ export function SchedulePage() {
                 </label>
                 <label>
                   Marca e modelo
-                  <input name="marca" />
+                  <input name="marca" maxLength="120" />
                 </label>
               </div>
               <label>
                 Descreva o problema
-                <textarea name="problema" required />
+                <textarea name="problema" maxLength="1500" required />
               </label>
             </fieldset>
             <div className="schedule-disclaimer">

@@ -13,6 +13,38 @@ npm run preview
 
 Registre URL, largura/dispositivo, passos, resultado atual, resultado esperado e captura para cada defeito. Não integre alterações com falhas críticas ou altas.
 
+## Gate de produção por risco
+
+| Prioridade  | Escopo                                                                                               | Regra de publicação                        |
+| ----------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| P0 / High   | Agendamento, dados do cliente, consentimentos, WhatsApp, regras comerciais, capacidade e duplicidade | Qualquer falha bloqueia merge e produção   |
+| P1 / High   | Rotas, conteúdo sem JavaScript, Menu Digital, carrosséis, acessibilidade A/AA e identidade oficial   | Qualquer falha bloqueia merge e produção   |
+| P2 / Medium | Capturas, geometria complementar e auditorias manuais ampliadas                                      | Exige análise e aceite registrado          |
+| P3 / Low    | Refinamentos sem impacto funcional                                                                   | Pode seguir para backlog com justificativa |
+
+Não há aprovação por média: um único caso P0/P1 reprovado mantém o deploy bloqueado.
+
+## Matriz automatizada consolidada
+
+| Camada                         | Cobertura obrigatória                                                                                                   | Execução                                  | Evidência                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------ |
+| Unidade e contratos            | Estado do carrossel, condições da visita, períodos, limites dos campos, paleta do Menu Digital e invariantes de rotas   | Todo PR e push de código                  | Saída do Node Test Runner                  |
+| Backend da agenda              | Obrigatórios, telefone, limites, saneamento, hoje/D+60, passado/D+61, domingo, capacidade, integral, lock e duplicidade | Todo PR e push de código                  | Saída do Node Test Runner                  |
+| Build estático                 | 21 rotas, 404, H1, conteúdo estático, arquivos, WhatsApp e formulários                                                  | Todo PR e push de código                  | Logs de build e `test:static`              |
+| SEO e conteúdo                 | Metadados únicos, Schema, sitemap, links internos e 415 blocos da referência histórica                                  | Todo PR e push de código                  | Logs de `test:seo`                         |
+| Navegador funcional            | 21 rotas com e sem JavaScript, Menu Digital, cookies, contato, agenda, carrosséis e ausência de overflow                | Todo PR e push de código                  | `regression-summary.json` e capturas       |
+| Acessibilidade automática      | axe WCAG A/AA em 10 templates funcionais, mobile e desktop                                                              | Todo PR e push de código                  | `accessibility.json` — 20 cenários         |
+| Acessibilidade nativa ampliada | 21 rotas, mobile/desktop, texto 200%, cores forçadas e movimento reduzido                                               | Sob demanda antes de mudança visual ampla | Workflow `QA acessibilidade nativa`        |
+| Produção                       | Revisão publicada, 21 páginas, integrações, 404 real e Lighthouse mobile/desktop                                        | Após publicação                           | `post-deploy.json` e relatórios Lighthouse |
+
+### Decisões de deduplicação
+
+- As 21 rotas continuam verificadas integralmente nas camadas estática e de navegador.
+- O axe roda por template representativo, pois repetir páginas que compartilham o mesmo componente não aumenta a detecção proporcionalmente ao custo.
+- A verificação nativa exaustiva permanece disponível sob demanda e não duplica mais todo pull request.
+- Hashes imutáveis das integrações foram removidos do gate: impediam correções legítimas. Regras funcionais explícitas agora validam agenda e analytics.
+- A referência histórica continua isolada e imutável para detectar perda de conteúdo, sem congelar código operacional.
+
 ## Home e apresentação
 
 - [ ] Nota e quantidade de avaliações aparecem no topo e correspondem ao resumo da seção de depoimentos.
@@ -22,6 +54,7 @@ Registre URL, largura/dispositivo, passos, resultado atual, resultado esperado e
 - [ ] Banner e imagens de equipamentos não ficam deformados ou cortados indevidamente.
 - [ ] Garantia mínima de 90 dias continua visível.
 - [ ] Carrosséis funcionam com setas, teclado e gesto; pausa e redução de movimento são respeitadas.
+- [ ] Setas ficam desativadas quando todos os itens já estão visíveis (QA-001).
 - [ ] Rodapé mantém dados da empresa e autoria.
 
 ## Páginas e navegação
@@ -36,12 +69,14 @@ Registre URL, largura/dispositivo, passos, resultado atual, resultado esperado e
 ## Agenda e formulários
 
 - [ ] Campos obrigatórios impedem envio incompleto, com identificação do erro.
+- [ ] Nome (100), bairro (120), endereço (250), marca/modelo (120) e problema (1.500) respeitam os mesmos limites do backend.
 - [ ] Mensagem de WhatsApp conserva o aparelho e os dados informados.
 - [ ] Consentimento é obrigatório onde previsto e possui área de clique confortável.
 - [ ] Indisponibilidade da agenda mantém o contato por WhatsApp utilizável.
 - [ ] Conferir com o backend os períodos Manhã (8h–13h), Tarde (13h–18h) e Dia inteiro (8h–18h).
 - [ ] Conferir o limite de cinco clientes por período e a ocupação de uma vaga em ambos no dia inteiro.
 - [ ] Conferir a janela de 60 dias, restrição de domingos e disponibilidade real.
+- [ ] Conferir as fronteiras hoje, D+60, passado, D+61 e domingo; hoje e D+60 são válidos quando não forem domingo.
 - [ ] Consultar disponibilidade em modo de leitura. Criação de evento real exige autorização específica.
 
 As regras operacionais acima exigem revisão manual e do serviço de agenda. Uma aprovação do frontend não comprova, sozinha, a disponibilidade ou o funcionamento do backend.

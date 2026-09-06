@@ -22,18 +22,42 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  qualidade:
-    name: Build e regressão React
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+  gate:
+    name: Evitar regressão sem mudança de código
     runs-on: ubuntu-latest
     outputs:
-      revision: ${{ steps.source.outputs.sha }}
+      revision: ${{ steps.source.outputs.revision }}
+      should_run: ${{ steps.source.outputs.should_run }}
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'workflow_run' && 'main' || github.sha }}
       - id: source
-        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SYNC_SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          revision="$(git rev-parse HEAD)"
+          should_run=true
+          if [[ "$EVENT_NAME" == "workflow_run" && "$revision" == "$SYNC_SOURCE_SHA" ]]; then
+            should_run=false
+            echo "A sincronização terminou sem gerar commit; regressão completa dispensada."
+          fi
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+          echo "should_run=$should_run" >> "$GITHUB_OUTPUT"
+
+  qualidade:
+    name: Build e regressão React
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    outputs:
+      revision: ${{ needs.gate.outputs.revision }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate.outputs.revision }}
       - uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
@@ -43,12 +67,19 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Validar componentes, build, rotas e acessibilidade
         env:
-          DORUS_REVISION: ${{ steps.source.outputs.sha }}
+          DORUS_REVISION: ${{ needs.gate.outputs.revision }}
         run: npm run check
       - name: Instalar auditoria de desempenho
         run: npm install --global lighthouse@12
       - name: Comparar desempenho antes da publicação
         run: node scripts/audit-performance.mjs
+      - name: Preservar exatamente o build aprovado
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-build-${{ needs.gate.outputs.revision }}
+          path: dist/
+          retention-days: 1
       - name: Salvar capturas da homologação
         if: always()
         uses: actions/upload-artifact@v4
@@ -93,13 +124,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.qualidade.outputs.revision }}
-      - uses: actions/setup-node@v4
+      - name: Recuperar o build aprovado
+        uses: actions/download-artifact@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: npm
-      - run: npm ci
-      - name: Gerar site React estático
-        run: npm run build
+          name: production-build-${{ needs.qualidade.outputs.revision }}
+          path: dist/
       - run: node scripts/fingerprint-build.mjs
       - id: changed
         name: Evitar publicação de build idêntico

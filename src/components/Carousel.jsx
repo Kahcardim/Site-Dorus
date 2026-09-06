@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from "react";
+import { getCarouselState } from "./carouselState.js";
 
 export function Carousel({ label, className, children, autoPlay = false }) {
   const id = useId();
@@ -7,6 +8,34 @@ export function Carousel({ label, className, children, autoPlay = false }) {
   const [reducedMotion, setReducedMotion] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
+  const [hasOverflow, setHasOverflow] = useState(false);
+
+  useEffect(() => {
+    const element = track.current;
+    if (!element) return;
+    const update = () => {
+      const state = getCarouselState(
+        element.scrollWidth,
+        element.clientWidth,
+        element.scrollLeft,
+      );
+      setHasOverflow(state.hasOverflow);
+      if (!state.hasOverflow && element.scrollLeft !== 0)
+        element.scrollTo({ left: 0, behavior: "instant" });
+    };
+    update();
+    const observer =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
+    observer?.observe(element);
+    for (const child of element.children) observer?.observe(child);
+    element.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      observer?.disconnect();
+      element.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, [children]);
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -20,12 +49,19 @@ export function Carousel({ label, className, children, autoPlay = false }) {
     const element = track.current;
     if (!element) return;
     if (manual) setPaused(true);
-    const max = element.scrollWidth - element.clientWidth;
+    const {
+      maxScroll: max,
+      atEnd,
+      atStart,
+    } = getCarouselState(
+      element.scrollWidth,
+      element.clientWidth,
+      element.scrollLeft,
+    );
+    if (max <= 2) return;
     const step =
       element.firstElementChild?.getBoundingClientRect().width || 180;
     const gap = parseFloat(getComputedStyle(element).columnGap) || 16;
-    const atEnd = element.scrollLeft >= max - 2;
-    const atStart = element.scrollLeft <= 2;
     const left =
       direction > 0 && atEnd
         ? 0
@@ -36,12 +72,20 @@ export function Carousel({ label, className, children, autoPlay = false }) {
   };
 
   useEffect(() => {
-    if (!autoPlay || paused || reducedMotion || hovered || focused) return;
+    if (
+      !autoPlay ||
+      !hasOverflow ||
+      paused ||
+      reducedMotion ||
+      hovered ||
+      focused
+    )
+      return;
     const timer = window.setInterval(() => {
       if (!document.hidden) move(1, false);
     }, 3500);
     return () => window.clearInterval(timer);
-  }, [autoPlay, paused, reducedMotion, hovered, focused]);
+  }, [autoPlay, hasOverflow, paused, reducedMotion, hovered, focused]);
 
   return (
     <div
@@ -59,14 +103,16 @@ export function Carousel({ label, className, children, autoPlay = false }) {
     >
       <div className="carousel-toolbar">
         <p id={`${id}-help`}>
-          Use as setas para percorrer {label.toLowerCase()} ou deslize no
-          celular.
+          {hasOverflow
+            ? `Use as setas para percorrer ${label.toLowerCase()} ou deslize no celular.`
+            : `${label} estão totalmente visíveis nesta largura.`}
         </p>
         <div className="carousel-buttons">
           <button
             type="button"
             aria-label={`Anterior: ${label}`}
             aria-controls={id}
+            disabled={!hasOverflow}
             onClick={() => move(-1)}
           >
             ←
@@ -76,7 +122,7 @@ export function Carousel({ label, className, children, autoPlay = false }) {
               type="button"
               aria-controls={id}
               aria-pressed={paused || reducedMotion}
-              disabled={reducedMotion}
+              disabled={reducedMotion || !hasOverflow}
               onClick={() => setPaused(!paused)}
             >
               {paused || reducedMotion ? "Retomar" : "Pausar"}
@@ -90,6 +136,7 @@ export function Carousel({ label, className, children, autoPlay = false }) {
             type="button"
             aria-label={`Próximo: ${label}`}
             aria-controls={id}
+            disabled={!hasOverflow}
             onClick={() => move(1)}
           >
             →
