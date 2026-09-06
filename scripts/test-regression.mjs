@@ -332,6 +332,10 @@ try {
   });
   const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
   const form = page.locator("[data-schedule-form]");
+  await page.waitForFunction(() => {
+    const input = document.querySelector('[data-schedule-form] [name="data"]');
+    return Boolean(input?.min && input?.max);
+  });
   const periodLabels = await form
     .locator('[name="periodo"] option')
     .allTextContents();
