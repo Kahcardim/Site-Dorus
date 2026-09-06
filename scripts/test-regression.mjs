@@ -10,6 +10,19 @@ const routePaths = [
     /<loc>https:\/\/assistenciadorus\.com\.br([^<]+)<\/loc>/g,
   ),
 ].map((match) => match[1]);
+const accessibilityPaths = [
+  "/",
+  "/servicos/",
+  "/servicos/geladeiras/",
+  "/curiosidades/",
+  "/curiosidades/geladeira-nao-gela/",
+  "/sobre/",
+  "/fale-conosco/",
+  "/agendamento/",
+  "/privacidade/",
+  "/links/",
+];
+const startedAt = Date.now();
 const mime = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
@@ -115,6 +128,33 @@ try {
     );
   }
 
+  const menuResponse = await page.goto("http://127.0.0.1:4174/links/", {
+    waitUntil: "networkidle",
+  });
+  check(menuResponse?.status() === 200, "Menu digital: rota indisponível");
+  check(
+    (await page.locator("main h1").count()) === 1,
+    "Menu digital: H1 ausente",
+  );
+  check(
+    (await page
+      .locator('.primary-actions a[href*="wa.me/5511913573932"]')
+      .count()) === 1,
+    "Menu digital: CTA principal não abre o WhatsApp oficial",
+  );
+  check(
+    (await page
+      .locator('.primary-actions a[href*="utm_campaign=menu_digital"]')
+      .count()) >= 1,
+    "Menu digital: origem do lead não foi preservada",
+  );
+  check(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth + 1,
+    ),
+    "Menu digital: overflow horizontal",
+  );
+
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
   const chunks = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name),
@@ -156,6 +196,27 @@ try {
     (await page.locator(".mobile-nav").getAttribute("open")) !== null,
     "Home: menu móvel não abre",
   );
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+  await page.locator("#avaliacoes").scrollIntoViewIfNeeded();
+  const reviewPrevious = page.getByRole("button", {
+    name: "Anterior: Avaliações de clientes",
+  });
+  const reviewNext = page.getByRole("button", {
+    name: "Próximo: Avaliações de clientes",
+  });
+  check(
+    (await reviewPrevious.isDisabled()) && (await reviewNext.isDisabled()),
+    "QA-001: avaliações sem overflow mantiveram setas ativas",
+  );
+  check(
+    (
+      await page.locator("#avaliacoes .carousel-toolbar p").innerText()
+    ).includes("totalmente visíveis"),
+    "QA-001: estado sem rolagem não foi comunicado",
+  );
+  await page.setViewportSize({ width: 390, height: 844 });
 
   for (const path of ["/", "/servicos/"]) {
     await page.goto(`http://127.0.0.1:4174${path}`, {
@@ -265,6 +326,31 @@ try {
   });
   const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
   const form = page.locator("[data-schedule-form]");
+  const periodLabels = await form
+    .locator('[name="periodo"] option')
+    .allTextContents();
+  for (const expected of [
+    "Manhã — 8h às 13h",
+    "Tarde — 13h às 18h",
+    "Dia inteiro — 8h às 18h",
+  ])
+    check(
+      periodLabels.includes(expected),
+      `Agenda: período divergente: ${expected}`,
+    );
+  const dateLimits = await form.locator('[name="data"]').evaluate((input) => ({
+    min: input.min,
+    max: input.max,
+  }));
+  const limitDays = Math.round(
+    (new Date(`${dateLimits.max}T12:00:00`).getTime() -
+      new Date(`${dateLimits.min}T12:00:00`).getTime()) /
+      86400000,
+  );
+  check(
+    limitDays === 60,
+    `Agenda: limite esperado D+60, recebido D+${limitDays}`,
+  );
   await form.locator('[name="nome"]').fill("Teste QA");
   await form.locator('[name="telefone"]').fill("11999999999");
   await form.locator('[name="bairro"]').fill("Centro");
@@ -326,7 +412,7 @@ try {
   );
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
-    for (const path of routePaths) {
+    for (const path of accessibilityPaths) {
       await page.goto(`http://127.0.0.1:4174${path}`, {
         waitUntil: "networkidle",
       });
@@ -370,6 +456,7 @@ try {
             errors.push("painel CTA fora do centro");
         }
         if (
+          location.pathname !== "/links/" &&
           !document
             .querySelector(".footer-credit")
             ?.textContent.includes("Kauan Cardim")
@@ -525,10 +612,21 @@ try {
   await desktop.close();
   await desktopContext.close();
 
+  const summary = {
+    routeCrawl: routePaths.length,
+    accessibilityScenarios: accessibility.length,
+    accessibilityTemplates: accessibilityPaths,
+    elapsedSeconds: Number(((Date.now() - startedAt) / 1000).toFixed(2)),
+    failures: failures.length,
+  };
+  await writeFile(
+    resolve(screenshots, "regression-summary.json"),
+    JSON.stringify(summary, null, 2),
+  );
   if (failures.length)
     throw new Error(`Regressão falhou:\n- ${failures.join("\n- ")}`);
   console.log(
-    "OK: 21 rotas sem JS, navegação, formulários e WhatsApp; 42 verificações axe WCAG A/AA sem violações automáticas. Validação manual ainda complementar.",
+    `OK: ${routePaths.length} rotas sem JS e com hidratação; Menu Digital, carrosséis, formulários e WhatsApp; ${accessibility.length} cenários axe WCAG A/AA representando 10 templates. ${summary.elapsedSeconds}s. Validação manual ainda complementar.`,
   );
 } finally {
   await browser.close();
