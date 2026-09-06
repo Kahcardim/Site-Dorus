@@ -370,7 +370,7 @@ function validateDate(date) {
     throw new Error('Data inválida.');
   }
 
-  const selected = Utilities.parseDate(date + ' 12:00', TIMEZONE, 'yyyy-MM-dd HH:mm');
+  const selected = Utilities.parseDate(date + ' 00:00', TIMEZONE, 'yyyy-MM-dd HH:mm');
   const todayText = Utilities.formatDate(new Date(), TIMEZONE, 'yyyy-MM-dd');
   const today = Utilities.parseDate(todayText + ' 00:00', TIMEZONE, 'yyyy-MM-dd HH:mm');
   if (selected < today) throw new Error('Não é possível agendar uma data passada.');

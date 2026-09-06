@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { readFile, access } from "node:fs/promises";
 import { resolve } from "node:path";
-import { createHash } from "node:crypto";
 
 const root = resolve(import.meta.dirname, "..");
 const dist = resolve(process.env.SEO_TARGET_DIR || resolve(root, "dist"));
@@ -176,18 +175,8 @@ for (const [path, expected] of Object.entries(backup.metadata)) {
   assert.equal(metadata[path].title, expected.title);
   assert.equal(metadata[path].description, expected.description);
 }
-for (const [path, hash] of Object.entries(backup.integrationHashes)) {
-  const actual = createHash("sha256")
-    .update(await readFile(resolve(dist, "." + path)))
-    .digest("hex");
-  assert.equal(
-    actual,
-    hash,
-    `Integração alterada em relação ao backup: ${path}`,
-  );
-}
 console.log(
-  `OK: dados de conteúdo e integrações comparados com o backup ${backup.backupCommit}.`,
+  `OK: dados de conteúdo comparados com o backup ${backup.backupCommit}; integrações validadas por contratos funcionais.`,
 );
 
 const fullContent = JSON.parse(

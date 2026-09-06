@@ -215,6 +215,8 @@
         '*Período solicitado:* ' + periodLabel,
         '*Horário exato:* a confirmar pela equipe dentro do período escolhido,',
         '',
+        '*Visita técnica e diagnóstico:* Estou ciente de que a D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor será informado antes da confirmação do agendamento e, quando o reparo for aprovado, será abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e será confirmado antes da visita.',
+        '',
         registered ? 'A solicitação já foi registrada na agenda da D’orus e aguarda confirmação.' : 'Se possível, confirme a disponibilidade desse horário.'
       ].join('\n');
     }
