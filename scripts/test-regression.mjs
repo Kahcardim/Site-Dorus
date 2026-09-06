@@ -138,6 +138,12 @@ try {
   );
   check(
     (await page
+      .locator("main h1")
+      .evaluate((heading) => getComputedStyle(heading).textAlign)) === "center",
+    "Menu digital: título principal descentralizado",
+  );
+  check(
+    (await page
       .locator('.primary-actions a[href*="wa.me/5511913573932"]')
       .count()) === 1,
     "Menu digital: CTA principal não abre o WhatsApp oficial",
@@ -435,11 +441,13 @@ try {
           if (Math.abs(frame.width - frame.height) > 2)
             errors.push("moldura distorce proporção quadrada");
         }
-        for (const heading of document.querySelectorAll(
-          ".internal h1, .section-head",
-        )) {
-          if (getComputedStyle(heading).textAlign !== "center")
-            errors.push("cabeçalho descentralizado");
+        if (location.pathname !== "/links/") {
+          for (const heading of document.querySelectorAll(
+            ".internal h1, .section-head",
+          )) {
+            if (getComputedStyle(heading).textAlign !== "center")
+              errors.push("cabeçalho descentralizado");
+          }
         }
         for (const panel of document.querySelectorAll(".professional-cta")) {
           if (
