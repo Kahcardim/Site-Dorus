@@ -47,6 +47,7 @@ jobs:
             "hotfix-visual-home-v2"
             "perf/home-avaliacoes"
             "portfolio/repository-credibility"
+            "portfolio/recruiter-facing"
             "qa/analytics-private-message"
             "qa/consolidated-regression-suite"
             "qa/modular-regression"
