@@ -63,12 +63,19 @@ jobs:
           node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
-      - name: Instalar navegador de regressão
-        run: npx playwright install --with-deps chromium
-      - name: Validar componentes, build, rotas e acessibilidade
+      - name: Gate rápido de sintaxe, contratos, build e manutenção
         env:
           DORUS_REVISION: ${{ needs.gate.outputs.revision }}
-        run: npm run check
+        run: |
+          for file in scripts/test-regression.mjs scripts/regression/*.mjs; do
+            node --check "$file"
+          done
+          npm run check:static
+          npm run test:maintenance
+      - name: Instalar navegador de regressão
+        run: npx playwright install --with-deps chromium
+      - name: Validar rotas, jornadas e acessibilidade no navegador
+        run: npm run test:regression
       - name: Comprovar equivalência com a regressão monolítica
         if: github.event_name == 'pull_request'
         env:

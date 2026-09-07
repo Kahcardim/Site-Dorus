@@ -76,6 +76,23 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   await form.locator('[name="data"]').fill(tomorrow);
   await form.locator('[name="periodo"]').selectOption({ index: 1 });
   await form.locator('[name="problema"]').fill("Não está gelando");
+  // Validate every High required field independently, with both consents granted.
+  await form.locator('[name="ciencia_visita"]').check();
+  await form.locator('[name="consentimento"]').check();
+  for (const name of ['nome', 'telefone', 'bairro', 'endereco', 'equipamento', 'data', 'periodo', 'problema']) {
+    const input = form.locator(`[name="${name}"]`);
+    const original = await input.inputValue();
+    const isSelect = await input.evaluate(element => element.tagName === 'SELECT');
+    if (isSelect) await input.selectOption('');
+    else await input.fill('');
+    await form.getByRole('button', { name: /WhatsApp/ }).click();
+    check(await input.evaluate(element => element.required && element.validity.valueMissing), `AGF-001: ${name} vazio não é obrigatório`);
+    check(!(await page.evaluate(() => window.__dorusOpened)), `AGF-001: ${name} vazio permitiu envio`);
+    if (isSelect) await input.selectOption(original);
+    else await input.fill(original);
+  }
+  await form.locator('[name="ciencia_visita"]').uncheck();
+  await form.locator('[name="consentimento"]').uncheck();
   const visitConsent = form.locator('[name="ciencia_visita"]');
   const privacyConsent = form.locator('[name="consentimento"]');
   const submitSchedule = form.getByRole("button", { name: /WhatsApp/ });

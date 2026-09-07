@@ -128,6 +128,14 @@ A integração de agenda no navegador é simulada: confirma frontend, protocolo,
 mensagem e link alternativo. Não comprova a versão do Apps Script implantada nem
 cria evento em produção. Os testes do backend executam o Code.gs versionado.
 
-Não confundir os 57 casos modelados com 57 testes automatizados implementados.
+Não confundir os 67 casos modelados com 57 testes automatizados implementados.
 A seleção de regressão por arquivos alterados ainda não está ativada: mudanças
 de código continuam executando o gate completo até haver mapa de impacto validado.
+
+AGF-001 verifica no navegador cada obrigatório vazio, isoladamente, com os dois
+consentimentos marcados. A agenda integrada deve inicializar somente depois da
+hidratação e dos limites de data do React. A resposta imediata da bridge é mantida
+no teste para detectar a regressão de inicialização (React #418).
+
+O gate rápido executa sintaxe de todos os módulos, contratos, build e manutenção
+antes de instalar o navegador. Mudanças de código ainda passam pela regressão completa.

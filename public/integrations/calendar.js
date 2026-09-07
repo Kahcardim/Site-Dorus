@@ -9,6 +9,9 @@
   function init() {
     var form = document.querySelector('[data-schedule-form]');
     if (!form) return;
+    // The bridge mutates labels/options; wait until React has hydrated the form.
+    if (document.getElementById('root') && form.dataset.scheduleReady !== 'true') return;
+    if (form.dataset.calendarInitialized === 'true') return;
 
     var dateInput = form.querySelector('input[name="data"]');
     var periodSelect = form.querySelector('select[name="periodo"]');
@@ -17,6 +20,7 @@
     var submitButton = form.querySelector('button[type="submit"]');
     if (!dateInput || !periodSelect || !status || !submitButton) return;
 
+    form.dataset.calendarInitialized = 'true';
     var bridgeReady = false;
     var pending = new Map();
     var iframe = document.createElement('iframe');
@@ -300,6 +304,7 @@
     }, REQUEST_TIMEOUT + 500);
   }
 
+  document.addEventListener('dorus:schedule-ready', init);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
