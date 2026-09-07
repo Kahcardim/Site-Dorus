@@ -84,6 +84,23 @@ class GoogleRatingTests(unittest.TestCase):
         self.assertEqual([item["author"] for item in merged[:3]], ["Romildo", "Daiana", "Ju"])
         self.assertEqual(sum(item.get("pinned") is True for item in merged), 3)
 
+    def test_merge_reviews_preserves_curated_display_text(self):
+        previous = {
+            "reviews": [
+                {
+                    "author": "Cliente",
+                    "text": "Excellent service",
+                    "displayText": "Excelente atendimento",
+                    "rating": 5,
+                }
+            ]
+        }
+        incoming = [
+            {"author": "Cliente", "text": "Excellent service", "rating": 5}
+        ]
+        merged = module.merge_reviews(incoming, previous)
+        self.assertEqual(merged[0]["displayText"], "Excelente atendimento")
+
     def test_save_reviews_does_not_shrink_existing_archive(self):
         target = Path(self.directory.name) / "google-reviews.json"
         previous_reviews = [
