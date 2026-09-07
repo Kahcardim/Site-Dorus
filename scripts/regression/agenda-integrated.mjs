@@ -2,7 +2,7 @@
 export async function run({ browser, check, failures }) {
   const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await context.newPage();
-  page.on("pageerror", (error) => failures.push(`Agenda integrada: ${error.message}`));
+  page.on("pageerror", (error) => { console.error(`Agenda integrada: ${error.message}`); failures.push(`Agenda integrada: ${error.message}`); });
   await context.route("**/*", (route) => {
     const url = new URL(route.request().url());
     if (url.hostname === "127.0.0.1") return route.continue();
@@ -51,6 +51,15 @@ export async function run({ browser, check, failures }) {
       check(message.includes(term), `AGF-008: mensagem integrada sem ${term}`);
     }
     check(await form.locator('[data-calendar-link]').isVisible(), 'AGF-008: link alternativo ausente quando popup é bloqueado');
+  } catch (error) {
+    console.error("Agenda state:", await page.evaluate(() => ({
+      min: document.querySelector('[name="data"]')?.min,
+      max: document.querySelector('[name="data"]')?.max,
+      mode: document.querySelector('[name="periodo"]')?.dataset.calendarMode,
+      frames: [...document.querySelectorAll('iframe')].map(frame => frame.src),
+      status: document.querySelector('[data-schedule-status]')?.textContent,
+    })));
+    throw error;
   } finally {
     await context.close();
   }
