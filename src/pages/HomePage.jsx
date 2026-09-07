@@ -163,13 +163,12 @@ export function HomePage() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="eyebrow">Assistência técnica em domicílio</span>
-            <h1>
-              Seu eletrodoméstico apresentou problema? Fale com quem entende.
-            </h1>
+            <h1>Assistência técnica de linha branca em Guarulhos e região.</h1>
             <p>
-              Há mais de 10 anos, a D’orus atende linha branca com diagnóstico
-              técnico, comunicação clara e atendimento em domicílio em{" "}
-              {SITE.serviceArea}.
+              Há mais de 10 anos, a D’orus realiza conserto e manutenção de
+              geladeiras, máquinas de lavar, fogões, freezers e outros
+              eletrodomésticos de linha branca, com diagnóstico técnico,
+              comunicação clara e atendimento em domicílio em {SITE.serviceArea}.
             </p>
             <div className="actions">
               <a
@@ -225,12 +224,10 @@ export function HomePage() {
           <div className="section-head">
             <div>
               <span className="kicker">Serviços</span>
-              <h2>
-                Assistência para os aparelhos que fazem parte da sua rotina
-              </h2>
+              <h2>Conserto de eletrodomésticos de linha branca em Guarulhos</h2>
               <p>
-                Escolha o aparelho para conhecer problemas comuns e preparar o
-                atendimento.
+                Escolha o aparelho para conhecer problemas comuns, orientações e
+                solicitar assistência técnica.
               </p>
             </div>
             <a className="text-link" href="/servicos/">
