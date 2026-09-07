@@ -9,13 +9,22 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "public" / "google-rating.json"
+REVIEWS_OUTPUT = ROOT / "src" / "data" / "google-reviews.json"
 SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
 EXPECTED_PLACE_ID = "ChIJZyk7iQ31zpQR0C-R3wgVywg"
+REVIEW_SELECTION = (
+    "Até 5 avaliações positivas com texto, priorizando as mais recentes entre "
+    "as retornadas pelo Google."
+)
 
 
 def fail(message: str) -> None:
     print(f"[google-rating] {message}", file=sys.stderr)
     raise SystemExit(1)
+
+
+def now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
 def safe_payload_summary(payload: object) -> str:
@@ -103,9 +112,105 @@ def save_rating(rating: float, reviews: int, output: Path = OUTPUT) -> bool:
         print("[google-rating] nota e quantidade sem alteração.")
         return False
 
-    current["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    current["updatedAt"] = now_iso()
     output.write_text(json.dumps(current, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"[google-rating] atualizado: {current['rating']} / {current['reviews']} avaliações")
+    return True
+
+
+def normalize_review(review: object) -> dict | None:
+    if not isinstance(review, dict):
+        return None
+
+    try:
+        rating = int(review.get("rating", 0))
+    except (TypeError, ValueError):
+        return None
+    if rating < 4:
+        return None
+
+    text_payload = review.get("text") or {}
+    text = text_payload.get("text") if isinstance(text_payload, dict) else None
+    if not isinstance(text, str) or not text.strip():
+        return None
+
+    author = review.get("authorAttribution") or {}
+    author_name = author.get("displayName") if isinstance(author, dict) else None
+    if not isinstance(author_name, str) or not author_name.strip():
+        author_name = "Cliente Google"
+
+    publish_time = review.get("publishTime")
+    return {
+        "author": author_name.strip(),
+        "text": text.strip(),
+        "rating": rating,
+        "relativeTime": review.get("relativePublishTimeDescription"),
+        "publishTime": publish_time if isinstance(publish_time, str) else None,
+        "authorUri": author.get("uri") if isinstance(author, dict) else None,
+        "photoUri": author.get("photoUri") if isinstance(author, dict) else None,
+        "sourceUri": review.get("googleMapsUri"),
+    }
+
+
+def select_reviews(raw_reviews: object) -> list[dict]:
+    if not isinstance(raw_reviews, list):
+        return []
+
+    normalized = []
+    seen = set()
+    for raw in raw_reviews:
+        review = normalize_review(raw)
+        if not review:
+            continue
+        identity = (review["author"], review["text"])
+        if identity in seen:
+            continue
+        seen.add(identity)
+        normalized.append(review)
+
+    normalized.sort(key=lambda item: item.get("publishTime") or "", reverse=True)
+    detailed = [item for item in normalized if len(item["text"]) >= 20]
+    selected = detailed[:5]
+
+    if len(selected) < 3:
+        selected_keys = {(item["author"], item["text"]) for item in selected}
+        for item in normalized:
+            key = (item["author"], item["text"])
+            if key in selected_keys:
+                continue
+            selected.append(item)
+            selected_keys.add(key)
+            if len(selected) >= 3:
+                break
+
+    return selected[:5]
+
+
+def save_reviews(reviews: list[dict], output: Path = REVIEWS_OUTPUT) -> bool:
+    if len(reviews) < 3:
+        print(
+            f"[google-rating] Google retornou apenas {len(reviews)} avaliações elegíveis; "
+            "snapshot de comentários preservado."
+        )
+        return False
+
+    stable = {
+        "source": "Google Places",
+        "selection": REVIEW_SELECTION,
+        "reviews": reviews,
+    }
+    try:
+        previous = json.loads(output.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        previous = None
+
+    if isinstance(previous, dict) and all(previous.get(key) == value for key, value in stable.items()):
+        print("[google-rating] seleção de comentários sem alteração.")
+        return False
+
+    payload = {**stable, "updatedAt": now_iso()}
+    output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"[google-rating] {len(reviews)} comentários recentes sincronizados.")
     return True
 
 
@@ -120,12 +225,14 @@ def main() -> None:
     if place_id != EXPECTED_PLACE_ID:
         fail("GOOGLE_PLACE_ID não corresponde à ficha pública validada da D'orus.")
 
-    url = "https://places.googleapis.com/v1/places/" + urllib.parse.quote(place_id, safe="")
+    place_path = urllib.parse.quote(place_id, safe="")
+    query = urllib.parse.urlencode({"languageCode": "pt-BR", "regionCode": "BR"})
+    url = f"https://places.googleapis.com/v1/places/{place_path}?{query}"
     request = urllib.request.Request(
         url,
         headers={
             "X-Goog-Api-Key": api_key,
-            "X-Goog-FieldMask": "rating,userRatingCount,displayName",
+            "X-Goog-FieldMask": "rating,userRatingCount,displayName,reviews",
             "Accept": "application/json",
             "User-Agent": "Dorus-GitHub-Actions/1.0",
         },
@@ -158,6 +265,7 @@ def main() -> None:
         fail(f"Quantidade de avaliações inválida: {reviews}")
 
     save_rating(rating, reviews)
+    save_reviews(select_reviews(payload.get("reviews", [])))
 
 
 if __name__ == "__main__":
