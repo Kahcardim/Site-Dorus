@@ -3,35 +3,60 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
   await page.locator("#avaliacoes").scrollIntoViewIfNeeded();
+  const reviewTrack = page.locator("#avaliacoes .review-carousel");
   const reviewPrevious = page.getByRole("button", {
     name: "Anterior: Avaliações de clientes",
   });
   const reviewNext = page.getByRole("button", {
     name: "Próximo: Avaliações de clientes",
   });
+  await page.waitForFunction(() => {
+    const track = document.querySelector("#avaliacoes .review-carousel");
+    const next = document.querySelector('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]');
+    return track && next && track.scrollWidth > track.clientWidth + 2 && !next.disabled;
+  });
   check(
-    (await reviewPrevious.isDisabled()) && (await reviewNext.isDisabled()),
-    "QA-001: avaliações sem overflow mantiveram setas ativas",
+    await reviewNext.isEnabled(),
+    "QA-001: dez avaliações devem ativar navegação no desktop",
   );
   check(
     (
       await page.locator("#avaliacoes .carousel-toolbar p").innerText()
-    ).includes("totalmente visíveis"),
-    "QA-001: estado sem rolagem não foi comunicado",
+    ).includes("Use as setas"),
+    "QA-001: estado com rolagem não foi comunicado",
   );
+  const reviewStart = await reviewTrack.evaluate((element) => element.scrollLeft);
+  await reviewNext.click();
+  await page.waitForTimeout(600);
+  const reviewDesktopNext = await reviewTrack.evaluate((element) => element.scrollLeft);
+  check(
+    reviewDesktopNext > reviewStart,
+    "QA-001: seta das avaliações não avança no desktop",
+  );
+  await reviewPrevious.click();
+  await page.waitForTimeout(600);
+  check(
+    (await reviewTrack.evaluate((element) => element.scrollLeft)) < reviewDesktopNext,
+    "QA-001: seta anterior das avaliações não retorna no desktop",
+  );
+
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForFunction(() => {
+    const track = document.querySelector("#avaliacoes .review-carousel");
     const next = document.querySelector('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]');
-    return next && !next.disabled;
+    return track && next && track.scrollWidth > track.clientWidth + 2 && !next.disabled;
   });
-  check(await reviewNext.isEnabled(), "CAR-003: resize para mobile não reativa a navegação das avaliações");
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.waitForFunction(() => {
-    const buttons = document.querySelectorAll('#avaliacoes button[aria-label]');
-    return buttons.length === 2 && [...buttons].every(button => button.disabled);
-  });
-  check((await reviewPrevious.isDisabled()) && (await reviewNext.isDisabled()), "CAR-003: resize para desktop não desativa as setas sem overflow");
-  await page.setViewportSize({ width: 390, height: 844 });
+  check(
+    await reviewNext.isEnabled(),
+    "CAR-003: resize para mobile deve manter navegação das avaliações ativa",
+  );
+  await reviewTrack.evaluate((element) => element.scrollTo({ left: 0, behavior: "instant" }));
+  await reviewNext.click();
+  await page.waitForTimeout(600);
+  check(
+    (await reviewTrack.evaluate((element) => element.scrollLeft)) > 0,
+    "CAR-003: avaliações não avançam no mobile",
+  );
 
   for (const path of ["/", "/servicos/"]) {
     await page.goto(`http://127.0.0.1:4174${path}`, {

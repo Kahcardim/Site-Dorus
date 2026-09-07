@@ -18,8 +18,12 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     "Home: nota ausente do topo",
   );
   check(
-    (await page.locator("#avaliacoes .review-card").count()) === 3,
-    "Home: depoimentos ausentes",
+    (await page.locator("#avaliacoes .review-card").count()) === 10,
+    "Home: carrossel deve exibir exatamente 10 avaliações",
+  );
+  check(
+    (await page.locator('#avaliacoes .review-card small', { hasText: "Recente" }).count()) >= 7,
+    "Home: seleção de avaliações não prioriza comentários recentes",
   );
 
   const structuralOrder = await page.evaluate(() => {

@@ -1,0 +1,110 @@
+{
+  "source": "Google Business Profile",
+  "selection": "3 avaliações históricas validadas e 7 avaliações recentes priorizando honestidade, competência, resolução, rapidez e preço justo.",
+  "updatedAt": "2026-09-07T00:00:00Z",
+  "reviews": [
+    {
+      "author": "Josefa Julia",
+      "text": "Speaking about his service is very rewarding for me; he's incredibly honest...",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Francis Barros",
+      "text": "Exemplary technical knowledge, no unnecessary parts replaced. Problem solved...",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Simone Camata",
+      "text": "Impeccable work! I've used their repair services for washing machines...",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Maria Inez Souza Pimenta",
+      "text": "Excellent service, fast and fair price, I highly recommend it!",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Rafael Cardim",
+      "text": "Excellent professional and very experienced! He solved my problem...",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "GabiiH Zaffalon Personalizados",
+      "text": "Wonderful service, great price, and the team is amazing, very attentive...",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Luciene Souza",
+      "text": "Highly competent professional, charges fair prices.",
+      "rating": 5,
+      "relativeTime": "Recente",
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Romildo Oliveira",
+      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Daiana Marques",
+      "text": "Ótimo",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Ju Kanashiro",
+      "text": "Avaliou a D’orus com 5 estrelas no Google.",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    }
+  ]
+}

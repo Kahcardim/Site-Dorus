@@ -52,3 +52,49 @@ class GoogleRatingTests(unittest.TestCase):
                 module.main()
             save.assert_not_called()
         self.assertEqual(before, self.output.read_bytes())
+
+    def test_merge_reviews_preserves_ten_unique_items(self):
+        previous = {
+            "reviews": [
+                {"author": f"Anterior {index}", "text": f"Comentário anterior {index}", "rating": 5}
+                for index in range(10)
+            ]
+        }
+        incoming = [
+            {"author": "Nova 1", "text": "Comentário novo 1", "rating": 5},
+            {"author": "Nova 2", "text": "Comentário novo 2", "rating": 5},
+        ]
+        merged = module.merge_reviews(incoming, previous)
+        self.assertEqual(len(merged), 10)
+        self.assertEqual([item["author"] for item in merged[:2]], ["Nova 1", "Nova 2"])
+        self.assertEqual(len({(item["author"], item["text"]) for item in merged}), 10)
+
+    def test_merge_reviews_reserves_pinned_history_even_with_many_incoming(self):
+        pinned = [
+            {"author": name, "text": f"Histórico {name}", "rating": 5, "pinned": True}
+            for name in ["Romildo", "Daiana", "Ju"]
+        ]
+        previous = {"reviews": pinned}
+        incoming = [
+            {"author": f"Novo {index}", "text": f"Comentário recente {index}", "rating": 5}
+            for index in range(10)
+        ]
+        merged = module.merge_reviews(incoming, previous)
+        self.assertEqual(len(merged), 10)
+        self.assertEqual([item["author"] for item in merged[:3]], ["Romildo", "Daiana", "Ju"])
+        self.assertEqual(sum(item.get("pinned") is True for item in merged), 3)
+
+    def test_save_reviews_does_not_shrink_existing_archive(self):
+        target = Path(self.directory.name) / "google-reviews.json"
+        previous_reviews = [
+            {"author": f"Cliente {index}", "text": f"Comentário válido {index}", "rating": 5}
+            for index in range(10)
+        ]
+        target.write_text(json.dumps({"source": "Google Business Profile", "selection": "anterior", "reviews": previous_reviews}), encoding="utf-8")
+        self.assertTrue(module.save_reviews(previous_reviews[:3], target))
+        saved = json.loads(target.read_text(encoding="utf-8"))
+        self.assertEqual(len(saved["reviews"]), 10)
+
+
+if __name__ == "__main__":
+    unittest.main()

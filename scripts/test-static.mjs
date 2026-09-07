@@ -125,8 +125,13 @@ assert.match(
 );
 assert.equal(
   (home.match(/class="review-card"/g) || []).length,
-  3,
-  "Home: depoimentos originais removidos",
+  10,
+  "Home: carrossel deve preservar 10 avaliações reais",
+);
+assert.match(
+  home,
+  /Josefa Julia/,
+  "Home: seleção recente de avaliações do Google não foi incorporada",
 );
 assert.match(
   contact,

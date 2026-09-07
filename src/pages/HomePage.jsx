@@ -1,4 +1,5 @@
-import { brands, reviews, services, SITE } from "../data/site.js";
+import { brands, services, SITE } from "../data/site.js";
+import googleReviews from "../data/google-reviews.json";
 import { useGoogleRating } from "../hooks/useSiteEffects.js";
 import { CtaPanel } from "../components/Layout.jsx";
 import { Faq } from "../components/ContentSections.jsx";
@@ -120,6 +121,7 @@ export function BrandCarousel({
 
 export function Reviews({ title = "Experiências de clientes da D’orus" }) {
   const { rating, reviews: count } = useGoogleRating();
+  const selectedReviews = googleReviews.reviews.slice(0, 10);
   return (
     <section
       className="section reviews-section"
@@ -153,20 +155,22 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
           </div>
         </div>
         <Carousel label="Avaliações de clientes" className="review-carousel">
-          {reviews.map(([name, text]) => (
-            <article className="review-card" key={name}>
+          {selectedReviews.map((review) => (
+            <article className="review-card" key={`${review.author}-${review.text}`}>
               <div className="review-top">
-                <div className="review-avatar">{name[0]}</div>
+                <div className="review-avatar">{review.author[0]}</div>
                 <div>
-                  <h3>{name}</h3>
-                  <small>Google</small>
+                  <h3>{review.author}</h3>
+                  <small>
+                    Google{review.relativeTime ? ` · ${review.relativeTime}` : ""}
+                  </small>
                 </div>
                 <span className="google-mark">G</span>
               </div>
-              <div className="stars" aria-label="5 estrelas">
-                ★★★★★
+              <div className="stars" aria-label={`${review.rating} estrelas`}>
+                {"★".repeat(review.rating)}
               </div>
-              <p>“{text}”</p>
+              <p>“{review.text}”</p>
             </article>
           ))}
         </Carousel>
