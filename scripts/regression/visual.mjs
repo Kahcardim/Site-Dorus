@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { resolve } from "node:path";
 
 export async function run({ browser, page, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages }) {
@@ -29,6 +29,23 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     path: resolve(screenshots, "home-desktop.png"),
     fullPage: true,
   });
+
+  const homeServiceGrid = await desktop.locator(".home-services-section .service-grid").evaluate((grid) => {
+    const cards = Array.from(grid.querySelectorAll(".service-card"));
+    const rows = new Map();
+    for (const card of cards) {
+      const top = Math.round(card.getBoundingClientRect().top);
+      rows.set(top, (rows.get(top) || 0) + 1);
+    }
+    return { count: cards.length, rows: [...rows.values()] };
+  });
+  check(
+    homeServiceGrid.count === 8 &&
+      homeServiceGrid.rows.length === 2 &&
+      homeServiceGrid.rows.every((count) => count === 4),
+    `Home desktop: serviços devem formar 2 linhas de 4 ${JSON.stringify(homeServiceGrid)}`,
+  );
+
   for (const width of [390, 1440, 1920]) {
     await desktop.setViewportSize({ width, height: 1000 });
     await desktop.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
@@ -93,6 +110,23 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
         fullPage: true,
       });
       if (name === "servicos") {
+        if (width === 1440) {
+          const serviceGrid = await desktop.locator(".service-grid").evaluate((grid) => {
+            const cards = Array.from(grid.querySelectorAll(".service-card"));
+            const rows = new Map();
+            for (const card of cards) {
+              const top = Math.round(card.getBoundingClientRect().top);
+              rows.set(top, (rows.get(top) || 0) + 1);
+            }
+            return { count: cards.length, rows: [...rows.values()] };
+          });
+          check(
+            serviceGrid.count === 8 &&
+              serviceGrid.rows.length === 2 &&
+              serviceGrid.rows.every((count) => count === 4),
+            `/servicos/ desktop: grade deve formar 2 linhas de 4 ${JSON.stringify(serviceGrid)}`,
+          );
+        }
         await desktop
           .locator(".service-card")
           .first()
