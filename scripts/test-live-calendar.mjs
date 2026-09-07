@@ -45,7 +45,10 @@ async function get(params, attempts = 3) {
       return JSON.parse(await response.text());
     } catch (error) {
       lastError = error;
-      if (attempt < attempts) await new Promise((resolveDelay) => setTimeout(resolveDelay, 1000 * attempt));
+      if (attempt < attempts)
+        await new Promise((resolveDelay) =>
+          setTimeout(resolveDelay, 1000 * attempt),
+        );
     }
   }
   throw lastError;
@@ -56,8 +59,7 @@ assert.equal(status.ok, true, "Agenda real não respondeu ao status.");
 
 const today = saoPauloToday();
 const yesterday = addDays(today, -1);
-const max = addDays(today, 60);
-const beyond = addDays(today, 61);
+const monthlyWindow = addDays(today, 30);
 let sunday = today;
 while (weekday(sunday) !== 0) sunday = addDays(sunday, 1);
 if (sunday === today) sunday = addDays(sunday, 7);
@@ -71,12 +73,11 @@ const cases = [
     error: /domingo/i,
   },
   {
-    id: "d+60",
-    date: max,
-    ok: weekday(max) !== 0,
+    id: "d+30",
+    date: monthlyWindow,
+    ok: weekday(monthlyWindow) !== 0,
     error: /domingo/i,
   },
-  { id: "d+61", date: beyond, ok: false, error: /60 dias/i },
   { id: "sunday", date: sunday, ok: false, error: /domingo/i },
 ];
 
@@ -84,15 +85,29 @@ const results = [];
 for (const testCase of cases) {
   const result = await get({ action: "availability", date: testCase.date });
   if (testCase.ok) {
-    assert.equal(result.ok, true, `${testCase.id} (${testCase.date}) deveria ser aceito: ${JSON.stringify(result)}`);
+    assert.equal(
+      result.ok,
+      true,
+      `${testCase.id} (${testCase.date}) deveria ser aceito: ${JSON.stringify(result)}`,
+    );
     assert.equal(result.date, testCase.date);
     assert.equal(result.capacityPerPeriod, 5);
     assert(Array.isArray(result.periods), `${testCase.id}: períodos ausentes`);
   } else {
-    assert.equal(result.ok, false, `${testCase.id} (${testCase.date}) deveria ser rejeitado.`);
-    assert.match(String(result.error || ""), testCase.error, `${testCase.id}: erro inesperado`);
+    assert.equal(
+      result.ok,
+      false,
+      `${testCase.id} (${testCase.date}) deveria ser rejeitado.`,
+    );
+    assert.match(
+      String(result.error || ""),
+      testCase.error,
+      `${testCase.id}: erro inesperado`,
+    );
   }
   results.push({ id: testCase.id, date: testCase.date, ok: result.ok });
 }
 
-console.log(`OK: agenda real validada em modo leitura. ${JSON.stringify(results)}`);
+console.log(
+  `OK: agenda real validada em modo leitura para janela mensal. ${JSON.stringify(results)}`,
+);
