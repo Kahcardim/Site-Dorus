@@ -29,11 +29,28 @@ const plain = (value) =>
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
-const approved = JSON.parse(await readFile(resolve(root, "tests/fixtures/approved-content-changes.json"), "utf8"));
-const contentKey = (text) => plain(text).replace(/‑/g, "-").replace(/\s+([.,?!:;])/g, "$1");
-const expectedContent = (path, value) => approved.content.find(change =>
-  change.path === path && contentKey(change.before) === contentKey(value)
-)?.after || value;
+const approved = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/approved-content-changes.json"),
+    "utf8",
+  ),
+);
+const approvedLayout = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/approved-layout-changes.json"),
+    "utf8",
+  ),
+);
+const approvedContent = [...approved.content, ...approvedLayout.content];
+const contentKey = (text) =>
+  plain(text).replace(/‑/g, "-").replace(/\s+([.,?!:;])/g, "$1");
+const expectedContent = (path, value) => {
+  const change = approvedContent.find(
+    (item) =>
+      item.path === path && contentKey(item.before) === contentKey(value),
+  );
+  return change ? change.after : value;
+};
 const sitemap = await readFile(resolve(dist, "sitemap.xml"), "utf8");
 const titles = new Set(),
   descriptions = new Set();
@@ -117,7 +134,9 @@ for (const [path, expected] of Object.entries(metadata)) {
 function includes(path, values) {
   for (const value of values.filter(Boolean))
     assert(
-      contentKey(generated.get(path)).includes(contentKey(expectedContent(path, value))),
+      contentKey(generated.get(path)).includes(
+        contentKey(expectedContent(path, value)),
+      ),
       `${path}: conteúdo perdido: ${value}`,
     );
 }
@@ -180,7 +199,12 @@ for (const [path, paragraphs] of Object.entries(backup.content))
 for (const [path, expected] of Object.entries(backup.metadata)) {
   for (const key of ["title", "description"]) {
     const change = approved.metadata[path]?.[key];
-    if (change) assert.equal(change.before, expected[key], `${path}: origem da substituição ${key} divergente`);
+    if (change)
+      assert.equal(
+        change.before,
+        expected[key],
+        `${path}: origem da substituição ${key} divergente`,
+      );
     assert.equal(metadata[path][key], change?.after || expected[key]);
   }
 }
