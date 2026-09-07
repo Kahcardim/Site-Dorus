@@ -9,7 +9,7 @@ const source = await readFile(
   "utf8",
 );
 
-function createHarness(consent = null) {
+function createHarness(consent = null, hostname = "assistenciadorus.com.br") {
   const listeners = new Map();
   const scripts = [];
   const storage = new Map();
@@ -33,7 +33,7 @@ function createHarness(consent = null) {
   };
   const window = {
     location: {
-      hostname: "assistenciadorus.com.br",
+      hostname,
       pathname: "/agendamento/",
       href: "https://assistenciadorus.com.br/agendamento/",
     },
@@ -93,4 +93,34 @@ test("rejeição permanece sem envio de evento e mantém publicidade negada", ()
   assert.deepEqual(consentUpdate.slice(0, 2), ["consent", "update"]);
   assert.equal(consentUpdate[2].analytics_storage, "denied");
   assert.equal(consentUpdate[2].ad_personalization, "denied");
+});
+
+test("ANA-003: link de WhatsApp não envia dados do formulário ao Analytics", () => {
+  const harness = createHarness("all");
+  const privateText = "QA_PII_NOME QA_PII_ENDERECO QA_PII_PROBLEMA";
+  const href = 'https://wa.me/5511913573932?text=' + encodeURIComponent(privateText);
+  const link = {
+    href, textContent: 'Continuar no WhatsApp',
+    getAttribute(name) { return name === 'href' ? href : null; },
+    closest(selector) { return selector === 'a[href]' ? this : null; },
+  };
+  harness.listeners.get('document:click')({ target: link });
+  const events = harness.window.dataLayer.map(item => Array.from(item)).filter(item => item[0] === 'event');
+  assert.equal(events.length, 2);
+  assert.equal(events[0][1], 'cta_click');
+  assert.equal(events[1][1], 'generate_lead');
+  for (const event of events) {
+    assert.equal(event[2].link_url, 'https://wa.me/5511913573932');
+    assert.doesNotMatch(JSON.stringify(event), /QA_PII|text=/);
+  }
+});
+
+
+test("PRI-004: preview local não carrega GA4 mesmo com consentimento total", () => {
+  for (const host of ['localhost', '127.0.0.1']) {
+    const harness = createHarness('all', host);
+    assert.equal(harness.scripts.length, 0);
+    assert.equal(harness.window.dorusAnalytics.trackLead('whatsapp'), false);
+    assert.equal(harness.window.dataLayer.filter(item => item[0] === 'event').length, 0);
+  }
 });
