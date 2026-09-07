@@ -1,7 +1,7 @@
 # D’orus Assistência Técnica
 
 [![Pipeline de produção](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml/badge.svg)](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
-[![Licença MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Licença proprietária](https://img.shields.io/badge/license-proprietary-lightgrey.svg)](LICENSE)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)](.nvmrc)
 [![Lighthouse Mobile](https://img.shields.io/badge/Lighthouse%20Mobile-94%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
 [![A11y](https://img.shields.io/badge/Acessibilidade-100%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
@@ -15,7 +15,7 @@ A D’orus é uma assistência técnica de linha branca em Guarulhos e região. 
 **Qualidade:** [docs/TESTES.md](docs/TESTES.md)  
 **Arquitetura:** [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
 
-![Home da D’orus em desktop](docs/media/home-desktop.png)
+![Identidade visual do site D’orus](public/assets/banner-principal-dorus.webp)
 
 ## Em 30 segundos
 
@@ -177,6 +177,9 @@ Esse desenho reduz o risco de testar um artefato e publicar outro.
 
 ## Executar localmente
 
+Pré-requisitos: Node.js **22.12 ou superior**, npm e Python 3.12 para manutenção.
+Consulte [o guia de desenvolvimento](docs/DESENVOLVIMENTO.md) para Windows e integrações.
+
 ```bash
 npm ci
 npm run dev
@@ -196,8 +199,17 @@ npx playwright install --with-deps chromium
 npm run check
 ```
 
+## Limites das evidências
+
+Os 67 casos são cenários modelados, não percentual de cobertura nem contagem de testes executados. As verificações axe e Lighthouse não certificam conformidade WCAG completa. Não há neste case evidência de aumento de receita, conversão, tráfego ou Core Web Vitals de campo.
+
+A política de revisão por PR é operacional: em 07/09/2026 a `main` ainda estava sem proteção administrativa. Veja [governança](CONTRIBUTING.md) e [evidências reproduzíveis](docs/EVIDENCIAS.md).
+
 ## Documentação técnica
 
+- [Evidências e limites das métricas](docs/EVIDENCIAS.md)
+- [Contribuição](CONTRIBUTING.md)
+- [Segurança](SECURITY.md)
 - [Case study](docs/CASE-STUDY.md)
 - [Decisões de arquitetura](docs/ARQUITETURA.md)
 - [Matriz de testes e critérios de aceite](docs/TESTES.md)

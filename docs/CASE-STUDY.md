@@ -153,7 +153,7 @@ Na mesma execução, o pós-deploy confirmou 21 páginas, 415 blocos históricos
 
 O projeto mantém documentação de rollback e um snapshot de recuperação usado pela pipeline. O build aprovado é preservado como artefato e o processo evita force-push na `main`.
 
-Deployments antigos e branches obsoletos foram limpos para reduzir ruído operacional, preservando apenas a `main`, o snapshot de recovery e um experimento de performance ainda não integrado.
+A limpeza administrativa anterior preservou o snapshot de recovery e o experimento de performance não integrado. Branches de trabalho podem existir durante novos PRs; este case não pressupõe um inventário permanente de três branches.
 
 ## O que eu defenderia em uma entrevista
 
@@ -176,6 +176,12 @@ Porque é laboratório. Ele ajuda a detectar regressões de performance, acessib
 ### Qual foi o principal ganho de maturidade do projeto?
 
 Transformar correções recorrentes em contratos automatizados e fazer P0/P1 realmente bloquearem release.
+
+## Limites e rastreabilidade
+
+As notas acima são uma medição de laboratório da revisão `81e525422fbf2924a26d6a950171db7729c2e0d5`, não uma promessa de desempenho constante. Não foram medidos resultados comerciais ou evolução de conversão. Os 67 casos modelados não equivalem à contagem de testes automatizados nem à cobertura de código. A aprovação automática não substitui avaliação humana de acessibilidade.
+
+Consulte [EVIDENCIAS.md](EVIDENCIAS.md) para origem dos valores, retenção dos artefatos e reprodução. A `main` estava com `protected: false` na consulta de 07/09/2026; gates são executados, mas a obrigatoriedade administrativa ainda é uma pendência.
 
 ## Próximas evoluções possíveis
 
