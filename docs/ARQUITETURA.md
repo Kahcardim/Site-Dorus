@@ -43,6 +43,8 @@ Essa separação permite tratar HTML indexável e comportamento interativo como 
 
 A agenda utiliza Google Apps Script. O frontend trabalha com uma bridge controlada e mantém fallback para WhatsApp quando o serviço não está disponível. As regras de negócio relevantes também são testadas fora do ambiente Google para evitar depender de chamadas reais durante regressão.
 
+O critério operacional atual exige que o serviço real permita agendamentos dentro de uma janela mínima de 30 dias corridos. Datas além dessa janela não bloqueiam release. Passado e domingos continuam inválidos, e capacidade e períodos seguem validados separadamente.
+
 ### Analytics
 
 O Analytics respeita consentimento e não deve receber conteúdo de mensagens preenchidas pelo cliente. Testes locais impedem carregamento do GA4 e usam marcadores fictícios para detectar vazamento de dados.
