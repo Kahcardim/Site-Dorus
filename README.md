@@ -3,109 +3,212 @@
 [![Pipeline de produção](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml/badge.svg)](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
 [![Licença MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)](.nvmrc)
+[![Lighthouse Mobile](https://img.shields.io/badge/Lighthouse%20Mobile-94%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
+[![A11y](https://img.shields.io/badge/Acessibilidade-100%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
 
-Site institucional em produção para uma assistência técnica de eletrodomésticos de linha branca, com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.
+**Produto real em produção, usado como case de engenharia de software, QA e entrega contínua.**
+
+A D’orus é uma assistência técnica de linha branca em Guarulhos e região. O projeto transforma procura local por defeitos em eletrodomésticos em uma jornada rastreável de conteúdo, confiança, WhatsApp e solicitação de visita, sem depender de servidor de aplicação em runtime.
 
 **Produção:** [assistenciadorus.com.br](https://assistenciadorus.com.br/)  
-**Pipeline:** [qualidade e publicação](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
+**Case técnico:** [docs/CASE-STUDY.md](docs/CASE-STUDY.md)  
+**Qualidade:** [docs/TESTES.md](docs/TESTES.md)  
+**Arquitetura:** [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
 
 ![Home da D’orus em desktop](docs/media/home-desktop.png)
 
+## Em 30 segundos
+
+| Dimensão | Evidência |
+| --- | --- |
+| Produto | Site real em produção com funil Google → conteúdo → WhatsApp/agendamento |
+| Frontend | React 19 + Vite com geração estática de HTML por rota |
+| Escopo | 21 rotas indexáveis + página 404 |
+| QA | Matriz baseada em risco, P0/P1 bloqueiam merge e produção |
+| Regressão | Playwright, axe-core, testes unitários, contratos e validação pós-deploy |
+| Conteúdo | 415 blocos históricos protegidos contra perda acidental |
+| Acessibilidade | 20 cenários axe em templates mobile e desktop, além de rotina nativa ampliada |
+| Lighthouse | Mobile 94/100 Performance e 100/100 nas demais categorias; Desktop 100/100 em todas |
+| Operação | GitHub Actions → GitHub Pages, build aprovado reutilizado e deploy idêntico evitado |
+| Integrações | Google Apps Script, Google Business Profile, Analytics condicionado a consentimento |
+
+> Métricas Lighthouse verificadas na produção em 07/09/2026. Lighthouse é dado de laboratório, não garantia de Core Web Vitals reais nem de ranking.
+
+## O que este projeto demonstra
+
+Este repositório foi tratado como produto em operação, não como landing page isolada. As decisões que mais interessam em uma avaliação técnica são:
+
+- **arquitetura proporcional ao problema:** React para composição, SSG para SEO e resiliência, sem servidor Node permanente;
+- **QA orientado a risco:** agenda, dados do cliente, WhatsApp, consentimento e regras comerciais são tratados como bloqueadores;
+- **prevenção de regressão:** contratos de conteúdo, geometria responsiva, acessibilidade e jornadas críticas são verificados automaticamente;
+- **CI/CD defensável:** o artefato testado é o mesmo publicado, builds equivalentes não geram deploy desnecessário e produção é revalidada depois da publicação;
+- **privacidade por contrato:** conteúdo preenchido em mensagens de WhatsApp não pode vazar para eventos de Analytics;
+- **decisões registradas:** arquitetura, recovery, matriz de testes e mudanças relevantes possuem documentação própria.
+
+## Resultados verificáveis
+
+Última auditoria pós-deploy de referência: [GitHub Actions #154](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867).
+
+| Perfil | Performance | Acessibilidade | Boas práticas | SEO | LCP | CLS | TBT |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Mobile | 94 | 100 | 100 | 100 | 1,4 s | 0 | 290 ms |
+| Desktop | 100 | 100 | 100 | 100 | 0,5 s | 0 | 0 ms |
+
+Na mesma execução, a validação pós-publicação confirmou:
+
+- 21 páginas publicadas e seus dados principais;
+- 415 blocos de títulos, parágrafos e listas protegidos contra regressão;
+- sitemap, canonical, dados estruturados, breadcrumbs e destinos internos;
+- agenda real disponível em modo de leitura para a janela mensal exigida pelo negócio;
+- build publicado correspondente exatamente à revisão aprovada.
+
 ## Problema de negócio
 
-A D’orus precisa transformar procura local por defeitos em eletrodomésticos em contato qualificado, sem criar uma operação digital mais complexa do que o negócio exige. O fluxo principal é pesquisa local → página de serviço ou guia → confiança → WhatsApp ou solicitação de visita.
+A D’orus precisa transformar busca local em contato qualificado sem adicionar infraestrutura desnecessária ao negócio. O fluxo principal é:
 
-O produto precisa, ao mesmo tempo:
+**pesquisa local → página de serviço ou guia → prova de confiança → WhatsApp ou solicitação de visita**
 
-- entregar conteúdo indexável e útil antes do JavaScript;
-- funcionar bem em celular e desktop;
-- preservar canais de atendimento durante falhas de integrações externas;
-- tratar agenda, dados de cliente, consentimento e regras comerciais como riscos de release;
-- permitir publicação e rollback sem servidor de aplicação permanente.
+Isso cria quatro requisitos técnicos centrais:
 
-## Solução técnica
+1. conteúdo precisa existir antes do JavaScript para descoberta e resiliência;
+2. celular é jornada prioritária, mas desktop não pode degradar;
+3. falha de agenda externa não pode eliminar o canal de atendimento;
+4. mudanças de alto risco não podem chegar à produção apenas porque o build compilou.
 
-A interface usa **React 19 + Vite**, mas não é uma SPA dependente de JavaScript para entregar conteúdo. O build gera HTML completo por rota, incluindo conteúdo, links, metadados e dados estruturados. A camada interativa é hidratada depois da primeira entrega e os grupos de páginas são carregados separadamente.
+## Arquitetura
 
-A produção é publicada no GitHub Pages por GitHub Actions. A agenda utiliza Google Apps Script, a nota do Google é sincronizada por workflow e o Analytics só é carregado após consentimento.
+```text
+Busca / acesso direto
+        │
+        ▼
+GitHub Pages
+        │
+        ├── HTML estático por rota
+        ├── CSS + imagens responsivas
+        └── hidratação React progressiva
+                    │
+                    ├── WhatsApp
+                    ├── Google Apps Script / agenda
+                    ├── Google Business Profile / avaliações
+                    └── Analytics após consentimento
+
+GitHub Actions
+        │
+        ├── unitários e contratos
+        ├── build estático + SEO
+        ├── Playwright + axe-core
+        ├── agenda real somente leitura
+        ├── comparação de performance
+        ├── publicação do build aprovado
+        └── Lighthouse + validação pós-deploy
+```
 
 ### Por que SSG em vez de SSR ou SPA pura
 
-**SSG** foi escolhido porque o conteúdo comercial muda com baixa frequência, a descoberta orgânica é central para o negócio e o produto não precisa de servidor Node em runtime.
+O conteúdo comercial muda com baixa frequência, SEO local é importante e não existe requisito de personalização por requisição. SSG permite entregar HTML completo, reduzir pontos de falha e publicar no GitHub Pages.
 
-Isso entrega HTML indexável, reduz pontos de falha e simplifica recuperação. O custo assumido é reconstruir as rotas quando o conteúdo muda e manter integrações dinâmicas separadas do HTML estático.
+SSR adicionaria infraestrutura e observabilidade de runtime sem benefício proporcional. SPA pura aumentaria a dependência da hidratação para conteúdo, navegação e descoberta orgânica.
 
-**SSR** adicionaria infraestrutura e observabilidade de runtime sem benefício proporcional neste caso. **SPA pura** reduziria a robustez do conteúdo sem JavaScript e aumentaria a dependência da hidratação para navegação e SEO.
+Trade-offs e critérios para rever essa decisão estão documentados em [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
 
-A decisão completa e seus trade-offs estão em [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
+## Estratégia de QA
 
-## Funcionalidades
+O projeto não usa "pipeline verde" como sinônimo de qualidade. A matriz diferencia risco de negócio:
 
-- Páginas de serviços e guias com navegação interna rastreável.
-- Contato direto por telefone e WhatsApp.
-- Solicitação de visita com integração de agenda e alternativa por WhatsApp.
-- Agenda real validada para uma janela mínima mensal, com bloqueio de datas passadas e domingos.
-- Nota e quantidade de avaliações sincronizadas com o Google.
-- Carrosséis com teclado, controles de pausa e respeito à redução de movimento.
-- Preferências de cookies e integração de métricas.
-- Layout responsivo, imagens adaptativas e garantia em destaque.
+| Prioridade | Exemplos | Regra |
+| --- | --- | --- |
+| P0 / High | agenda, dados do cliente, consentimento, WhatsApp, capacidade, duplicidade | qualquer falha bloqueia release |
+| P1 / High | rotas, conteúdo sem JS, carrosséis, identidade, acessibilidade A/AA | qualquer falha bloqueia release |
+| P2 / Medium | geometria complementar, evidência visual e auditorias ampliadas | exige análise registrada |
+| P3 / Low | refinamentos sem impacto funcional | pode seguir para backlog |
 
-## Tecnologias
+A suíte consolidada trabalha com **67 casos modelados**, distribuídos entre contratos, backend da agenda, rotas, formulários, carrosséis, acessibilidade, geometria, conteúdo e produção. O detalhamento está em [docs/TESTES.md](docs/TESTES.md).
 
-React · Vite · JavaScript · CSS · Playwright · axe-core · Lighthouse · GitHub Actions · GitHub Pages
+## CI/CD
 
-As integrações utilizam Google Apps Script e scripts Python executados nos fluxos de manutenção.
+A pipeline de produção executa, em sequência:
+
+1. gate rápido de sintaxe, contratos, build e manutenção;
+2. regressão Playwright e acessibilidade;
+3. validação somente leitura da agenda real;
+4. comparação de desempenho;
+5. preservação exata do build aprovado;
+6. fingerprint para evitar deploy de build idêntico;
+7. publicação no GitHub Pages;
+8. Lighthouse mobile/desktop;
+9. validação de conteúdo, integrações e revisão publicada.
+
+Esse desenho reduz o risco de testar um artefato e publicar outro.
+
+## Funcionalidades do produto
+
+- Oito jornadas de assistência para equipamentos de linha branca.
+- Guias orientados a intenção de busca e links internos para serviços.
+- Contato via WhatsApp com copy pré-preenchida.
+- Solicitação de visita com agenda e fallback para WhatsApp.
+- Janela mensal de agendamento com restrições de passado, domingo, capacidade e períodos.
+- Avaliações reais do Google em carrossel com autoplay, pausa e respeito a redução de movimento.
+- Consentimento de cookies e Analytics condicionado à preferência do usuário.
+- Responsividade com validação automatizada em mobile e desktop.
+- SEO técnico com canonical, sitemap, JSON-LD e breadcrumbs.
+
+## Stack
+
+**Frontend:** React 19, Vite, JavaScript, CSS  
+**QA:** Playwright, axe-core, Node Test Runner, Python unittest, Lighthouse  
+**CI/CD:** GitHub Actions, GitHub Pages  
+**Integrações:** Google Apps Script, Google Business Profile, GA4  
+**Runtime de desenvolvimento:** Node.js 22, Python 3.12
+
+## Estrutura do repositório
+
+| Diretório | Responsabilidade |
+| --- | --- |
+| `src/pages/` | páginas e jornadas de atendimento |
+| `src/components/` | componentes compartilhados |
+| `src/data/` | conteúdo editorial, catálogo e metadados |
+| `src/hooks/` | avaliações, consentimento e acessibilidade |
+| `src/styles/` | estilos por responsabilidade |
+| `public/` | arquivos públicos e integrações do navegador |
+| `scripts/` | SSG, regressão, auditorias e manutenção |
+| `tests/` | unidade, manutenção e referências isoladas |
+| `integrations/google-calendar/` | integração versionada da agenda |
+| `.github/workflows/` | qualidade, deploy e manutenção do repositório |
 
 ## Executar localmente
-
-Requisitos: Node.js 22 e Python 3.12 para os testes de manutenção. As versões das dependências estão fixadas no projeto.
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Para conferir a versão estática:
+Build estático:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-## Estrutura principal
-
-| Diretório | Responsabilidade |
-| --- | --- |
-| `src/pages/` | Páginas e jornadas de atendimento |
-| `src/components/` | Componentes compartilhados |
-| `src/data/` | Conteúdo editorial, catálogo e metadados |
-| `src/hooks/` | Avaliações, consentimento e preferências de acessibilidade |
-| `src/styles/` | Estilos organizados por responsabilidade |
-| `public/` | Arquivos públicos, imagens e integrações do navegador |
-| `scripts/` | Geração estática, validações e manutenção |
-| `tests/` | Testes unitários, manutenção e referências isoladas |
-| `integrations/google-calendar/` | Código da integração com a agenda |
-| `.github/workflows/` | Qualidade, publicação e sincronização de avaliações |
-
-## Qualidade
+Suíte principal:
 
 ```bash
-npx playwright install chromium
+npx playwright install --with-deps chromium
 npm run check
 ```
 
-A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core e uma leitura contra o serviço real da agenda para confirmar a janela mensal necessária ao negócio.
+## Documentação técnica
 
-Os testes automatizados complementam a revisão manual; não representam uma certificação de acessibilidade nem uma garantia de posicionamento no Google. Relatórios Lighthouse e capturas ficam disponíveis nas execuções do GitHub Actions.
+- [Case study](docs/CASE-STUDY.md)
+- [Decisões de arquitetura](docs/ARQUITETURA.md)
+- [Matriz de testes e critérios de aceite](docs/TESTES.md)
+- [Desenvolvimento](docs/DESENVOLVIMENTO.md)
+- [SEO](docs/SEO.md)
+- [Analytics e privacidade](docs/ANALYTICS.md)
+- [Rollback, recovery e backup](docs/RECOVERY.md)
+- [Changelog](CHANGELOG.md)
 
-## Publicação e integrações
+## Responsabilidade no projeto
 
-O GitHub Pages recebe o conteúdo gerado em `dist/` após a aprovação da pipeline. Mudanças apenas de documentação e builds equivalentes não exigem uma nova publicação. A validação pós-publicação confere a revisão entregue, as páginas, os dados de conteúdo e o SEO técnico.
+Projeto desenvolvido e mantido por [Kauan Cardim](https://github.com/Kahcardim), cobrindo decisões de produto, frontend, QA, automação, SEO técnico, CI/CD e operação do site em produção.
 
-As credenciais do Google ficam nos secrets do GitHub Actions ou na configuração do serviço correspondente, nunca no código enviado ao navegador. Instruções de desenvolvimento e manutenção estão em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md).
-
-## Autor
-
-Desenvolvido por [Kauan Cardim](https://github.com/Kahcardim) para a D’orus Assistência Técnica.
-
-Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md) · [Arquitetura](docs/ARQUITETURA.md) · [Recovery](docs/RECOVERY.md)
+A intenção deste repositório como portfólio é mostrar **processo de engenharia e capacidade de manter um produto real**, não apenas o resultado visual da interface.
