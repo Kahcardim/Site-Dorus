@@ -1,6 +1,6 @@
 {
   "source": "Google Business Profile",
-  "selection": "10 avaliações reais priorizando comentários recentes, clareza do atendimento, competência, honestidade, rapidez e preço justo.",
+  "selection": "3 avaliações históricas validadas e 7 avaliações recentes priorizando honestidade, competência, resolução, rapidez e preço justo.",
   "updatedAt": "2026-09-07T00:00:00Z",
   "reviews": [
     {
@@ -16,16 +16,6 @@
     {
       "author": "Francis Barros",
       "text": "Exemplary technical knowledge, no unnecessary parts replaced. Problem solved...",
-      "rating": 5,
-      "relativeTime": "Recente",
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null
-    },
-    {
-      "author": "Marta Celular",
-      "text": "Um excelente profissional",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -74,16 +64,6 @@
       "sourceUri": null
     },
     {
-      "author": "Sandra",
-      "text": "Very good... it solved the problem with my washing machine.",
-      "rating": 5,
-      "relativeTime": "Recente",
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null
-    },
-    {
       "author": "Luciene Souza",
       "text": "Highly competent professional, charges fair prices.",
       "rating": 5,
@@ -101,7 +81,30 @@
       "publishTime": null,
       "authorUri": null,
       "photoUri": null,
-      "sourceUri": null
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Daiana Marques",
+      "text": "Ótimo",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Ju Kanashiro",
+      "text": "Avaliou a D’orus com 5 estrelas no Google.",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
     }
   ]
 }
