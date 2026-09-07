@@ -7,7 +7,7 @@ Este arquivo resume ciclos relevantes do produto. O histórico completo permanec
 - Consolidação da aplicação em React + Vite com geração estática de HTML por rota.
 - Pipeline única de produção com build, regressão, acessibilidade, comparação de desempenho e validação pós-publicação.
 - Matriz de testes priorizada por risco para agendamento, dados do cliente, consentimento, WhatsApp, rotas, conteúdo e identidade visual.
-- Integração de agenda com Google Apps Script e regras de capacidade, períodos, janela de 60 dias e proteção contra duplicidade.
+- Integração de agenda com Google Apps Script e regras de capacidade, períodos, janela mensal mínima e proteção contra duplicidade.
 - Sincronização automatizada da nota e da quantidade de avaliações do Google.
 - Reforço de SEO local, metadados, dados estruturados, sitemap e links internos.
 - Correções de privacidade para impedir que conteúdo de mensagens de WhatsApp seja enviado ao Analytics.
