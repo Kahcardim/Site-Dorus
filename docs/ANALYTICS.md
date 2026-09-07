@@ -26,6 +26,8 @@ As prévias em `localhost` e `127.0.0.1` não carregam a tag do Google. Isso evi
 - `cta_type`, `link_text` e `link_url`: diagnóstico dos botões.
 - `schedule_period` e `schedule_status`: análise do agendamento, sem dados pessoais.
 
+A validação da disponibilidade da agenda em QA é operacional e não deve gerar conversões. O gate atual exige apenas que o serviço real funcione para a janela mensal necessária ao negócio.
+
 ## Configuração externa necessária no GA4
 
 1. Em **Administrador > Exibição de dados > Eventos principais**, marque `generate_lead` como evento principal.

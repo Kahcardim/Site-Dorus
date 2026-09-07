@@ -1,5 +1,9 @@
 import { SITE } from "../data/site.js";
-import { useConsent, useNativeAccessibility } from "../hooks/useSiteEffects.js";
+import {
+  useConsent,
+  useGoogleRating,
+  useNativeAccessibility,
+} from "../hooks/useSiteEffects.js";
 
 const navigation = [
   ["/", "Início"],
@@ -230,9 +234,26 @@ export function InternalHero({
   );
 }
 
+function CtaRating() {
+  const { rating, reviews: count } = useGoogleRating();
+  return (
+    <div className="cta-rating" aria-label={`${rating} de 5 estrelas no Google`}>
+      <strong data-final-google-rating>
+        {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
+      </strong>
+      <span aria-hidden="true">★★★★★</span>
+      <small>
+        <span data-final-google-review-count>{count.toLocaleString("pt-BR")}</span>{" "}
+        avaliações no Google
+      </small>
+    </div>
+  );
+}
+
 export function CtaPanel({
   title = "Conte o problema e fale direto com a D’orus.",
   children,
+  showRating = false,
 }) {
   return (
     <section className="section section-soft final-cta">
@@ -248,6 +269,7 @@ export function CtaPanel({
             <span>Atendimento em domicílio</span>
             <span>Garantia mínima de 90 dias</span>
           </div>
+          {showRating && <CtaRating />}
         </div>
         <div className="actions">
           <a

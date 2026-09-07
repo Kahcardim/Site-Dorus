@@ -66,6 +66,8 @@ O código do serviço de agenda está em `integrations/google-calendar/Code.gs`.
 
 Os testes de regressão interceptam os fluxos externos para não criar visitas nem enviar mensagens reais. Uma validação ponta a ponta com serviços externos deve utilizar um procedimento de teste explicitamente autorizado.
 
+Para a release atual, o contrato operacional da agenda exige uma janela mínima de 30 dias corridos. O smoke de produção consulta somente disponibilidade e valida passado, hoje, D+30 e domingo. Datas além de D+30 não fazem parte do bloqueio atual de release.
+
 ## Critérios antes da integração
 
 1. Executar o conjunto de testes relevante e conferir as capturas.

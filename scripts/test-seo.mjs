@@ -29,6 +29,28 @@ const plain = (value) =>
     .replace(/&nbsp;/g, " ")
     .replace(/\s+/g, " ")
     .trim();
+const approved = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/approved-content-changes.json"),
+    "utf8",
+  ),
+);
+const approvedLayout = JSON.parse(
+  await readFile(
+    resolve(root, "tests/fixtures/approved-layout-changes.json"),
+    "utf8",
+  ),
+);
+const approvedContent = [...approved.content, ...approvedLayout.content];
+const contentKey = (text) =>
+  plain(text).replace(/‑/g, "-").replace(/\s+([.,?!:;])/g, "$1");
+const expectedContent = (path, value) => {
+  const change = approvedContent.find(
+    (item) =>
+      item.path === path && contentKey(item.before) === contentKey(value),
+  );
+  return change ? change.after : value;
+};
 const sitemap = await readFile(resolve(dist, "sitemap.xml"), "utf8");
 const titles = new Set(),
   descriptions = new Set();
@@ -112,7 +134,9 @@ for (const [path, expected] of Object.entries(metadata)) {
 function includes(path, values) {
   for (const value of values.filter(Boolean))
     assert(
-      generated.get(path).includes(plain(value)),
+      contentKey(generated.get(path)).includes(
+        contentKey(expectedContent(path, value)),
+      ),
       `${path}: conteúdo perdido: ${value}`,
     );
 }
@@ -169,11 +193,20 @@ assert.match(
 console.log(
   "OK: 21 rotas, conteúdo restaurado, marcas/regiões no HTML, metadados únicos, grafos Schema, breadcrumbs, sitemap e destinos internos.",
 );
+for (const change of approved.content) includes(change.path, [change.after]);
 for (const [path, paragraphs] of Object.entries(backup.content))
   includes(path, paragraphs);
 for (const [path, expected] of Object.entries(backup.metadata)) {
-  assert.equal(metadata[path].title, expected.title);
-  assert.equal(metadata[path].description, expected.description);
+  for (const key of ["title", "description"]) {
+    const change = approved.metadata[path]?.[key];
+    if (change)
+      assert.equal(
+        change.before,
+        expected[key],
+        `${path}: origem da substituição ${key} divergente`,
+      );
+    assert.equal(metadata[path][key], change?.after || expected[key]);
+  }
 }
 console.log(
   `OK: dados de conteúdo comparados com o backup ${backup.backupCommit}; integrações validadas por contratos funcionais.`,
@@ -210,7 +243,7 @@ for (const [path, blocks] of Object.entries(fullContent.pages)) {
       `${path}: marcação ${type} perdida`,
     );
   for (const block of blocks)
-    if (!main.includes(normalizeContent(block.text)))
+    if (!main.includes(normalizeContent(expectedContent(path, block.text))))
       contentLosses.push({ path, ...block });
 }
 assert.deepEqual(

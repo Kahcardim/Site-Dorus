@@ -8,6 +8,7 @@
 @import "./base/page-density.css";
 @import "./base/home.css";
 @import "./base/contrast.css";
+@import "./base/release-polish.css";
 
 .prose ul {
   display: grid;

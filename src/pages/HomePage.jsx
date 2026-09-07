@@ -6,6 +6,24 @@ import faq from "../data/faq.json";
 import catalogCopy from "../data/catalog-copy.json";
 import { Carousel } from "../components/Carousel.jsx";
 
+const featuredGuides = [
+  {
+    slug: "geladeira-nao-gela",
+    title: "Geladeira não gela",
+    description: "Veja causas comuns e quando chamar assistência.",
+  },
+  {
+    slug: "maquina-nao-centrifuga",
+    title: "Máquina não centrifuga",
+    description: "Entenda os sintomas mais frequentes.",
+  },
+  {
+    slug: "micro-ondas-nao-aquece",
+    title: "Micro-ondas não aquece",
+    description: "Saiba quais sinais pedem avaliação.",
+  },
+];
+
 function HeroRating() {
   const { rating, reviews: count } = useGoogleRating();
   return (
@@ -78,21 +96,22 @@ export function BrandCarousel({
           </div>
         </div>
         <Carousel label="Marcas atendidas" className="brand-list" autoPlay>
-          {brands.map(([name, file]) => (
-            <div
-              className={`brand-logo${file ? "" : " is-text-only"}`}
-              key={name}
-            >
-              {file && (
-                <img
-                  src={`/assets/brands/${file}.webp`}
-                  alt={name}
-                  loading="lazy"
-                />
-              )}
-              <span className="brand-fallback">{name}</span>
-            </div>
-          ))}
+          {brands.map(([name, file]) => {
+            const asset = file
+              ? `/assets/brands/${file}.webp`
+              : name === "Bosch"
+                ? "/assets/brands/bosch.svg"
+                : null;
+            return (
+              <div
+                className={`brand-logo${asset ? "" : " is-text-only"}`}
+                key={name}
+              >
+                {asset && <img src={asset} alt={name} loading="lazy" />}
+                <span className="brand-fallback">{name}</span>
+              </div>
+            );
+          })}
         </Carousel>
       </div>
     </section>
@@ -219,7 +238,7 @@ export function HomePage() {
           </figure>
         </div>
       </section>
-      <section className="section">
+      <section className="section home-services-section">
         <div className="container">
           <div className="section-head">
             <div>
@@ -235,92 +254,11 @@ export function HomePage() {
             </a>
           </div>
           <ServiceCards />
-          <div className="prose">
-            <h3>Outros equipamentos</h3>
-            <p>Lava e seca, fornos e micro-ondas, conforme avaliação.</p>
-          </div>
         </div>
       </section>
+      <Reviews />
       <BrandCarousel />
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="kicker">Atendimento local</span>
-              <h2>Uma assistência preparada para ir até você</h2>
-            </div>
-          </div>
-          <div className="trust-grid">
-            <article className="trust-card">
-              <div className="icon">01</div>
-              <h3>Atendimento em domicílio</h3>
-              <p>O endereço é informado apenas no agendamento da visita.</p>
-            </article>
-            <article className="trust-card">
-              <div className="icon">02</div>
-              <h3>Diagnóstico responsável</h3>
-              <p>
-                Os sintomas são avaliados e a necessidade de manutenção é
-                explicada de forma clara.
-              </p>
-            </article>
-            <article className="trust-card">
-              <div className="icon">03</div>
-              <h3>Contato direto</h3>
-              <p>
-                WhatsApp e agendamento simples para reduzir o tempo entre o
-                problema e o atendimento.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-      <section className="section section-soft">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="kicker">Guias práticos</span>
-              <h2>Entenda o problema antes de solicitar assistência</h2>
-              <p>
-                Conteúdo direto para reconhecer sinais comuns e saber quando
-                buscar avaliação técnica.
-              </p>
-            </div>
-            <a className="text-link" href="/curiosidades/">
-              Ver todos os guias →
-            </a>
-          </div>
-          <div className="cards">
-            {[
-              {
-                slug: "geladeira-nao-gela",
-                title: "Geladeira não gela",
-                description: "Veja causas comuns e quando chamar assistência.",
-              },
-              {
-                slug: "maquina-nao-centrifuga",
-                title: "Máquina não centrifuga",
-                description: "Entenda os sintomas mais frequentes.",
-              },
-              {
-                slug: "micro-ondas-nao-aquece",
-                title: "Micro-ondas não aquece",
-                description: "Saiba quais sinais pedem avaliação.",
-              },
-            ].map((guide) => (
-              <a
-                className="card"
-                href={`/curiosidades/${guide.slug}/`}
-                key={guide.slug}
-              >
-                <h3>{guide.title}</h3>
-                <p>{guide.description}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section className="section section-blue">
+      <section className="section section-blue home-flow-section">
         <div className="container">
           <div className="section-head">
             <div>
@@ -344,6 +282,14 @@ export function HomePage() {
             </article>
             <article className="step">
               <span className="num">03</span>
+              <h3>Diagnóstico responsável</h3>
+              <p>
+                Os sintomas são avaliados e a necessidade de manutenção é
+                explicada de forma clara.
+              </p>
+            </article>
+            <article className="step">
+              <span className="num">04</span>
               <h3>Combine a visita</h3>
               <p>
                 A disponibilidade é confirmada e o atendimento é realizado no
@@ -353,9 +299,40 @@ export function HomePage() {
           </div>
         </div>
       </section>
+      <section
+        className="section section-soft home-guides-section"
+        data-featured-criterion="editorial-priority"
+      >
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <span className="kicker">Guias práticos</span>
+              <h2>Entenda o problema antes de solicitar assistência</h2>
+              <p>
+                Conteúdo direto para reconhecer sinais comuns e saber quando
+                buscar avaliação técnica.
+              </p>
+            </div>
+            <a className="text-link" href="/curiosidades/">
+              Ver todos os guias →
+            </a>
+          </div>
+          <div className="cards">
+            {featuredGuides.map((guide) => (
+              <a
+                className="card"
+                href={`/curiosidades/${guide.slug}/`}
+                key={guide.slug}
+              >
+                <h3>{guide.title}</h3>
+                <p>{guide.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
       <Faq items={faq} />
-      <Reviews />
-      <CtaPanel />
+      <CtaPanel showRating />
     </>
   );
 }

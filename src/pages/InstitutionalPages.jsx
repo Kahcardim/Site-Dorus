@@ -163,6 +163,13 @@ export function SchedulePage() {
     setMinDate(formatDate(today));
     setMaxDate(formatDate(maximum));
   }, []);
+  useEffect(() => {
+    if (!minDate || !maxDate) return;
+    const form = document.querySelector('[data-schedule-form]');
+    if (!form) return;
+    form.dataset.scheduleReady = "true";
+    document.dispatchEvent(new Event("dorus:schedule-ready"));
+  }, [minDate, maxDate]);
   const submit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

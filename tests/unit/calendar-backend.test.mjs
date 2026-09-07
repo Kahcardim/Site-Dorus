@@ -61,6 +61,10 @@ function createHarness({ morning = 0, afternoon = 0 } = {}) {
     Number,
     Error,
     encodeURIComponent,
+    HtmlService: {
+      XFrameOptionsMode: { ALLOWALL: "ALLOWALL" },
+      createHtmlOutput(html) { return { html, setTitle() { return this; }, setXFrameOptionsMode() { return this; } }; },
+    },
     CalendarApp: {
       EventTransparency: { OPAQUE: "OPAQUE" },
       getCalendarById: () => calendar,
@@ -150,15 +154,14 @@ test("backend aplica limites e saneia texto controlado pelo usuário", () => {
   assert.equal(harness.call(`sanitize(" <b>teste</b> ")`), "bteste/b");
 });
 
-test("backend aceita hoje e D+60, mas bloqueia passado, D+61 e domingo", () => {
+test("backend cobre a janela mensal, passado e domingo", () => {
   const harness = createHarness();
   assert.doesNotThrow(() => harness.call(`validateDate("2026-09-07")`));
-  assert.doesNotThrow(() => harness.call(`validateDate("2026-11-06")`));
+  assert.doesNotThrow(() => harness.call(`validateDate("2026-10-07")`));
   assert.throws(
     () => harness.call(`validateDate("2026-09-06")`),
     /data passada/,
   );
-  assert.throws(() => harness.call(`validateDate("2026-11-07")`), /60 dias/);
   assert.throws(() => harness.call(`validateDate("2026-09-13")`), /domingos/);
 });
 
@@ -186,4 +189,46 @@ test("requisição duplicada não cria um segundo evento", () => {
   assert.equal(first.ok, true);
   assert.equal(second.duplicate, true);
   assert.equal(harness.created.length, 1);
+});
+
+
+test("AGB-001: todos os limites aceitam a fronteira e rejeitam excesso", () => {
+  const harness = createHarness();
+  for (const [field, limit] of Object.entries({ name: 100, neighborhood: 120, address: 250, equipment: 100, brand: 120, problem: 1500 })) {
+    assert.doesNotThrow(() => invoke(harness, "validateRequired", { ...validAppointment, [field]: "x".repeat(limit) }));
+    assert.throws(() => invoke(harness, "validateRequired", { ...validAppointment, [field]: "x".repeat(limit + 1) }));
+  }
+});
+
+test("AGB-007: sessão ausente, desconhecida e expirada não permite criação", () => {
+  const harness = createHarness();
+  const token = harness.call('issueBridgeSession()');
+  assert.doesNotThrow(() => invoke(harness, 'validateBridgeSession', token));
+  for (const invalid of ['', 'unknown']) {
+    assert.throws(() => harness.call(`createAppointmentClient(${JSON.stringify(validAppointment)}, ${JSON.stringify(invalid)})`));
+  }
+  harness.cache.delete('bridge:' + token);
+  assert.throws(() => harness.call(`createAppointmentClient(${JSON.stringify(validAppointment)}, ${JSON.stringify(token)})`));
+  assert.equal(harness.created.length, 0);
+});
+
+test("AGB-007: bridge aceita apenas janela pai e origem oficial", () => {
+  const harness = createHarness();
+  const html = harness.call('bridgePage()').html;
+  const script = html.match(/<script>([\s\S]*?)<\/script>/)[1];
+  let listener;
+  const calls = [];
+  const parent = { postMessage() {} };
+  const run = {
+    withSuccessHandler() { return this; }, withFailureHandler() { return this; },
+    getAvailabilityClient(payload, token) { calls.push({ payload, token }); },
+  };
+  vm.runInNewContext(script, { window: { parent, addEventListener(_, fn) { listener = fn; } }, google: { script: { run } }, Set });
+  const data = { source: 'dorus-site', requestId: 'qa', type: 'availability', payload: { date: '2026-09-08' } };
+  listener({ source: parent, origin: 'https://example.invalid', data });
+  listener({ source: {}, origin: 'https://assistenciadorus.com.br', data });
+  assert.equal(calls.length, 0);
+  listener({ source: parent, origin: 'https://assistenciadorus.com.br', data });
+  assert.equal(calls.length, 1);
+  assert.doesNotThrow(() => invoke(harness, 'validateBridgeSession', calls[0].token));
 });

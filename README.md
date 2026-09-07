@@ -1,20 +1,50 @@
 # D’orus Assistência Técnica
 
-Site institucional de uma assistência técnica de eletrodomésticos de linha branca, com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.
+[![Pipeline de produção](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml/badge.svg)](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
+[![Licença MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node.js 22](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)](.nvmrc)
 
-[Acessar o site](https://assistenciadorus.com.br/) · [Qualidade e publicação](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
+Site institucional em produção para uma assistência técnica de eletrodomésticos de linha branca, com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.
 
-## O projeto
+**Produção:** [assistenciadorus.com.br](https://assistenciadorus.com.br/)  
+**Pipeline:** [qualidade e publicação](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
 
-A experiência conecta quem procura ajuda para um eletrodoméstico aos canais de atendimento da empresa. Reúne serviços por equipamento, guias educativos, avaliações do Google e jornadas distintas para contato e solicitação de visita.
+![Home da D’orus em desktop](docs/media/home-desktop.png)
 
-O site usa **React e Vite com geração estática de HTML**. Cada endereço entrega seu conteúdo, links e metadados antes da execução de JavaScript. Os componentes interativos são carregados após a primeira exibição do conteúdo, com código separado por grupo de páginas.
+## Problema de negócio
+
+A D’orus precisa transformar procura local por defeitos em eletrodomésticos em contato qualificado, sem criar uma operação digital mais complexa do que o negócio exige. O fluxo principal é pesquisa local → página de serviço ou guia → confiança → WhatsApp ou solicitação de visita.
+
+O produto precisa, ao mesmo tempo:
+
+- entregar conteúdo indexável e útil antes do JavaScript;
+- funcionar bem em celular e desktop;
+- preservar canais de atendimento durante falhas de integrações externas;
+- tratar agenda, dados de cliente, consentimento e regras comerciais como riscos de release;
+- permitir publicação e rollback sem servidor de aplicação permanente.
+
+## Solução técnica
+
+A interface usa **React 19 + Vite**, mas não é uma SPA dependente de JavaScript para entregar conteúdo. O build gera HTML completo por rota, incluindo conteúdo, links, metadados e dados estruturados. A camada interativa é hidratada depois da primeira entrega e os grupos de páginas são carregados separadamente.
+
+A produção é publicada no GitHub Pages por GitHub Actions. A agenda utiliza Google Apps Script, a nota do Google é sincronizada por workflow e o Analytics só é carregado após consentimento.
+
+### Por que SSG em vez de SSR ou SPA pura
+
+**SSG** foi escolhido porque o conteúdo comercial muda com baixa frequência, a descoberta orgânica é central para o negócio e o produto não precisa de servidor Node em runtime.
+
+Isso entrega HTML indexável, reduz pontos de falha e simplifica recuperação. O custo assumido é reconstruir as rotas quando o conteúdo muda e manter integrações dinâmicas separadas do HTML estático.
+
+**SSR** adicionaria infraestrutura e observabilidade de runtime sem benefício proporcional neste caso. **SPA pura** reduziria a robustez do conteúdo sem JavaScript e aumentaria a dependência da hidratação para navegação e SEO.
+
+A decisão completa e seus trade-offs estão em [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
 
 ## Funcionalidades
 
 - Páginas de serviços e guias com navegação interna rastreável.
 - Contato direto por telefone e WhatsApp.
 - Solicitação de visita com integração de agenda e alternativa por WhatsApp.
+- Agenda real validada para uma janela mínima mensal, com bloqueio de datas passadas e domingos.
 - Nota e quantidade de avaliações sincronizadas com o Google.
 - Carrosséis com teclado, controles de pausa e respeito à redução de movimento.
 - Preferências de cookies e integração de métricas.
@@ -64,7 +94,7 @@ npx playwright install chromium
 npm run check
 ```
 
-A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core.
+A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core e uma leitura contra o serviço real da agenda para confirmar a janela mensal necessária ao negócio.
 
 Os testes automatizados complementam a revisão manual; não representam uma certificação de acessibilidade nem uma garantia de posicionamento no Google. Relatórios Lighthouse e capturas ficam disponíveis nas execuções do GitHub Actions.
 
@@ -78,4 +108,4 @@ As credenciais do Google ficam nos secrets do GitHub Actions ou na configuraçã
 
 Desenvolvido por [Kauan Cardim](https://github.com/Kahcardim) para a D’orus Assistência Técnica.
 
-Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md)
+Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md) · [Arquitetura](docs/ARQUITETURA.md) · [Recovery](docs/RECOVERY.md)

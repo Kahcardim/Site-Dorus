@@ -63,12 +63,34 @@ jobs:
           node-version-file: ".nvmrc"
           cache: npm
       - run: npm ci
-      - name: Instalar navegador de regressão
-        run: npx playwright install --with-deps chromium
-      - name: Validar componentes, build, rotas e acessibilidade
+      - name: Gate rápido de sintaxe, contratos, build e manutenção
         env:
           DORUS_REVISION: ${{ needs.gate.outputs.revision }}
-        run: npm run check
+        run: |
+          for file in scripts/test-regression.mjs scripts/regression/*.mjs scripts/test-live-calendar.mjs; do
+            node --check "$file"
+          done
+          npm run check:static
+          npm run test:maintenance
+      - name: Instalar navegador de regressão
+        run: npx playwright install --with-deps chromium
+      - name: Validar rotas, jornadas e acessibilidade no navegador
+        run: npm run test:regression
+      - name: Comprovar equivalência com a regressão monolítica
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          git fetch --depth=1 origin "$BASE_SHA"
+          git show "$BASE_SHA:scripts/test-regression.mjs" > scripts/test-regression-baseline.mjs
+          if grep -q 'const noScript =' scripts/test-regression-baseline.mjs; then
+            cp test-results/regression-summary.json test-results/modular-summary.json
+            node scripts/test-regression-baseline.mjs
+            mv test-results/regression-summary.json test-results/baseline-summary.json
+            cp test-results/modular-summary.json test-results/regression-summary.json
+          fi
+          rm scripts/test-regression-baseline.mjs
       - name: Instalar auditoria de desempenho
         run: npm install --global lighthouse@12
       - name: Comparar desempenho antes da publicação
@@ -87,6 +109,21 @@ jobs:
           name: react-qa-${{ github.run_id }}
           path: test-results/
           retention-days: 14
+
+  agenda_real:
+    name: Agenda real somente leitura
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate.outputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - name: Validar fronteiras e restrições do serviço implantado
+        run: node scripts/test-live-calendar.mjs
 
   equivalencia:
     name: Equivalência da refatoração
@@ -111,10 +148,34 @@ jobs:
       - name: Comparar arquivos entregues
         run: node scripts/compare-builds.mjs .baseline/dist dist
 
+  recovery:
+    name: Restaurar snapshot independente
+    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'release:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperar snapshot anterior em árvore separada
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-portfolio-layout-2026-09-07
+          path: recovery-snapshot
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: recovery-snapshot/package-lock.json
+      - name: Reinstalar dependências a partir do snapshot
+        run: npm ci
+        working-directory: recovery-snapshot
+      - name: Reconstruir snapshot sem depender da árvore candidata
+        run: |
+          npm run build
+          node scripts/test-static.mjs
+        working-directory: recovery-snapshot
+
   preparar:
     name: Preparar publicação
     if: github.event_name != 'pull_request'
-    needs: qualidade
+    needs: [qualidade, agenda_real]
     runs-on: ubuntu-latest
     env:
       DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
@@ -144,7 +205,7 @@ jobs:
   deploy:
     name: Publicar GitHub Pages
     if: github.event_name != 'pull_request' && needs.preparar.outputs.changed == 'true'
-    needs: [qualidade, preparar]
+    needs: [qualidade, agenda_real, preparar]
     runs-on: ubuntu-latest
     outputs:
       published: ${{ steps.deployment.outcome == 'success' }}
@@ -158,7 +219,7 @@ jobs:
   lighthouse:
     name: Auditoria Lighthouse pos-deploy
     if: github.event_name != 'pull_request' && needs.deploy.outputs.published == 'true'
-    needs: [qualidade, deploy]
+    needs: [qualidade, agenda_real, deploy]
     runs-on: ubuntu-latest
     env:
       DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
@@ -191,6 +252,8 @@ jobs:
           python scripts/summarize_lighthouse.py
       - name: Validar conteúdo e integrações publicados
         run: node scripts/validate-deployment.mjs
+      - name: Revalidar agenda real após publicação
+        run: node scripts/test-live-calendar.mjs
       - name: Salvar relatorios Lighthouse
         if: always()
         uses: actions/upload-artifact@v4
