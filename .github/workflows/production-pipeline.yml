@@ -72,8 +72,6 @@ jobs:
           done
           npm run check:static
           npm run test:maintenance
-      - name: Validar agenda real em modo de leitura
-        run: node scripts/test-live-calendar.mjs
       - name: Instalar navegador de regressão
         run: npx playwright install --with-deps chromium
       - name: Validar rotas, jornadas e acessibilidade no navegador
@@ -111,6 +109,21 @@ jobs:
           name: react-qa-${{ github.run_id }}
           path: test-results/
           retention-days: 14
+
+  agenda_real:
+    name: Agenda real somente leitura
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.gate.outputs.revision }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+      - name: Validar fronteiras e restrições do serviço implantado
+        run: node scripts/test-live-calendar.mjs
 
   equivalencia:
     name: Equivalência da refatoração
@@ -156,13 +169,13 @@ jobs:
       - name: Reconstruir snapshot sem depender da árvore candidata
         run: |
           npm run build
-          npm run test:static
+          node scripts/test-static.mjs
         working-directory: recovery-snapshot
 
   preparar:
     name: Preparar publicação
     if: github.event_name != 'pull_request'
-    needs: qualidade
+    needs: [qualidade, agenda_real]
     runs-on: ubuntu-latest
     env:
       DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
@@ -192,7 +205,7 @@ jobs:
   deploy:
     name: Publicar GitHub Pages
     if: github.event_name != 'pull_request' && needs.preparar.outputs.changed == 'true'
-    needs: [qualidade, preparar]
+    needs: [qualidade, agenda_real, preparar]
     runs-on: ubuntu-latest
     outputs:
       published: ${{ steps.deployment.outcome == 'success' }}
@@ -206,7 +219,7 @@ jobs:
   lighthouse:
     name: Auditoria Lighthouse pos-deploy
     if: github.event_name != 'pull_request' && needs.deploy.outputs.published == 'true'
-    needs: [qualidade, deploy]
+    needs: [qualidade, agenda_real, deploy]
     runs-on: ubuntu-latest
     env:
       DORUS_REVISION: ${{ needs.qualidade.outputs.revision }}
