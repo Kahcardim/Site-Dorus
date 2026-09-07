@@ -185,21 +185,38 @@ def merge_reviews(incoming: list[dict], previous: object) -> list[dict]:
         for review in previous_reviews
         if isinstance(review, dict) and review.get("pinned") is not True
     ]
+    previous_by_identity = {}
+    for review in previous_reviews:
+        if not isinstance(review, dict):
+            continue
+        author = str(review.get("author", "")).strip()
+        text = str(review.get("text", "")).strip()
+        if author and text:
+            previous_by_identity[(author.casefold(), text.casefold())] = review
+
     combined = []
     seen = set()
 
     for review in [*pinned, *incoming, *unpinned]:
         if not isinstance(review, dict):
             continue
-        author = str(review.get("author", "")).strip()
-        text = str(review.get("text", "")).strip()
+        candidate = dict(review)
+        author = str(candidate.get("author", "")).strip()
+        text = str(candidate.get("text", "")).strip()
         if not author or not text:
             continue
         identity = (author.casefold(), text.casefold())
         if identity in seen:
             continue
+        previous_match = previous_by_identity.get(identity)
+        if (
+            not candidate.get("displayText")
+            and isinstance(previous_match, dict)
+            and previous_match.get("displayText")
+        ):
+            candidate["displayText"] = previous_match["displayText"]
         seen.add(identity)
-        combined.append(review)
+        combined.append(candidate)
         if len(combined) >= REVIEW_LIMIT:
             break
 
