@@ -1,7 +1,15 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { getCarouselState } from "./carouselState.js";
 
-export function Carousel({ label, className, children, autoPlay = false }) {
+export function Carousel({
+  label,
+  className,
+  children,
+  autoPlay = false,
+  showNavigation = true,
+  pauseOnPointer = true,
+  interval = 3500,
+}) {
   const id = useId();
   const track = useRef(null);
   const [paused, setPaused] = useState(false);
@@ -83,9 +91,17 @@ export function Carousel({ label, className, children, autoPlay = false }) {
       return;
     const timer = window.setInterval(() => {
       if (!document.hidden) move(1, false);
-    }, 3500);
+    }, interval);
     return () => window.clearInterval(timer);
-  }, [autoPlay, hasOverflow, paused, reducedMotion, hovered, focused]);
+  }, [autoPlay, hasOverflow, paused, reducedMotion, hovered, focused, interval]);
+
+  const helpText = !hasOverflow
+    ? `${label} estão totalmente visíveis nesta largura.`
+    : showNavigation
+      ? `Use as setas para percorrer ${label.toLowerCase()} ou deslize no celular.`
+      : autoPlay
+        ? `${label} avançam automaticamente. Deslize para navegar ou use o controle de pausa.`
+        : `Deslize para percorrer ${label.toLowerCase()}.`;
 
   return (
     <div
@@ -102,46 +118,48 @@ export function Carousel({ label, className, children, autoPlay = false }) {
       }}
     >
       <div className="carousel-toolbar">
-        <p id={`${id}-help`}>
-          {hasOverflow
-            ? `Use as setas para percorrer ${label.toLowerCase()} ou deslize no celular.`
-            : `${label} estão totalmente visíveis nesta largura.`}
-        </p>
-        <div className="carousel-buttons">
-          <button
-            type="button"
-            aria-label={`Anterior: ${label}`}
-            aria-controls={id}
-            disabled={!hasOverflow}
-            onClick={() => move(-1)}
-          >
-            ←
-          </button>
-          {autoPlay && (
-            <button
-              type="button"
-              aria-controls={id}
-              aria-pressed={paused || reducedMotion}
-              disabled={reducedMotion || !hasOverflow}
-              onClick={() => setPaused(!paused)}
-            >
-              {paused || reducedMotion ? "Retomar" : "Pausar"}
-              <span className="sr-only">
-                {" "}
-                carrossel de {label.toLowerCase()}
-              </span>
-            </button>
-          )}
-          <button
-            type="button"
-            aria-label={`Próximo: ${label}`}
-            aria-controls={id}
-            disabled={!hasOverflow}
-            onClick={() => move(1)}
-          >
-            →
-          </button>
-        </div>
+        <p id={`${id}-help`}>{helpText}</p>
+        {(showNavigation || autoPlay) && (
+          <div className="carousel-buttons">
+            {showNavigation && (
+              <button
+                type="button"
+                aria-label={`Anterior: ${label}`}
+                aria-controls={id}
+                disabled={!hasOverflow}
+                onClick={() => move(-1)}
+              >
+                ←
+              </button>
+            )}
+            {autoPlay && (
+              <button
+                type="button"
+                aria-controls={id}
+                aria-pressed={paused || reducedMotion}
+                disabled={reducedMotion || !hasOverflow}
+                onClick={() => setPaused(!paused)}
+              >
+                {paused || reducedMotion ? "Retomar" : "Pausar"}
+                <span className="sr-only">
+                  {" "}
+                  carrossel de {label.toLowerCase()}
+                </span>
+              </button>
+            )}
+            {showNavigation && (
+              <button
+                type="button"
+                aria-label={`Próximo: ${label}`}
+                aria-controls={id}
+                disabled={!hasOverflow}
+                onClick={() => move(1)}
+              >
+                →
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <div
         id={id}
@@ -151,7 +169,9 @@ export function Carousel({ label, className, children, autoPlay = false }) {
         role="group"
         aria-label={label}
         aria-describedby={`${id}-help`}
-        onPointerDown={() => setPaused(true)}
+        onPointerDown={() => {
+          if (pauseOnPointer) setPaused(true);
+        }}
         onKeyDown={(event) => {
           if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
             event.preventDefault();
