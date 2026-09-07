@@ -26,16 +26,16 @@ Não há aprovação por média: um único caso P0/P1 reprovado mantém o deploy
 
 ## Matriz automatizada consolidada
 
-| Camada                         | Cobertura obrigatória                                                                                                   | Execução                                  | Evidência                                  |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------ |
-| Unidade e contratos            | Estado do carrossel, condições da visita, períodos, limites dos campos, paleta do Menu Digital e invariantes de rotas   | Todo PR e push de código                  | Saída do Node Test Runner                  |
-| Backend da agenda              | Obrigatórios, telefone, limites, saneamento, hoje/D+60, passado/D+61, domingo, capacidade, integral, lock e duplicidade | Todo PR e push de código                  | Saída do Node Test Runner                  |
-| Build estático                 | 21 rotas, 404, H1, conteúdo estático, arquivos, WhatsApp e formulários                                                  | Todo PR e push de código                  | Logs de build e `test:static`              |
-| SEO e conteúdo                 | Metadados únicos, Schema, sitemap, links internos e 415 blocos da referência histórica                                  | Todo PR e push de código                  | Logs de `test:seo`                         |
-| Navegador funcional            | 21 rotas com e sem JavaScript, Menu Digital, cookies, contato, agenda, carrosséis e ausência de overflow                | Todo PR e push de código                  | `regression-summary.json` e capturas       |
-| Acessibilidade automática      | axe WCAG A/AA em 10 templates funcionais, mobile e desktop                                                              | Todo PR e push de código                  | `accessibility.json` — 20 cenários         |
-| Acessibilidade nativa ampliada | 21 rotas, mobile/desktop, texto 200%, cores forçadas e movimento reduzido                                               | Sob demanda antes de mudança visual ampla | Workflow `QA acessibilidade nativa`        |
-| Produção                       | Revisão publicada, 21 páginas, integrações, 404 real e Lighthouse mobile/desktop                                        | Após publicação                           | `post-deploy.json` e relatórios Lighthouse |
+| Camada                         | Cobertura obrigatória                                                                                                      | Execução                                  | Evidência                                  |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------ |
+| Unidade e contratos            | Estado do carrossel, condições da visita, períodos, limites dos campos, paleta do Menu Digital e invariantes de rotas      | Todo PR e push de código                  | Saída do Node Test Runner                  |
+| Backend da agenda              | Obrigatórios, telefone, limites, saneamento, hoje, passado, domingo, capacidade, integral, lock e duplicidade              | Todo PR e push de código                  | Saída do Node Test Runner                  |
+| Build estático                 | 21 rotas, 404, H1, conteúdo estático, arquivos, WhatsApp e formulários                                                     | Todo PR e push de código                  | Logs de build e `test:static`              |
+| SEO e conteúdo                 | Metadados únicos, Schema, sitemap, links internos e 415 blocos da referência histórica                                     | Todo PR e push de código                  | Logs de `test:seo`                         |
+| Navegador funcional            | 21 rotas com e sem JavaScript, Menu Digital, cookies, contato, agenda, carrosséis e ausência de overflow                   | Todo PR e push de código                  | `regression-summary.json` e capturas       |
+| Acessibilidade automática      | axe WCAG A/AA em 10 templates funcionais, mobile e desktop                                                                 | Todo PR e push de código                  | `accessibility.json` — 20 cenários         |
+| Acessibilidade nativa ampliada | 21 rotas, mobile/desktop, texto 200%, cores forçadas e movimento reduzido                                                  | Sob demanda antes de mudança visual ampla | Workflow `QA acessibilidade nativa`        |
+| Produção                       | Revisão publicada, 21 páginas, integrações, 404 real, agenda disponível no mês e Lighthouse mobile/desktop                | Após publicação                           | `post-deploy.json` e relatórios Lighthouse |
 
 ### Decisões de deduplicação
 
@@ -75,8 +75,9 @@ Não há aprovação por média: um único caso P0/P1 reprovado mantém o deploy
 - [ ] Indisponibilidade da agenda mantém o contato por WhatsApp utilizável.
 - [ ] Conferir com o backend os períodos Manhã (8h–13h), Tarde (13h–18h) e Dia inteiro (8h–18h).
 - [ ] Conferir o limite de cinco clientes por período e a ocupação de uma vaga em ambos no dia inteiro.
-- [ ] Conferir a janela de 60 dias, restrição de domingos e disponibilidade real.
-- [ ] Conferir as fronteiras hoje, D+60, passado, D+61 e domingo; hoje e D+60 são válidos quando não forem domingo.
+- [ ] Garantir janela mínima de 30 dias corridos para agendamento, restrição de domingos e disponibilidade real.
+- [ ] Conferir passado, hoje, D+30 e domingo; hoje e D+30 são válidos quando não forem domingo e houver disponibilidade.
+- [ ] Datas além de D+30 não fazem parte do critério de release atual.
 - [ ] Consultar disponibilidade em modo de leitura. Criação de evento real exige autorização específica.
 
 As regras operacionais acima exigem revisão manual e do serviço de agenda. Uma aprovação do frontend não comprova, sozinha, a disponibilidade ou o funcionamento do backend.
@@ -113,7 +114,7 @@ Os contratos de conteúdo e a base de referência são independentes da produç�
 | menu | WhatsApp, origem do lead, título e overflow do Menu Digital |
 | home | Carregamento de chunks, avaliações, cookies e menu móvel |
 | carousels | QA-001, marcas, setas, teclado, pausa e movimento reduzido |
-| forms | Contato e fallback da agenda; campos, D+60 e consentimentos |
+| forms | Contato e fallback da agenda; campos, janela mensal e consentimentos |
 | agenda-integrated | AGF-008 / QA-R01: protocolo real do iframe com serviço simulado e mensagem registrada |
 | accessibility | 20 cenários axe e geometria por template |
 | visual | Imagens, capturas e home em 390, 1440 e 1920 px |
