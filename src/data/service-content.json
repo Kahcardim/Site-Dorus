@@ -66,34 +66,34 @@
   "geladeiras": {
     "ctaDescription": "Envie marca, modelo, foto e uma breve descrição do defeito.",
     "ctaTitle": "Conte o problema da sua geladeira.",
-    "intro": "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
+    "intro": "A D’orus realiza conserto e assistência técnica de geladeiras em Guarulhos e região. Se a geladeira não está gelando, está formando gelo demais, vazando água, fazendo barulho ou apresentando falhas de refrigeração, observe os sintomas e evite desmontar o aparelho.",
     "issues": [
       {
-        "description": "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação.",
-        "title": "Não está gelando"
+        "description": "Geladeira que não gela ou gela pouco pode ter relação com vedação, circulação de ar, degelo ou outros componentes que precisam de diagnóstico técnico.",
+        "title": "Geladeira não está gelando"
       },
       {
-        "description": "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção.",
+        "description": "Quando o freezer funciona, mas a parte da geladeira perde refrigeração, o fluxo de ar e o sistema de degelo merecem avaliação.",
         "title": "Freezer gela, geladeira não"
       },
       {
-        "description": "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna.",
+        "description": "Acúmulo anormal de gelo pode indicar problema de vedação, degelo ou circulação interna.",
         "title": "Gelo em excesso"
       },
       {
-        "description": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação.",
+        "description": "Geladeira vazando água pode ter relação com drenagem, gelo acumulado ou falhas de vedação.",
         "title": "Vazamento de água"
       },
       {
-        "description": "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico.",
-        "title": "Ruídos diferentes"
+        "description": "Geladeira fazendo barulho, com ruídos novos, fortes ou contínuos, deve ter esse comportamento considerado no diagnóstico.",
+        "title": "Geladeira fazendo barulho"
       },
       {
-        "description": "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
+        "description": "Ciclos fora do padrão podem sinalizar esforço excessivo, falha de controle ou necessidade de avaliação técnica.",
         "title": "Liga e desliga demais"
       }
     ],
-    "title": "Assistência técnica de geladeiras em Guarulhos e região."
+    "title": "Conserto e assistência técnica de geladeiras em Guarulhos."
   },
   "lava-e-seca": {
     "ctaDescription": "Envie marca, modelo e o erro apresentado.",
