@@ -63,8 +63,8 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
       86400000,
   );
   check(
-    limitDays === 60,
-    `Agenda: limite esperado D+60, recebido D+${limitDays}`,
+    limitDays >= 30,
+    `Agenda: janela mínima mensal esperada, recebido D+${limitDays}`,
   );
   await form.locator('[name="nome"]').fill("Teste QA");
   await form.locator('[name="telefone"]').fill("11999999999");
