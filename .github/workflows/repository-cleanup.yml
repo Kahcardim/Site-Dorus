@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: write
-  deployments: write
 
 concurrency:
   group: repository-admin-cleanup
@@ -17,7 +16,7 @@ concurrency:
 
 jobs:
   cleanup:
-    name: Remover branches e deployments obsoletos
+    name: Remover branches obsoletos
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -76,41 +75,10 @@ jobs:
 
           echo "Preservadas intencionalmente: main, backup/pre-portfolio-layout-2026-09-07 e perf/desktop-critical-css."
 
-      - name: Excluir deployments antigos do GitHub Pages
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t ids < <(
-            gh api --paginate "repos/${REPO}/deployments?environment=github-pages&per_page=100" \
-              --jq '.[].id'
-          )
-
-          if (( ${#ids[@]} <= 1 )); then
-            echo "Nenhum deployment antigo para excluir."
-            exit 0
-          fi
-
-          latest="${ids[0]}"
-          echo "Preservando deployment mais recente: ${latest}"
-
-          for id in "${ids[@]:1}"; do
-            state="$(gh api "repos/${REPO}/deployments/${id}/statuses?per_page=1" --jq '.[0].state // ""' 2>/dev/null || true)"
-            if [[ "$state" != "inactive" ]]; then
-              gh api -X POST "repos/${REPO}/deployments/${id}/statuses" \
-                -f state=inactive \
-                -f description='Deployment antigo desativado antes da limpeza administrativa.' >/dev/null
-            fi
-            echo "Excluindo deployment antigo: ${id}"
-            gh api -X DELETE "repos/${REPO}/deployments/${id}" >/dev/null
-          done
-
       - name: Resumo
         run: |
           echo "### Limpeza concluída" >> "$GITHUB_STEP_SUMMARY"
           echo "- branches obsoletos removidos" >> "$GITHUB_STEP_SUMMARY"
           echo "- snapshot de recovery preservado" >> "$GITHUB_STEP_SUMMARY"
           echo "- experimento perf/desktop-critical-css preservado por conter commit não integrado" >> "$GITHUB_STEP_SUMMARY"
-          echo "- somente o deployment mais recente do github-pages foi preservado" >> "$GITHUB_STEP_SUMMARY"
+          echo "- deployments do GitHub Pages não são removidos por esta rotina" >> "$GITHUB_STEP_SUMMARY"
