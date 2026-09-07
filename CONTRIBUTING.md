@@ -19,6 +19,8 @@ A política operacional é **sem push direto**. Alterações devem chegar por Pu
 
 A proteção administrativa do GitHub deve exigir os checks da `Pipeline de producao` e impedir integração enquanto um gate obrigatório estiver vermelho.
 
+Estado verificado em 07/09/2026: `main` com `protected: false`. A política acima orienta o processo, mas ainda não é imposta por branch protection. A ativação depende de acesso administrativo; não apresentar a pipeline como impedimento técnico a qualquer merge manual.
+
 ## Risco
 
 - **P0 / High:** agenda, dados do cliente, consentimento, WhatsApp, regras comerciais, capacidade e duplicidade.

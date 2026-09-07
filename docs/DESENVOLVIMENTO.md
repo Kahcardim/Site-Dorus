@@ -88,3 +88,17 @@ O manifesto ignora apenas o identificador da revisão, nomes de assets com hash 
 PRs com título iniciado por `refactor:` executam também a comparação do build com a branch base. Mudanças funcionais intencionais devem ser tratadas como features ou correções, com critérios de aceite próprios.
 
 Integrações usam squash para reunir os commits de trabalho. Não é necessário reescrever a história da branch principal ou apagar registros de deploy para manter novas alterações organizadas.
+
+## Preparação no Windows
+
+Use Node.js 22.12 ou superior e Python 3.12. `npm run test:maintenance` usa o comando `python3`; se a instalação do Windows disponibilizar apenas `py`, execute a mesma suíte diretamente:
+
+```powershell
+npm ci
+npx playwright install chromium
+npm run check:static
+py -3.12 -m unittest discover -s tests/maintenance -p 'test_*.py'
+npm run test:regression
+```
+
+Não é necessário configurar credenciais Google para build e testes locais. A leitura real da agenda é uma verificação separada, dependente do serviço externo. Não use dados reais de clientes em fixtures ou capturas.

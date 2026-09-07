@@ -53,8 +53,8 @@ Não há aprovação por média: um único caso P0/P1 reprovado mantém o deploy
 - [ ] A identificação “Assistência multimarcas” permanece legível junto à imagem.
 - [ ] Banner e imagens de equipamentos não ficam deformados ou cortados indevidamente.
 - [ ] Garantia mínima de 90 dias continua visível.
-- [ ] Carrosséis funcionam com setas, teclado e gesto; pausa e redução de movimento são respeitadas.
-- [ ] Setas ficam desativadas quando todos os itens já estão visíveis (QA-001).
+- [ ] Marcas: conferir controles, teclado e gesto conforme o componente. Avaliações: conferir autoplay, gesto e pausar/retomar, sem setas; respeitar redução de movimento.
+- [ ] Nos carrosséis que possuem setas, elas ficam desativadas quando todos os itens já estão visíveis (QA-001).
 - [ ] Rodapé mantém dados da empresa e autoria.
 
 ## Páginas e navegação
