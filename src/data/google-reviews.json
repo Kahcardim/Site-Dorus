@@ -5,6 +5,7 @@
     {
       "author": "Romildo Oliveira",
       "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
+      "displayText": "Bom lugar para consertos de geladeiras e máquinas de lavar",
       "rating": 5,
       "relativeTime": null,
       "publishTime": null,
@@ -16,6 +17,7 @@
     {
       "author": "Daiana Marques",
       "text": "Ótimo",
+      "displayText": "Ótimo",
       "rating": 5,
       "relativeTime": null,
       "publishTime": null,
@@ -27,6 +29,7 @@
     {
       "author": "Ju Kanashiro",
       "text": "Avaliou a D’orus com 5 estrelas no Google.",
+      "displayText": "Avaliou a D’orus com 5 estrelas no Google.",
       "rating": 5,
       "relativeTime": null,
       "publishTime": null,
@@ -38,6 +41,7 @@
     {
       "author": "Josefa Julia",
       "text": "Speaking about his service is very rewarding for me; he's incredibly honest...",
+      "displayText": "Falar sobre o atendimento dele é muito gratificante para mim; ele é extremamente honesto...",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -48,6 +52,7 @@
     {
       "author": "Francis Barros",
       "text": "Exemplary technical knowledge, no unnecessary parts replaced. Problem solved...",
+      "displayText": "Conhecimento técnico exemplar, sem troca de peças desnecessárias. Problema resolvido...",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -58,6 +63,7 @@
     {
       "author": "Simone Camata",
       "text": "Impeccable work! I've used their repair services for washing machines...",
+      "displayText": "Trabalho impecável! Já utilizei os serviços de conserto de máquinas de lavar...",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -68,6 +74,7 @@
     {
       "author": "Maria Inez Souza Pimenta",
       "text": "Excellent service, fast and fair price, I highly recommend it!",
+      "displayText": "Excelente atendimento, rápido e com preço justo. Recomendo muito!",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -78,6 +85,7 @@
     {
       "author": "Rafael Cardim",
       "text": "Excellent professional and very experienced! He solved my problem...",
+      "displayText": "Excelente profissional e muito experiente! Resolveu meu problema...",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -88,6 +96,7 @@
     {
       "author": "GabiiH Zaffalon Personalizados",
       "text": "Wonderful service, great price, and the team is amazing, very attentive...",
+      "displayText": "Atendimento maravilhoso, ótimo preço e uma equipe incrível, muito atenciosa...",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
@@ -98,6 +107,7 @@
     {
       "author": "Luciene Souza",
       "text": "Highly competent professional, charges fair prices.",
+      "displayText": "Profissional altamente competente e com preços justos.",
       "rating": 5,
       "relativeTime": "Recente",
       "publishTime": null,
