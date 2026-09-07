@@ -79,6 +79,11 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   const bosch = page.locator('.brands-section img[alt="Bosch"]');
   check((await bosch.count()) === 1, "Home: Bosch continua sem ativo visual");
   if ((await bosch.count()) === 1) {
+    await bosch.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.brands-section img[alt="Bosch"]');
+      return Boolean(image?.complete && image.naturalWidth > 0);
+    });
     check(
       await bosch.evaluate((image) => image.complete && image.naturalWidth > 0),
       "Home: ativo visual da Bosch não carregou",
