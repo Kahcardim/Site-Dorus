@@ -1,8 +1,40 @@
 {
   "source": "Google Business Profile",
   "selection": "3 avaliações históricas validadas e 7 avaliações recentes priorizando honestidade, competência, resolução, rapidez e preço justo.",
-  "updatedAt": "2026-09-07T00:00:00Z",
   "reviews": [
+    {
+      "author": "Romildo Oliveira",
+      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Daiana Marques",
+      "text": "Ótimo",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
+    {
+      "author": "Ju Kanashiro",
+      "text": "Avaliou a D’orus com 5 estrelas no Google.",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null,
+      "pinned": true
+    },
     {
       "author": "Josefa Julia",
       "text": "Speaking about his service is very rewarding for me; he's incredibly honest...",
@@ -72,39 +104,7 @@
       "authorUri": null,
       "photoUri": null,
       "sourceUri": null
-    },
-    {
-      "author": "Romildo Oliveira",
-      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
-      "rating": 5,
-      "relativeTime": null,
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null,
-      "pinned": true
-    },
-    {
-      "author": "Daiana Marques",
-      "text": "Ótimo",
-      "rating": 5,
-      "relativeTime": null,
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null,
-      "pinned": true
-    },
-    {
-      "author": "Ju Kanashiro",
-      "text": "Avaliou a D’orus com 5 estrelas no Google.",
-      "rating": 5,
-      "relativeTime": null,
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null,
-      "pinned": true
     }
-  ]
+  ],
+  "updatedAt": "2026-09-07T12:57:02Z"
 }
