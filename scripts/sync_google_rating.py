@@ -12,9 +12,10 @@ OUTPUT = ROOT / "public" / "google-rating.json"
 REVIEWS_OUTPUT = ROOT / "src" / "data" / "google-reviews.json"
 SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
 EXPECTED_PLACE_ID = "ChIJZyk7iQ31zpQR0C-R3wgVywg"
+REVIEW_LIMIT = 10
 REVIEW_SELECTION = (
-    "Até 5 avaliações positivas com texto, priorizando as mais recentes entre "
-    "as retornadas pelo Google."
+    "10 avaliações reais priorizando comentários recentes, clareza do atendimento, "
+    "competência, honestidade, rapidez e preço justo."
 )
 
 
@@ -169,40 +170,51 @@ def select_reviews(raw_reviews: object) -> list[dict]:
         normalized.append(review)
 
     normalized.sort(key=lambda item: item.get("publishTime") or "", reverse=True)
-    detailed = [item for item in normalized if len(item["text"]) >= 20]
-    selected = detailed[:5]
+    return normalized[:REVIEW_LIMIT]
 
-    if len(selected) < 3:
-        selected_keys = {(item["author"], item["text"]) for item in selected}
-        for item in normalized:
-            key = (item["author"], item["text"])
-            if key in selected_keys:
-                continue
-            selected.append(item)
-            selected_keys.add(key)
-            if len(selected) >= 3:
-                break
 
-    return selected[:5]
+def merge_reviews(incoming: list[dict], previous: object) -> list[dict]:
+    previous_reviews = previous.get("reviews", []) if isinstance(previous, dict) else []
+    combined = []
+    seen = set()
+
+    for review in [*incoming, *previous_reviews]:
+        if not isinstance(review, dict):
+            continue
+        author = str(review.get("author", "")).strip()
+        text = str(review.get("text", "")).strip()
+        if not author or not text:
+            continue
+        identity = (author.casefold(), text.casefold())
+        if identity in seen:
+            continue
+        seen.add(identity)
+        combined.append(review)
+        if len(combined) >= REVIEW_LIMIT:
+            break
+
+    return combined
 
 
 def save_reviews(reviews: list[dict], output: Path = REVIEWS_OUTPUT) -> bool:
-    if len(reviews) < 3:
+    try:
+        previous = json.loads(output.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        previous = None
+
+    merged = merge_reviews(reviews, previous)
+    if len(merged) < 3:
         print(
-            f"[google-rating] Google retornou apenas {len(reviews)} avaliações elegíveis; "
+            f"[google-rating] apenas {len(merged)} avaliações elegíveis disponíveis; "
             "snapshot de comentários preservado."
         )
         return False
 
     stable = {
-        "source": "Google Places",
+        "source": "Google Business Profile",
         "selection": REVIEW_SELECTION,
-        "reviews": reviews,
+        "reviews": merged,
     }
-    try:
-        previous = json.loads(output.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        previous = None
 
     if isinstance(previous, dict) and all(previous.get(key) == value for key, value in stable.items()):
         print("[google-rating] seleção de comentários sem alteração.")
@@ -210,7 +222,7 @@ def save_reviews(reviews: list[dict], output: Path = REVIEWS_OUTPUT) -> bool:
 
     payload = {**stable, "updatedAt": now_iso()}
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"[google-rating] {len(reviews)} comentários recentes sincronizados.")
+    print(f"[google-rating] arquivo rotativo com {len(merged)} comentários sincronizado.")
     return True
 
 
