@@ -1,5 +1,5 @@
 
-export async function run({ browser, page, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages }) {
+export async function run({ browser, routePaths, check, failures }) {
   const noScript = await browser.newContext({ javaScriptEnabled: false });
   const crawlPage = await noScript.newPage();
   for (const path of routePaths) {
