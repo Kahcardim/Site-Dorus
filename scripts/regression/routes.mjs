@@ -57,6 +57,16 @@ export async function run({ browser, routePaths, check, failures }) {
       (await page.locator('.whatsapp-float[href*="wa.me"]').count()) === 1,
       `${path}: WhatsApp flutuante ausente`,
     );
+
+    const finalCta = page.locator(".final-cta .actions");
+    if ((await finalCta.count()) > 0) {
+      check(
+        (await finalCta.locator('a[href*="wa.me"]').count()) === 1 &&
+          (await finalCta.locator('a[href="/agendamento/"]').count()) === 0 &&
+          (await finalCta.locator("a").count()) === 1,
+        `${path}: CTA final deve conter somente WhatsApp`,
+      );
+    }
   }
 
   return { context, page };

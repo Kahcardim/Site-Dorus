@@ -96,9 +96,11 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
 
   check(
     (await page.locator("main .actions").count()) === 2 &&
-      (await page.locator(".hero .actions > a").count()) === 2 &&
-      (await page.locator(".final-cta .actions > a").count()) === 2,
-    "Home: pares completos de CTA devem existir somente no Hero e CTA final",
+      (await page.locator('.hero .actions > a[href*="wa.me"]').count()) === 1 &&
+      (await page.locator('.final-cta .actions > a[href*="wa.me"]').count()) === 1 &&
+      (await page.locator('.hero .actions > a[href="/agendamento/"]').count()) === 0 &&
+      (await page.locator('.final-cta .actions > a[href="/agendamento/"]').count()) === 0,
+    "Home: Hero e CTA final devem ter somente o botão do WhatsApp",
   );
 
   const ratingContract = await page.evaluate(() => ({

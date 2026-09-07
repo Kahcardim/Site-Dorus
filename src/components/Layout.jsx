@@ -280,9 +280,6 @@ export function CtaPanel({
           >
             Abrir WhatsApp
           </a>
-          <a className="button button-white" href="/agendamento/">
-            Agendar visita
-          </a>
         </div>
       </div>
     </section>

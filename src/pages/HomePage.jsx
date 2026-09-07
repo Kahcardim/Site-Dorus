@@ -209,9 +209,6 @@ export function HomePage() {
               >
                 Falar no WhatsApp
               </a>
-              <a className="button button-white" href="/agendamento/">
-                Agendar visita
-              </a>
             </div>
             <div className="hero-points">
               <HeroRating />
