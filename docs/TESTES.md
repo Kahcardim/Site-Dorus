@@ -102,3 +102,32 @@ A rotina manual “QA acessibilidade nativa” executa cenários adicionais com 
 - [ ] Conferir capturas e relatórios da pipeline, sem tratar nota Lighthouse como garantia de ranking.
 
 Os contratos de conteúdo e a base de referência são independentes da produção. O backup não deve ser atualizado ou publicado automaticamente para acompanhar cada release.
+
+## Suíte modular — continuidade da matriz mestra
+
+`scripts/test-regression.mjs` orquestra módulos em `scripts/regression/`:
+
+| Módulo | Responsabilidade |
+| --- | --- |
+| routes | 21 rotas sem JavaScript e com hidratação; erros de runtime |
+| menu | WhatsApp, origem do lead, título e overflow do Menu Digital |
+| home | Carregamento de chunks, avaliações, cookies e menu móvel |
+| carousels | QA-001, marcas, setas, teclado, pausa e movimento reduzido |
+| forms | Contato e fallback da agenda; campos, D+60 e consentimentos |
+| agenda-integrated | AGF-008 / QA-R01: protocolo real do iframe com serviço simulado e mensagem registrada |
+| accessibility | 20 cenários axe e geometria por template |
+| visual | Imagens, capturas e home em 390, 1440 e 1920 px |
+
+O relatório `regression-summary.json` registra duração e falhas por grupo.
+A migração conserva os sete corpos de cenários antigos, sem remover assertions.
+Enquanto a base do PR ainda contiver o monólito, a CI executa também essa base
+sobre o mesmo build e preserva `baseline-summary.json` e `modular-summary.json`.
+Após a migração, a execução duplicada é automaticamente dispensada.
+
+A integração de agenda no navegador é simulada: confirma frontend, protocolo,
+mensagem e link alternativo. Não comprova a versão do Apps Script implantada nem
+cria evento em produção. Os testes do backend executam o Code.gs versionado.
+
+Não confundir os 57 casos modelados com 57 testes automatizados implementados.
+A seleção de regressão por arquivos alterados ainda não está ativada: mudanças
+de código continuam executando o gate completo até haver mapa de impacto validado.

@@ -1,5 +1,13 @@
+import { run as runIntegratedAgenda } from "./regression/agenda-integrated.mjs";
+import { run as runRoutes } from "./regression/routes.mjs";
+import { run as runMenu } from "./regression/menu.mjs";
+import { run as runHome } from "./regression/home.mjs";
+import { run as runCarousels } from "./regression/carousels.mjs";
+import { run as runForms } from "./regression/forms.mjs";
+import { run as runAccessibility } from "./regression/accessibility.mjs";
+import { run as runVisual } from "./regression/visual.mjs";
 import { createServer } from "node:http";
-import { mkdir, readFile, stat, writeFile } from "node:fs/promises";
+import { readFile, stat, writeFile } from "node:fs/promises";
 import { extname, resolve } from "node:path";
 import { chromium } from "playwright";
 
@@ -51,11 +59,13 @@ const server = createServer(async (request, response) => {
 });
 
 await new Promise((done) => server.listen(4174, "127.0.0.1", done));
-const browser = await chromium.launch({ headless: true });
+let browser;
 const failures = [];
+const groups = [];
+let activeGroup = "runtime";
 const accessibility = [];
 const check = (condition, message) => {
-  if (!condition) failures.push(message);
+  if (!condition) failures.push(`[${activeGroup}] ${message}`);
 };
 
 async function loadLazyImages(targetPage) {
@@ -69,562 +79,37 @@ async function loadLazyImages(targetPage) {
 }
 
 try {
-  const noScript = await browser.newContext({ javaScriptEnabled: false });
-  const crawlPage = await noScript.newPage();
-  for (const path of routePaths) {
-    await crawlPage.goto(`http://127.0.0.1:4174${path}`);
-    check(
-      (await crawlPage.locator("main h1").count()) === 1,
-      `${path}: conteúdo depende de JavaScript`,
-    );
-    check(
-      (await crawlPage.locator("main").innerText()).length > 150,
-      `${path}: HTML sem conteúdo suficiente`,
-    );
-    check(
-      (await crawlPage.locator('a[href^="/servicos/"]').count()) > 0,
-      `${path}: links não rastreáveis`,
-    );
-  }
-  await noScript.close();
-  const context = await browser.newContext({
-    viewport: { width: 390, height: 844 },
-  });
-  const page = await context.newPage();
-  page.on("pageerror", (error) => failures.push(`Runtime: ${error.message}`));
-  page.on("console", (message) => {
-    if (
-      message.type() === "error" &&
-      /hydration|Minified React error|didn't match/i.test(message.text())
-    )
-      failures.push(message.text());
-  });
-  await page.route("https://script.google.com/**", (route) => route.abort());
-
-  for (const path of routePaths) {
-    const response = await page.goto(`http://127.0.0.1:4174${path}`, {
-      waitUntil: "networkidle",
-    });
-    check(response?.status() === 200, `${path}: HTTP ${response?.status()}`);
-    check(
-      (await page.locator("main#conteudo").count()) === 1,
-      `${path}: main ausente`,
-    );
-    check((await page.locator("h1").count()) === 1, `${path}: deve ter um h1`);
-    check(
-      (await page.locator('link[rel="canonical"]').getAttribute("href")) ===
-        `https://assistenciadorus.com.br${path}`,
-      `${path}: canonical incorreto`,
-    );
-    const overflow = await page.evaluate(
-      () =>
-        document.documentElement.scrollWidth -
-        document.documentElement.clientWidth,
-    );
-    check(overflow <= 1, `${path}: overflow horizontal de ${overflow}px`);
-    check(
-      (await page.locator('.whatsapp-float[href*="wa.me"]').count()) === 1,
-      `${path}: WhatsApp flutuante ausente`,
-    );
-  }
-
-  const menuResponse = await page.goto("http://127.0.0.1:4174/links/", {
-    waitUntil: "networkidle",
-  });
-  check(menuResponse?.status() === 200, "Menu digital: rota indisponível");
-  check(
-    (await page.locator("main h1").count()) === 1,
-    "Menu digital: H1 ausente",
-  );
-  check(
-    (await page
-      .locator("main h1")
-      .evaluate((heading) => getComputedStyle(heading).textAlign)) === "center",
-    "Menu digital: título principal descentralizado",
-  );
-  check(
-    (await page
-      .locator('.primary-actions a[href*="wa.me/5511913573932"]')
-      .count()) === 1,
-    "Menu digital: CTA principal não abre o WhatsApp oficial",
-  );
-  check(
-    (await page
-      .locator('.primary-actions a[href*="utm_campaign=menu_digital"]')
-      .count()) >= 1,
-    "Menu digital: origem do lead não foi preservada",
-  );
-  check(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth + 1,
-    ),
-    "Menu digital: overflow horizontal",
-  );
-
-  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  const chunks = await page.evaluate(() =>
-    performance.getEntriesByType("resource").map((entry) => entry.name),
-  );
-  check(
-    !chunks.some((url) =>
-      /\/(InstitutionalPages|ServicePages|GuidePages)-/.test(url),
-    ),
-    "Home: carregou código de páginas não visitadas",
-  );
-  check(
-    chunks.filter((url) => url.includes("/google-rating.json")).length === 1,
-    "Home: requisições duplicadas para a avaliação",
-  );
-  check(
-    await page.locator(".hero-rating [data-google-rating]").isVisible(),
-    "Home: nota ausente do topo",
-  );
-  check(
-    (await page.locator("#avaliacoes .review-card").count()) === 3,
-    "Home: depoimentos ausentes",
-  );
-  await page.keyboard.press("Tab");
-  check(
-    (await page.locator(":focus").textContent())?.includes("Pular"),
-    "Home: skip link não recebe foco",
-  );
-  check(
-    (await page.locator("[data-cookie-banner]").count()) === 1,
-    "Home: banner de cookies ausente",
-  );
-  await page.getByRole("button", { name: "Somente necessários" }).click();
-  check(
-    (await page.locator("[data-cookie-banner]").count()) === 0,
-    "Home: banner de cookies não fecha",
-  );
-  await page.locator(".mobile-nav summary").click();
-  check(
-    (await page.locator(".mobile-nav").getAttribute("open")) !== null,
-    "Home: menu móvel não abre",
-  );
-
-  await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  await page.locator("#avaliacoes").scrollIntoViewIfNeeded();
-  const reviewPrevious = page.getByRole("button", {
-    name: "Anterior: Avaliações de clientes",
-  });
-  const reviewNext = page.getByRole("button", {
-    name: "Próximo: Avaliações de clientes",
-  });
-  check(
-    (await reviewPrevious.isDisabled()) && (await reviewNext.isDisabled()),
-    "QA-001: avaliações sem overflow mantiveram setas ativas",
-  );
-  check(
-    (
-      await page.locator("#avaliacoes .carousel-toolbar p").innerText()
-    ).includes("totalmente visíveis"),
-    "QA-001: estado sem rolagem não foi comunicado",
-  );
-  await page.setViewportSize({ width: 390, height: 844 });
-
-  for (const path of ["/", "/servicos/"]) {
-    await page.goto(`http://127.0.0.1:4174${path}`, {
-      waitUntil: "networkidle",
-    });
-    const brands = page.locator(".brand-list");
-    check(
-      (await brands.locator(".brand-logo").count()) === 13,
-      `${path}: marcas ausentes do carrossel`,
-    );
-    await brands.scrollIntoViewIfNeeded();
-    await page
-      .getByRole("button", { name: "Próximo: Marcas atendidas" })
-      .click();
-    await page.waitForTimeout(600);
-    const next = await brands.evaluate((element) => element.scrollLeft);
-    check(next > 0, `${path}: seta do carrossel não avança`);
-    await brands.focus();
-    await page.keyboard.press("ArrowLeft");
-    await page.waitForTimeout(600);
-    check(
-      (await brands.evaluate((element) => element.scrollLeft)) < next,
-      `${path}: teclado do carrossel não retorna`,
-    );
-    check(
-      (await page
-        .getByRole("button", { name: /Retomar carrossel de marcas/ })
-        .getAttribute("aria-pressed")) === "true",
-      `${path}: interação não pausou o carrossel`,
-    );
-  }
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  const reducedTrack = page.locator(".brand-list");
-  await reducedTrack.scrollIntoViewIfNeeded();
-  const reducedStart = await reducedTrack.evaluate(
-    (element) => element.scrollLeft,
-  );
-  await page.waitForTimeout(3800);
-  check(
-    (await reducedTrack.evaluate((element) => element.scrollLeft)) ===
-      reducedStart,
-    "Carrossel não respeita movimento reduzido",
-  );
-  await page.emulateMedia({ reducedMotion: "no-preference" });
-  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  await page.locator(".brand-list").scrollIntoViewIfNeeded();
-  await page.mouse.move(0, 0);
-  await page.waitForTimeout(3800);
-  check(
-    (await page
-      .locator(".brand-list")
-      .evaluate((element) => element.scrollLeft)) > 0,
-    "Carrossel não avança automaticamente",
-  );
-  await page
-    .getByRole("button", { name: /Pausar carrossel de marcas/ })
-    .click();
-  await page.mouse.move(0, 0);
-  await page.evaluate(() => document.activeElement?.blur());
-  await page.waitForTimeout(600);
-  const stopped = await page
-    .locator(".brand-list")
-    .evaluate((element) => element.scrollLeft);
-  await page.waitForTimeout(3800);
-  check(
-    (await page
-      .locator(".brand-list")
-      .evaluate((element) => element.scrollLeft)) === stopped,
-    "Pausa do carrossel não foi mantida",
-  );
-
-  await page.goto("http://127.0.0.1:4174/fale-conosco/", {
-    waitUntil: "networkidle",
-  });
-  check(
-    (await page.locator(".contact-message").getAttribute("open")) === null,
-    "Contato: formulário deve ser opcional e recolhido inicialmente",
-  );
-  check(
-    await page.locator('.contact-hero a[href^="tel:"]').isVisible(),
-    "Contato: ligação direta ausente",
-  );
-  await page.locator(".contact-message > summary").click();
-  await page.evaluate(() => {
-    window.open = (url) => {
-      window.__dorusOpened = url;
-    };
-  });
-  await page.locator("#nome").fill("Teste QA");
-  await page.locator("#problema").fill("Teste de regressão");
-  await page.getByRole("button", { name: /Continuar no WhatsApp/ }).click();
-  check(
-    (await page.evaluate(() => window.__dorusOpened || "")).includes(
-      "wa.me/5511913573932",
-    ),
-    "Contato: não abriu WhatsApp",
-  );
-
-  await page.goto("http://127.0.0.1:4174/agendamento/", {
-    waitUntil: "domcontentloaded",
-  });
-  await page.evaluate(() => {
-    window.open = (url) => {
-      window.__dorusOpened = url;
-    };
-  });
-  const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
-  const form = page.locator("[data-schedule-form]");
-  await page.waitForFunction(() => {
-    const input = document.querySelector('[data-schedule-form] [name="data"]');
-    return Boolean(input?.min && input?.max);
-  });
-  const periodLabels = await form
-    .locator('[name="periodo"] option')
-    .allTextContents();
-  for (const expected of [
-    "Manhã — 8h às 13h",
-    "Tarde — 13h às 18h",
-    "Dia inteiro — 8h às 18h",
-  ])
-    check(
-      periodLabels.includes(expected),
-      `Agenda: período divergente: ${expected}`,
-    );
-  const dateLimits = await form.locator('[name="data"]').evaluate((input) => ({
-    min: input.min,
-    max: input.max,
-  }));
-  const limitDays = Math.round(
-    (new Date(`${dateLimits.max}T12:00:00`).getTime() -
-      new Date(`${dateLimits.min}T12:00:00`).getTime()) /
-      86400000,
-  );
-  check(
-    limitDays === 60,
-    `Agenda: limite esperado D+60, recebido D+${limitDays}`,
-  );
-  await form.locator('[name="nome"]').fill("Teste QA");
-  await form.locator('[name="telefone"]').fill("11999999999");
-  await form.locator('[name="bairro"]').fill("Centro");
-  await form.locator('[name="endereco"]').fill("Rua de teste, 1");
-  await form
-    .locator('[name="equipamento"]')
-    .selectOption({ label: "Geladeira" });
-  await form.locator('[name="data"]').fill(tomorrow);
-  await form.locator('[name="periodo"]').selectOption({ index: 1 });
-  await form.locator('[name="problema"]').fill("Não está gelando");
-  const visitConsent = form.locator('[name="ciencia_visita"]');
-  const privacyConsent = form.locator('[name="consentimento"]');
-  const submitSchedule = form.getByRole("button", { name: /WhatsApp/ });
-  check(
-    await visitConsent.evaluate((input) => input.required && !input.checked),
-    "Agenda: ciência da visita deve ser obrigatória e desmarcada inicialmente",
-  );
-  await privacyConsent.check();
-  await submitSchedule.click();
-  check(
-    (await visitConsent.evaluate((input) => input.validity.valueMissing)) &&
-      !(await page.evaluate(() => window.__dorusOpened)),
-    "Agenda: não deve abrir WhatsApp sem ciência das condições da visita",
-  );
-  await visitConsent.check();
-  await privacyConsent.uncheck();
-  await submitSchedule.click();
-  check(
-    (await privacyConsent.evaluate((input) => input.validity.valueMissing)) &&
-      !(await page.evaluate(() => window.__dorusOpened)),
-    "Agenda: ciência da visita não substitui o consentimento de privacidade",
-  );
-  await privacyConsent.check();
-  await submitSchedule.click();
-  const scheduleUrl = await page.evaluate(() => window.__dorusOpened || "");
-  check(
-    scheduleUrl.includes("wa.me/5511913573932"),
-    "Agenda: fallback do WhatsApp falhou",
-  );
-  const scheduleMessage = scheduleUrl
-    ? new URL(scheduleUrl).searchParams.get("text") || ""
-    : "";
-  for (const condition of [
-    "Estou ciente",
-    "deslocamento e diagnóstico",
-    "valor será informado antes da confirmação do agendamento",
-    "será abatido do serviço",
-    "valor pode variar conforme a localização",
-  ]) {
-    check(
-      scheduleMessage.includes(condition),
-      `Agenda: mensagem sem condição da visita: ${condition}`,
-    );
-  }
-
-  const axeSource = await readFile(
-    resolve(root, "..", "node_modules", "axe-core", "axe.min.js"),
-    "utf8",
-  );
-  for (const width of [390, 1440]) {
-    await page.setViewportSize({ width, height: 900 });
-    for (const path of accessibilityPaths) {
-      await page.goto(`http://127.0.0.1:4174${path}`, {
-        waitUntil: "networkidle",
-      });
-      if (path === "/fale-conosco/")
-        await page.locator(".contact-message > summary").click();
-      const visualErrors = await page.evaluate(() => {
-        const errors = [];
-        for (const image of document.querySelectorAll(
-          ".service-card-media img",
-        )) {
-          const box = image.getBoundingClientRect();
-          const frame = image.parentElement.getBoundingClientRect();
-          if (
-            Math.abs(box.width - frame.width) > 2 ||
-            Math.abs(box.height - frame.height) > 2
-          )
-            errors.push(
-              `imagem não preenche moldura: ${image.getAttribute("src")} (${box.width}×${box.height} / ${frame.width}×${frame.height})`,
-            );
-          if (Math.abs(frame.width - frame.height) > 2)
-            errors.push("moldura distorce proporção quadrada");
-        }
-        if (location.pathname !== "/links/") {
-          for (const heading of document.querySelectorAll(
-            ".internal h1, .section-head",
-          )) {
-            if (getComputedStyle(heading).textAlign !== "center")
-              errors.push("cabeçalho descentralizado");
-          }
-        }
-        for (const panel of document.querySelectorAll(".professional-cta")) {
-          if (
-            !panel.querySelector(".cta-trust")?.textContent.includes("90 dias")
-          )
-            errors.push("CTA sem garantia");
-          if (
-            getComputedStyle(panel.querySelector(".cta-copy")).textAlign !==
-            "center"
-          )
-            errors.push("CTA descentralizado");
-          const box = panel.getBoundingClientRect();
-          if (Math.abs(box.left + box.width / 2 - innerWidth / 2) > 2)
-            errors.push("painel CTA fora do centro");
-        }
-        if (
-          location.pathname !== "/links/" &&
-          !document
-            .querySelector(".footer-credit")
-            ?.textContent.includes("Kauan Cardim")
-        )
-          errors.push("rodapé sem autor");
-        return errors;
-      });
-      check(
-        visualErrors.length === 0,
-        `${path} (${width}px): ${visualErrors.join(", ")}`,
-      );
-      await page.addScriptTag({ content: axeSource });
-      const result = await page.evaluate(() =>
-        axe.run(document, {
-          runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa"] },
-        }),
-      );
-      const severe = result.violations;
-      const clippedImages = await page
-        .locator(".service-card-media img")
-        .evaluateAll(
-          (images) =>
-            images.filter((image) => {
-              const imageBox = image.getBoundingClientRect();
-              const frame = image.parentElement.getBoundingClientRect();
-              return (
-                imageBox.top < frame.top - 1 ||
-                imageBox.bottom > frame.bottom + 1 ||
-                imageBox.left < frame.left - 1 ||
-                imageBox.right > frame.right + 1
-              );
-            }).length,
-        );
-      check(
-        clippedImages === 0,
-        `${path} (${width}px): imagem de serviço fora da moldura`,
-      );
-      accessibility.push({ path, width, violations: severe });
-      check(
-        severe.length === 0,
-        `${path} (${width}px): axe ${severe.map((item) => item.id).join(", ")}`,
-      );
-      check(
-        await page.evaluate(
-          () => document.documentElement.scrollWidth <= innerWidth + 1,
-        ),
-        `${path} (${width}px): overflow`,
-      );
+  browser = await chromium.launch({ headless: true });
+  const shared = { browser, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages };
+  const runGroup = async (name, run) => {
+    activeGroup = name;
+    const started = Date.now();
+    const before = failures.length;
+    try { return await run(shared); }
+    finally {
+      const result = { name, elapsedSeconds: (Date.now() - started) / 1000, failures: failures.length - before };
+      groups.push(result);
+      console.log(JSON.stringify(result));
     }
-  }
+  };
+  const { context, page } = await runGroup("routes", runRoutes);
+  Object.assign(shared, { context, page });
 
-  const screenshots = resolve(root, "..", "test-results");
-  await mkdir(screenshots, { recursive: true });
-  await writeFile(
-    resolve(screenshots, "accessibility.json"),
-    JSON.stringify(accessibility, null, 2),
-  );
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  await loadLazyImages(page);
-  await page.screenshot({
-    path: resolve(screenshots, "home-mobile.png"),
-    fullPage: true,
-  });
-  const desktopContext = await browser.newContext({
-    viewport: { width: 1440, height: 1000 },
-  });
-  const desktop = await desktopContext.newPage();
-  await desktop.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-  const desktopConsent = desktop.getByRole("button", {
-    name: "Somente necessários",
-  });
-  if (await desktopConsent.isVisible()) await desktopConsent.click();
-  await loadLazyImages(desktop);
-  await desktop.screenshot({
-    path: resolve(screenshots, "home-desktop.png"),
-    fullPage: true,
-  });
-  for (const width of [390, 1440, 1920]) {
-    await desktop.setViewportSize({ width, height: 1000 });
-    await desktop.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
-    const hero = await desktop.locator(".hero").evaluate((element) => {
-      const title = element.querySelector("h1");
-      const copy = element.querySelector(".hero-copy").getBoundingClientRect();
-      const heading = title.getBoundingClientRect();
-      const caption = element
-        .querySelector("figcaption")
-        .getBoundingClientRect();
-      const media = element
-        .querySelector(".hero-media")
-        .getBoundingClientRect();
-      return {
-        centered:
-          getComputedStyle(title).textAlign === "center" &&
-          Math.abs(
-            heading.left + heading.width / 2 - copy.left - copy.width / 2,
-          ) < 2,
-        captionInside:
-          caption.left >= media.left &&
-          caption.right <= media.right &&
-          caption.top >= media.top &&
-          caption.bottom <= media.bottom,
-      };
-    });
-    check(hero.centered, `Home (${width}px): texto não centralizado`);
-    check(
-      hero.captionInside,
-      `Home (${width}px): identificação multimarcas fora da foto`,
-    );
-    await desktop
-      .locator(".hero")
-      .screenshot({ path: resolve(screenshots, `hero-${width}.png`) });
-  }
-  for (const width of [390, 1440]) {
-    await desktop.setViewportSize({ width, height: 1000 });
-    for (const [name, path] of Object.entries({
-      sobre: "/sobre/",
-      servicos: "/servicos/",
-      guias: "/curiosidades/",
-      geladeira: "/servicos/geladeiras/",
-      guia: "/curiosidades/geladeira-nao-gela/",
-      contato: "/fale-conosco/",
-      agendamento: "/agendamento/",
-    })) {
-      await desktop.goto(`http://127.0.0.1:4174${path}`, {
-        waitUntil: "networkidle",
-      });
-      await loadLazyImages(desktop);
-      const brokenImages = await desktop
-        .locator(".service-card-media img")
-        .evaluateAll(
-          (images) =>
-            images.filter(
-              (image) => !image.complete || image.naturalWidth === 0,
-            ).length,
-        );
-      check(brokenImages === 0, `${path} (${width}px): imagem não carregou`);
-      await desktop.screenshot({
-        path: resolve(screenshots, `${name}-${width}.png`),
-        fullPage: true,
-      });
-      if (name === "servicos") {
-        await desktop
-          .locator(".service-card")
-          .first()
-          .screenshot({ path: resolve(screenshots, `produto-${width}.png`) });
-        await desktop
-          .locator(".brands-section")
-          .screenshot({ path: resolve(screenshots, `carrossel-${width}.png`) });
-      }
-    }
-  }
-  await desktop.close();
-  await desktopContext.close();
+  await runGroup("menu", runMenu);
+
+  await runGroup("home", runHome);
+
+  await runGroup("carousels", runCarousels);
+
+  await runGroup("forms", runForms);
+  await runGroup("agenda-integrated", runIntegratedAgenda);
+
+  await runGroup("accessibility", runAccessibility);
+
+  const screenshots = await runGroup("visual", runVisual);
 
   const summary = {
+    groups,
     routeCrawl: routePaths.length,
     accessibilityScenarios: accessibility.length,
     accessibilityTemplates: accessibilityPaths,
@@ -641,6 +126,6 @@ try {
     `OK: ${routePaths.length} rotas sem JS e com hidratação; Menu Digital, carrosséis, formulários e WhatsApp; ${accessibility.length} cenários axe WCAG A/AA representando 10 templates. ${summary.elapsedSeconds}s. Validação manual ainda complementar.`,
   );
 } finally {
-  await browser.close();
+  await browser?.close();
   await new Promise((done) => server.close(done));
 }

@@ -69,6 +69,21 @@ jobs:
         env:
           DORUS_REVISION: ${{ needs.gate.outputs.revision }}
         run: npm run check
+      - name: Comprovar equivalência com a regressão monolítica
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          git fetch --depth=1 origin "$BASE_SHA"
+          git show "$BASE_SHA:scripts/test-regression.mjs" > scripts/test-regression-baseline.mjs
+          if grep -q 'const noScript =' scripts/test-regression-baseline.mjs; then
+            cp test-results/regression-summary.json test-results/modular-summary.json
+            node scripts/test-regression-baseline.mjs
+            mv test-results/regression-summary.json test-results/baseline-summary.json
+            cp test-results/modular-summary.json test-results/regression-summary.json
+          fi
+          rm scripts/test-regression-baseline.mjs
       - name: Instalar auditoria de desempenho
         run: npm install --global lighthouse@12
       - name: Comparar desempenho antes da publicação
