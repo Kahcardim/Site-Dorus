@@ -5,10 +5,10 @@ Transformar a presença digital da D’orus em aquisição orgânica qualificada
 
 ## Estratégia de Git
 - `main`: produção estável.
-- `feature/seo-sprint-2`: desenvolvimento da Sprint 2.
+- `feature/seo-sprint-2`: desenvolvimento original da Sprint 2, preservado apenas como histórico após a consolidação da release.
 - `backup/pre-sprint2-2026-09-05`: ponto de restauração antes da Sprint 2.
-- `perf/desktop-critical-css`: correção de performance existente a ser incorporada somente após validação.
-- Mudanças da Sprint 2 não devem ir diretamente para `main` sem build, testes e revisão.
+- `backup/pre-portfolio-layout-2026-09-07`: snapshot anterior à release consolidada.
+- Mudanças relevantes seguem por pull request, gates de qualidade e integração por squash.
 
 ## Prioridades
 ### P0
@@ -28,7 +28,7 @@ Transformar a presença digital da D’orus em aquisição orgânica qualificada
 ### P2
 - Revisar dados estruturados LocalBusiness/Service.
 - Validar rastreamento de cliques para WhatsApp.
-- Incorporar a correção de critical CSS após testes.
+- Incorporar correções de performance apenas após testes.
 
 ## Critérios de aceite
 - Build sem erro.
@@ -37,6 +37,7 @@ Transformar a presença digital da D’orus em aquisição orgânica qualificada
 - Titles, descriptions, canonical, sitemap e schema coerentes.
 - Páginas prioritárias com H1 comercial claro, conteúdo útil, sintomas, marcas, atendimento, prova social, links internos e CTA.
 - Nenhuma página deve inventar certificações, peças originais, prazo, preço ou condição de garantia não validada.
+- Agendamento deve permanecer utilizável para a janela mensal necessária ao negócio.
 - `main` permanece intacta até a aprovação final.
 
 ## Métricas de acompanhamento
