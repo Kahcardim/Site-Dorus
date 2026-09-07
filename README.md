@@ -39,9 +39,42 @@ Isso entrega HTML indexável, reduz pontos de falha e simplifica recuperação. 
 
 A decisão completa e seus trade-offs estão em [docs/ARQUITETURA.md](docs/ARQUITETURA.md).
 
-## Arquitetura
+## Funcionalidades
 
-| Camada | Responsabilidade |
+- Páginas de serviços e guias com navegação interna rastreável.
+- Contato direto por telefone e WhatsApp.
+- Solicitação de visita com integração de agenda e alternativa por WhatsApp.
+- Agenda real validada para uma janela mínima mensal, com bloqueio de datas passadas e domingos.
+- Nota e quantidade de avaliações sincronizadas com o Google.
+- Carrosséis com teclado, controles de pausa e respeito à redução de movimento.
+- Preferências de cookies e integração de métricas.
+- Layout responsivo, imagens adaptativas e garantia em destaque.
+
+## Tecnologias
+
+React · Vite · JavaScript · CSS · Playwright · axe-core · Lighthouse · GitHub Actions · GitHub Pages
+
+As integrações utilizam Google Apps Script e scripts Python executados nos fluxos de manutenção.
+
+## Executar localmente
+
+Requisitos: Node.js 22 e Python 3.12 para os testes de manutenção. As versões das dependências estão fixadas no projeto.
+
+```bash
+npm ci
+npm run dev
+```
+
+Para conferir a versão estática:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Estrutura principal
+
+| Diretório | Responsabilidade |
 | --- | --- |
 | `src/pages/` | Páginas e jornadas de atendimento |
 | `src/components/` | Componentes compartilhados |
@@ -49,98 +82,30 @@ A decisão completa e seus trade-offs estão em [docs/ARQUITETURA.md](docs/ARQUI
 | `src/hooks/` | Avaliações, consentimento e preferências de acessibilidade |
 | `src/styles/` | Estilos organizados por responsabilidade |
 | `public/` | Arquivos públicos, imagens e integrações do navegador |
-| `scripts/` | Build, auditorias, regressão e manutenção |
-| `tests/` | Testes unitários, contratos e referências históricas |
-| `integrations/google-calendar/` | Código versionado da integração de agenda |
-| `.github/workflows/` | Qualidade, publicação e sincronização |
+| `scripts/` | Geração estática, validações e manutenção |
+| `tests/` | Testes unitários, manutenção e referências isoladas |
+| `integrations/google-calendar/` | Código da integração com a agenda |
+| `.github/workflows/` | Qualidade, publicação e sincronização de avaliações |
 
-## Qualidade orientada a risco
-
-A matriz consolidada possui **67 casos modelados**, distribuídos em **19 P0, 40 P1 e 8 P2**. Não há aprovação por média: uma falha P0 ou P1 bloqueia a publicação.
-
-A pipeline valida:
-
-- 28 testes unitários e de contratos no candidato atual;
-- 21 rotas indexáveis e página 404;
-- conteúdo completo sem JavaScript;
-- metadados, Schema, sitemap e links internos;
-- agenda, formulários, limites de campos e regras comerciais;
-- carrosséis e geometria responsiva;
-- 20 cenários automáticos de acessibilidade com axe-core;
-- consentimento e isolamento de dados do Analytics;
-- regressão de navegador e capturas mobile/desktop;
-- restauração de snapshot em runner separado;
-- Lighthouse antes e depois de publicação;
-- validação pós-deploy da revisão realmente entregue.
-
-A matriz, critérios P0/P1/P2 e roteiro manual estão em [docs/TESTES.md](docs/TESTES.md).
-
-## Evidência de desempenho
-
-Baseline do candidato React validado na execução **#123** da pipeline, antes desta reorganização estrutural:
-
-| Perfil | Performance | Acessibilidade | Boas práticas | SEO | CLS | TBT |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Mobile | 100 | 100 | 100 | 100 | 0 | 0 ms |
-| Desktop | 100 | 100 | 100 | 100 | 0 | 0 ms |
-
-Os números são dados de laboratório, não uma promessa de Core Web Vitals reais ou posicionamento orgânico. A release final é reavaliada antes e depois do deploy e os relatórios ficam nos artefatos do GitHub Actions.
-
-## Integrações e privacidade
-
-### Agenda
-
-O formulário consulta disponibilidade por data e período. O backend limita capacidade, evita duplicidade e bloqueia datas inválidas. A interface mantém WhatsApp como fallback quando a integração automática não responde.
-
-O serviço real também possui um gate somente leitura que valida passado, hoje, D+60, D+61 e domingo antes de permitir publicação.
-
-### Analytics
-
-O GA4 começa negado e só é carregado após consentimento. URLs enviadas em eventos removem query string e fragmento para impedir que o conteúdo de mensagens de WhatsApp com dados do cliente seja copiado para Analytics.
-
-### Avaliações do Google
-
-Nota e quantidade são sincronizadas periodicamente. Os depoimentos exibidos são conteúdo editorial separado do total de avaliações do perfil.
-
-## Executar localmente
-
-Requisitos: Node.js 22 e Python 3.12.
+## Qualidade
 
 ```bash
-npm ci
-npm run dev
-```
-
-Build estático:
-
-```bash
-npm run build
-npm run preview
-```
-
-Regressão completa:
-
-```bash
-npx playwright install --with-deps chromium
+npx playwright install chromium
 npm run check
 ```
 
-## Publicação, rollback e backup
+A validação cobre 21 rotas indexáveis, página 404, conteúdo disponível sem JavaScript, metadados, dados estruturados, links, formulários, carrosséis e geometria responsiva. A regressão inclui verificações automáticas de acessibilidade com axe-core e uma leitura contra o serviço real da agenda para confirmar a janela mensal necessária ao negócio.
 
-A pipeline preserva o build que passou pelos gates e compara seu fingerprint com a versão publicada. Builds equivalentes não geram novo deploy.
+Os testes automatizados complementam a revisão manual; não representam uma certificação de acessibilidade nem uma garantia de posicionamento no Google. Relatórios Lighthouse e capturas ficam disponíveis nas execuções do GitHub Actions.
 
-O processo de rollback preserva SHA, evidências e histórico, e usa nova alteração rastreável em vez de force-push. O procedimento completo está em [docs/RECOVERY.md](docs/RECOVERY.md).
+## Publicação e integrações
 
-## Histórico de evolução
+O GitHub Pages recebe o conteúdo gerado em `dist/` após a aprovação da pipeline. Mudanças apenas de documentação e builds equivalentes não exigem uma nova publicação. A validação pós-publicação confere a revisão entregue, as páginas, os dados de conteúdo e o SEO técnico.
 
-Entregas relevantes por ciclo estão em [CHANGELOG.md](CHANGELOG.md). O histórico técnico detalhado permanece nos commits, Pull Requests e execuções da pipeline.
+As credenciais do Google ficam nos secrets do GitHub Actions ou na configuração do serviço correspondente, nunca no código enviado ao navegador. Instruções de desenvolvimento e manutenção estão em [docs/DESENVOLVIMENTO.md](docs/DESENVOLVIMENTO.md).
 
-## Documentação
-
-[Arquitetura](docs/ARQUITETURA.md) · [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md) · [Recovery](docs/RECOVERY.md)
-
-## Autor e licença
+## Autor
 
 Desenvolvido por [Kauan Cardim](https://github.com/Kahcardim) para a D’orus Assistência Técnica.
 
-O código original deste repositório é distribuído sob a [licença MIT](LICENSE). Marcas, nomes comerciais, avaliações e ativos de terceiros permanecem propriedade de seus respectivos titulares.
+Documentação: [Desenvolvimento](docs/DESENVOLVIMENTO.md) · [Testes](docs/TESTES.md) · [SEO](docs/SEO.md) · [Analytics](docs/ANALYTICS.md) · [Arquitetura](docs/ARQUITETURA.md) · [Recovery](docs/RECOVERY.md)
