@@ -1,4 +1,5 @@
 import { brands, services, SITE } from "../data/site.js";
+import { WHATSAPP_CTA_URL } from "../data/whatsapp-copy.js";
 import googleReviews from "../data/google-reviews.json";
 import { useGoogleRating } from "../hooks/useSiteEffects.js";
 import { CtaPanel } from "../components/Layout.jsx";
@@ -203,7 +204,7 @@ export function HomePage() {
             <div className="actions">
               <a
                 className="button button-green"
-                href={SITE.whatsapp}
+                href={WHATSAPP_CTA_URL}
                 target="_blank"
                 rel="noopener noreferrer"
               >

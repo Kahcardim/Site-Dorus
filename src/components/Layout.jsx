@@ -1,4 +1,5 @@
 import { SITE } from "../data/site.js";
+import { WHATSAPP_CTA_URL } from "../data/whatsapp-copy.js";
 import {
   useConsent,
   useGoogleRating,
@@ -92,7 +93,7 @@ export function Layout({
           </nav>
           <a
             className="whatsapp-mini"
-            href={SITE.whatsapp}
+            href={WHATSAPP_CTA_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -129,7 +130,7 @@ export function Layout({
       </main>
       <a
         className="whatsapp-float"
-        href={SITE.whatsapp}
+        href={WHATSAPP_CTA_URL}
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar com a D’orus pelo WhatsApp"
@@ -181,7 +182,7 @@ export function Layout({
               >
                 @assistenciadorus
               </a>
-              <a href={SITE.whatsapp} target="_blank" rel="noopener noreferrer">
+              <a href={WHATSAPP_CTA_URL} target="_blank" rel="noopener noreferrer">
                 WhatsApp da D’orus
               </a>
             </div>
@@ -274,7 +275,7 @@ export function CtaPanel({
         <div className="actions">
           <a
             className="button button-green"
-            href={SITE.whatsapp}
+            href={WHATSAPP_CTA_URL}
             target="_blank"
             rel="noopener noreferrer"
           >
