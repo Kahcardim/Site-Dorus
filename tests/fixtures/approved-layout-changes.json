@@ -1,0 +1,48 @@
+{
+  "source": "Análise de estrutura do site D'orus, 07/09/2026",
+  "scope": "Layout, hierarquia e fluxo de navegação, preservando identidade visual, conteúdo comercial e SEO fora das remoções estruturais autorizadas.",
+  "content": [
+    {
+      "path": "/",
+      "before": "Outros equipamentos",
+      "after": "",
+      "reason": "Bloco redundante com os oito serviços já exibidos no grid."
+    },
+    {
+      "path": "/",
+      "before": "Lava e seca, fornos e micro-ondas, conforme avaliação.",
+      "after": "",
+      "reason": "Itens já representados no grid de serviços."
+    },
+    {
+      "path": "/",
+      "before": "Atendimento local",
+      "after": "",
+      "reason": "Seção fundida ao fluxo único Como funciona."
+    },
+    {
+      "path": "/",
+      "before": "Uma assistência preparada para ir até você",
+      "after": "",
+      "reason": "Seção fundida ao fluxo único Como funciona."
+    },
+    {
+      "path": "/",
+      "before": "O endereço é informado apenas no agendamento da visita.",
+      "after": "",
+      "reason": "Card redundante removido durante a fusão dos dois fluxos."
+    },
+    {
+      "path": "/",
+      "before": "Contato direto",
+      "after": "",
+      "reason": "Card redundante removido durante a fusão dos dois fluxos."
+    },
+    {
+      "path": "/",
+      "before": "WhatsApp e agendamento simples para reduzir o tempo entre o problema e o atendimento.",
+      "after": "",
+      "reason": "Card redundante removido durante a fusão dos dois fluxos."
+    }
+  ]
+}
