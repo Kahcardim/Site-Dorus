@@ -90,6 +90,13 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     check(!(await page.evaluate(() => window.__dorusOpened)), `AGF-001: ${name} vazio permitiu envio`);
     if (isSelect) await input.selectOption(original);
     else await input.fill(original);
+    if (name === 'data') {
+      await page.waitForFunction(() => {
+        const select = document.querySelector('[data-schedule-form] [name="periodo"]');
+        return select && !select.disabled && select.dataset.calendarMode === 'fallback';
+      });
+      await form.locator('[name="periodo"]').selectOption('manha');
+    }
   }
   await form.locator('[name="ciencia_visita"]').uncheck();
   await form.locator('[name="consentimento"]').uncheck();

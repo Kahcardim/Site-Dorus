@@ -103,6 +103,19 @@
     return null;
   }
 
+  function safeLinkUrl(href) {
+    try {
+      var url = new URL(href, window.location.href);
+      // Query strings and fragments may contain the customer's form message.
+      // Keep the destination for attribution without copying that payload to GA4.
+      return (url.protocol === 'http:' || url.protocol === 'https:')
+        ? (url.origin + url.pathname).slice(0, 500)
+        : url.protocol;
+    } catch (error) {
+      return '';
+    }
+  }
+
   function bindLeadTracking() {
     if (document.documentElement.dataset.dorusGa4Delegated === 'true') return;
     document.documentElement.dataset.dorusGa4Delegated = 'true';
@@ -117,7 +130,7 @@
       var params = {
         cta_type: type,
         cta_location: ctaLocation(link),
-        link_url: link.href.slice(0, 500),
+        link_url: safeLinkUrl(link.href),
         link_text: (link.textContent || link.getAttribute('aria-label') || '').trim().replace(/\s+/g, ' ').slice(0, 100)
       };
       sendEvent('cta_click', params);

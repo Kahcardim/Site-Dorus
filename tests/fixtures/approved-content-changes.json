@@ -1,0 +1,291 @@
+{
+  "sourceCommits": [
+    "a0bfaffe0820275ef4aff0057a37eddae98a3d60",
+    "249a935351aadac80bf6e7929c3a1a27946c87b0",
+    "4f5353e67ce162bb3a06be4e69931a9d8cf5562a",
+    "862a2e5e65113b5b83740534c815d682b403bf63"
+  ],
+  "reason": "Reconciliar conteúdo SEO já incorporado na main, preservando o backup histórico e exigindo cada substituição explícita.",
+  "content": [
+    {
+      "path": "/servicos/fogoes/",
+      "before": "Falhas de acendimento, chama irregular, queimadores que não funcionam ou forno com desempenho diferente podem ser avaliados pela D’orus.",
+      "after": "A D’orus realiza conserto e assistência técnica de fogões em Guarulhos e região. Falhas de acendimento, chama irregular, queimadores que não funcionam ou forno com desempenho diferente podem ser avaliados em domicílio."
+    },
+    {
+      "path": "/servicos/fogoes/",
+      "before": "Assistência técnica de fogões em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de fogões em Guarulhos."
+    },
+    {
+      "path": "/servicos/fornos/",
+      "before": "Se o forno não aquece corretamente, apresenta funcionamento irregular ou falhas de comando, a D’orus pode avaliar o equipamento.",
+      "after": "A D’orus realiza conserto e assistência técnica de fornos em Guarulhos e região. Se o forno não aquece corretamente, apresenta funcionamento irregular ou falhas de comando, o equipamento pode ser avaliado conforme marca e modelo."
+    },
+    {
+      "path": "/servicos/fornos/",
+      "before": "Assistência técnica de fornos em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de fornos em Guarulhos."
+    },
+    {
+      "path": "/servicos/freezers/",
+      "before": "Baixo rendimento, excesso de gelo, demora para congelar ou funcionamento irregular são sinais que merecem avaliação.",
+      "after": "A D’orus realiza conserto e assistência técnica de freezers em Guarulhos e região. Baixo rendimento, excesso de gelo, demora para congelar ou funcionamento irregular são sinais que merecem avaliação."
+    },
+    {
+      "path": "/servicos/freezers/",
+      "before": "Assistência técnica de freezers em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de freezers em Guarulhos."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Geladeira parou de gelar, está formando gelo demais, vazando água ou fazendo um barulho diferente? Observe os sintomas e evite desmontar o aparelho.",
+      "after": "A D’orus realiza conserto e assistência técnica de geladeiras em Guarulhos e região. Se a geladeira não está gelando, está formando gelo demais, vazando água, fazendo barulho ou apresentando falhas de refrigeração, observe os sintomas e evite desmontar o aparelho."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Perda de refrigeração pode envolver ajustes, vedação, circulação de ar ou componentes que precisam de avaliação.",
+      "after": "Geladeira que não gela ou gela pouco pode ter relação com vedação, circulação de ar, degelo ou outros componentes que precisam de diagnóstico técnico."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Não está gelando",
+      "after": "Geladeira não está gelando"
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Quando uma parte refrigera e outra perde desempenho, o fluxo de ar e o degelo merecem atenção.",
+      "after": "Quando o freezer funciona, mas a parte da geladeira perde refrigeração, o fluxo de ar e o sistema de degelo merecem avaliação."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Acúmulo anormal pode indicar problema de vedação, degelo ou circulação interna.",
+      "after": "Acúmulo anormal de gelo pode indicar problema de vedação, degelo ou circulação interna."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Água no piso ou no gabinete pode ter relação com drenagem, gelo acumulado ou vedação.",
+      "after": "Geladeira vazando água pode ter relação com drenagem, gelo acumulado ou falhas de vedação."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Ruídos novos, fortes ou contínuos são informações importantes para o diagnóstico.",
+      "after": "Geladeira fazendo barulho, com ruídos novos, fortes ou contínuos, deve ter esse comportamento considerado no diagnóstico."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Ruídos diferentes",
+      "after": "Geladeira fazendo barulho"
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Ciclos fora do padrão podem sinalizar esforço excessivo ou falha de controle.",
+      "after": "Ciclos fora do padrão podem sinalizar esforço excessivo, falha de controle ou necessidade de avaliação técnica."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Assistência técnica de geladeiras em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de geladeiras em Guarulhos."
+    },
+    {
+      "path": "/servicos/lava-e-seca/",
+      "before": "Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo.",
+      "after": "A D’orus realiza conserto e assistência técnica de lava e seca em Guarulhos e região. Falhas na lavagem, centrifugação, drenagem ou secagem podem ser avaliadas conforme marca e modelo."
+    },
+    {
+      "path": "/servicos/lava-e-seca/",
+      "before": "Assistência técnica de lava e seca em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de lava e seca em Guarulhos."
+    },
+    {
+      "path": "/servicos/lava-loucas/",
+      "before": "Falhas de drenagem, lavagem incompleta, aquecimento ou interrupção do ciclo podem ser avaliadas pela D’orus.",
+      "after": "A D’orus realiza conserto e assistência técnica de lava-louças em Guarulhos e região. Falhas de drenagem, lavagem incompleta, aquecimento ou interrupção do ciclo podem ser avaliadas conforme marca e modelo."
+    },
+    {
+      "path": "/servicos/lava-loucas/",
+      "before": "Assistência técnica de lava‑louças em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de lava-louças em Guarulhos."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Conte o problema da sua máquina.",
+      "after": "Conte o problema da sua máquina de lavar."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Falhas de centrifugação, drenagem, enchimento, vazamentos ou ciclos interrompidos podem ter causas diferentes. Observe o comportamento antes de insistir no uso.",
+      "after": "A D’orus realiza conserto e assistência técnica de máquinas de lavar em Guarulhos e região. Se a máquina não centrifuga, não drena, não enche, vaza água, faz ruídos ou interrompe o ciclo, informe o comportamento antes da visita técnica."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "A roupa termina muito molhada ou a máquina não entra na etapa de centrifugação.",
+      "after": "Máquina de lavar que não centrifuga pode terminar o ciclo com as roupas muito molhadas ou parar antes dessa etapa."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Não centrifuga",
+      "after": "Máquina não centrifuga"
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Não drena",
+      "after": "Máquina não drena"
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Não enche",
+      "after": "Máquina não enche"
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem.",
+      "after": "Mangueiras, vedações e conexões devem ser avaliadas para localizar a origem do vazamento."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Vaza água",
+      "after": "Máquina vaza água"
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Batidas fortes e ruídos persistentes merecem diagnóstico.",
+      "after": "Batidas fortes, vibração excessiva e ruídos persistentes merecem diagnóstico."
+    },
+    {
+      "path": "/servicos/maquinas-de-lavar/",
+      "before": "Assistência técnica de máquinas de lavar em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de máquinas de lavar em Guarulhos."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "Problemas de aquecimento, comandos ou funcionamento podem ser avaliados conforme marca, modelo e defeito.",
+      "after": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região. Micro-ondas que liga mas não aquece, apresenta falhas no painel, prato giratório ou funcionamento irregular deve ser avaliado conforme marca, modelo e defeito."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "O equipamento liga, mas os alimentos não aquecem como deveriam.",
+      "after": "Micro-ondas que liga, mas não aquece os alimentos como deveria, precisa de avaliação técnica. Não abra o gabinete em casa."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "Não aquece",
+      "after": "Micro-ondas não aquece"
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "Assistência técnica de micro‑ondas em Guarulhos e região.",
+      "after": "Conserto e assistência técnica de micro-ondas em Guarulhos."
+    },
+    {
+      "path": "/",
+      "before": "Seu eletrodoméstico apresentou problema? Fale com quem entende.",
+      "after": "Assistência técnica de linha branca em Guarulhos e região."
+    },
+    {
+      "path": "/",
+      "before": "Há mais de 10 anos, a D’orus atende linha branca com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+      "after": "Há mais de 10 anos, a D’orus realiza conserto e manutenção de geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos de linha branca, com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo."
+    },
+    {
+      "path": "/",
+      "before": "Assistência para os aparelhos que fazem parte da sua rotina",
+      "after": "Conserto de eletrodomésticos de linha branca em Guarulhos"
+    },
+    {
+      "path": "/",
+      "before": "Escolha o aparelho para conhecer problemas comuns e preparar o atendimento.",
+      "after": "Escolha o aparelho para conhecer problemas comuns, orientações e solicitar assistência técnica."
+    }
+  ],
+  "metadata": {
+    "/": {
+      "description": {
+        "before": "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeiras, lavadoras, fogões e mais.",
+        "after": "Assistência técnica de linha branca em Guarulhos e região, com atendimento em domicílio para geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos."
+      },
+      "title": {
+        "before": "D’orus Assistência Técnica em Guarulhos | Linha Branca",
+        "after": "Assistência Técnica de Linha Branca em Guarulhos | D’orus"
+      }
+    },
+    "/agendamento/": {
+      "description": {
+        "before": "Solicite uma visita técnica da D’orus para atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+        "after": "Agende uma visita técnica da D’orus para conserto de eletrodomésticos em domicílio em Guarulhos e região, conforme disponibilidade."
+      },
+      "title": {
+        "before": "Agendamento de Assistência Técnica em Guarulhos | D’orus",
+        "after": "Agendar Visita Técnica em Guarulhos | D’orus"
+      }
+    },
+    "/fale-conosco/": {
+      "description": {
+        "before": "Fale com a D’orus Assistência Técnica pelo WhatsApp ou formulário e solicite atendimento em domicílio em Guarulhos e região.",
+        "after": "Fale com a D’orus pelo WhatsApp ou formulário para tirar dúvidas e solicitar atendimento técnico de linha branca em Guarulhos e região."
+      },
+      "title": {
+        "before": "Fale com a D’orus Assistência Técnica | Guarulhos",
+        "after": "Contato D’orus Assistência Técnica | Guarulhos"
+      }
+    },
+    "/servicos/": {
+      "description": {
+        "before": "Assistência técnica de eletrodomésticos em Guarulhos, com atendimento em domicílio para geladeiras, lavadoras, fogões e outros aparelhos de linha branca.",
+        "after": "Conserto de eletrodomésticos e assistência técnica de linha branca em Guarulhos. Geladeiras, máquinas de lavar, fogões, freezers, lava-louças, lava e seca, fornos e micro-ondas."
+      },
+      "title": {
+        "before": "Assistência Técnica de Eletrodomésticos em Guarulhos | D’orus",
+        "after": "Conserto de Eletrodomésticos em Guarulhos | D’orus"
+      }
+    },
+    "/servicos/fogoes/": {
+      "description": {
+        "before": "Assistência técnica de fogões em Guarulhos e região para falhas de acendimento, chama irregular, queimadores e funcionamento do forno. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de fogões em Guarulhos para falhas de acendimento, chama irregular, queimadores e forno. Atendimento em domicílio e garantia mínima de 90 dias nos serviços executados."
+      }
+    },
+    "/servicos/fornos/": {
+      "description": {
+        "before": "Assistência técnica de fornos em Guarulhos e região para falhas de aquecimento, comandos e funcionamento irregular. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de fornos em Guarulhos para falhas de aquecimento, comandos e funcionamento irregular. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/freezers/": {
+      "description": {
+        "before": "Assistência técnica de freezers em Guarulhos e região para baixo rendimento, excesso de gelo, ruídos e falhas de refrigeração. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de freezers em Guarulhos para falhas de congelamento, excesso de gelo, ruídos e refrigeração. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/geladeiras/": {
+      "description": {
+        "before": "Conserto e manutenção de geladeiras em Guarulhos e região. Falhas de refrigeração, excesso de gelo, vazamentos, ruídos e outros sintomas. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de geladeiras em Guarulhos. Geladeira não gela, excesso de gelo, vazamento, barulho e falhas de refrigeração. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/lava-e-seca/": {
+      "description": {
+        "before": "Assistência técnica de lava e seca em Guarulhos e região para falhas de lavagem, centrifugação, drenagem e secagem. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de lava e seca em Guarulhos para falhas de lavagem, centrifugação, drenagem e secagem. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/lava-loucas/": {
+      "description": {
+        "before": "Assistência técnica de lava-louças em Guarulhos e região para falhas de lavagem, drenagem, aquecimento e interrupções de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de lava-louças em Guarulhos para falhas de lavagem, drenagem, aquecimento e ciclo. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/maquinas-de-lavar/": {
+      "description": {
+        "before": "Conserto de máquinas de lavar em Guarulhos e região. Centrifugação, drenagem, enchimento, vazamentos, ruídos e falhas de ciclo. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de máquinas de lavar em Guarulhos. Máquina não centrifuga, não drena, não enche, vaza água ou interrompe o ciclo. Atendimento em domicílio e garantia mínima de 90 dias."
+      }
+    },
+    "/servicos/micro-ondas/": {
+      "description": {
+        "before": "Assistência técnica de micro-ondas em Guarulhos e região para falhas de aquecimento, painel, prato giratório e funcionamento. Garantia mínima de 90 dias nos serviços executados.",
+        "after": "Conserto e assistência técnica de micro-ondas em Guarulhos para aparelho que não aquece, falhas no painel, prato giratório e funcionamento irregular. Atendimento conforme marca e modelo."
+      }
+    }
+  }
+}
