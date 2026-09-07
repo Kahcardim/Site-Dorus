@@ -65,7 +65,7 @@ Confirmar:
 
 ### Agenda
 
-O código versionado do Apps Script fica em `integrations/google-calendar/Code.gs`, mas a implantação real no Google Apps Script é um ativo externo ao GitHub Pages. Antes de considerar a agenda recuperada, comparar a versão implantada com o código aprovado e validar em modo de leitura as regras de data, domingo, capacidade e períodos.
+O código versionado do Apps Script fica em `integrations/google-calendar/Code.gs`, mas a implantação real no Google Apps Script é um ativo externo ao GitHub Pages. Antes de considerar a agenda recuperada, validar em modo de leitura as regras de data, domingo, capacidade e períodos. Para a operação atual, a janela mínima exigida é de 30 dias corridos; datas além de D+30 não bloqueiam release.
 
 Criação de evento real exige autorização específica e não faz parte da regressão automatizada padrão.
 
