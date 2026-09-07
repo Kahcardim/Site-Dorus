@@ -1,61 +1,65 @@
 
 export async function run({ browser, page, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages }) {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
   await page.locator("#avaliacoes").scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => document.activeElement?.blur());
+
   const reviewTrack = page.locator("#avaliacoes .review-carousel");
-  const reviewPrevious = page.getByRole("button", {
-    name: "Anterior: Avaliações de clientes",
-  });
-  const reviewNext = page.getByRole("button", {
-    name: "Próximo: Avaliações de clientes",
-  });
-  await page.waitForFunction(() => {
-    const track = document.querySelector("#avaliacoes .review-carousel");
-    const next = document.querySelector('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]');
-    return track && next && track.scrollWidth > track.clientWidth + 2 && !next.disabled;
-  });
   check(
-    await reviewNext.isEnabled(),
-    "QA-001: dez avaliações devem ativar navegação no desktop",
+    (await page.locator('#avaliacoes button[aria-label="Anterior: Avaliações de clientes"]').count()) === 0 &&
+      (await page.locator('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]').count()) === 0,
+    "REV-CAR-001: avaliações ainda exibem setas de navegação",
   );
   check(
     (
       await page.locator("#avaliacoes .carousel-toolbar p").innerText()
-    ).includes("Use as setas"),
-    "QA-001: estado com rolagem não foi comunicado",
+    ).includes("avançam automaticamente"),
+    "REV-CAR-002: autoplay das avaliações não foi comunicado",
   );
+  const reviewPause = page.getByRole("button", {
+    name: /Pausar carrossel de avaliações de clientes/,
+  });
+  check(await reviewPause.isVisible(), "REV-CAR-003: controle de pausa do autoplay ausente");
+
   const reviewStart = await reviewTrack.evaluate((element) => element.scrollLeft);
-  await reviewNext.click();
-  await page.waitForTimeout(600);
-  const reviewDesktopNext = await reviewTrack.evaluate((element) => element.scrollLeft);
+  await page.waitForTimeout(5200);
+  const reviewAutoNext = await reviewTrack.evaluate((element) => element.scrollLeft);
   check(
-    reviewDesktopNext > reviewStart,
-    "QA-001: seta das avaliações não avança no desktop",
+    reviewAutoNext > reviewStart,
+    "REV-CAR-004: avaliações não avançam automaticamente no desktop",
   );
-  await reviewPrevious.click();
+
+  await reviewPause.click();
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => document.activeElement?.blur());
   await page.waitForTimeout(600);
+  const reviewStopped = await reviewTrack.evaluate((element) => element.scrollLeft);
+  await page.waitForTimeout(5200);
   check(
-    (await reviewTrack.evaluate((element) => element.scrollLeft)) < reviewDesktopNext,
-    "QA-001: seta anterior das avaliações não retorna no desktop",
+    (await reviewTrack.evaluate((element) => element.scrollLeft)) === reviewStopped,
+    "REV-CAR-005: pausa das avaliações não interrompe o autoplay",
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.waitForFunction(() => {
-    const track = document.querySelector("#avaliacoes .review-carousel");
-    const next = document.querySelector('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]');
-    return track && next && track.scrollWidth > track.clientWidth + 2 && !next.disabled;
-  });
+  await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
+  await page.locator("#avaliacoes").scrollIntoViewIfNeeded();
+  await page.mouse.move(0, 0);
+  await page.evaluate(() => document.activeElement?.blur());
+  const mobileReviewTrack = page.locator("#avaliacoes .review-carousel");
   check(
-    await reviewNext.isEnabled(),
-    "CAR-003: resize para mobile deve manter navegação das avaliações ativa",
+    (await page.locator('#avaliacoes button[aria-label="Anterior: Avaliações de clientes"]').count()) === 0 &&
+      (await page.locator('#avaliacoes button[aria-label="Próximo: Avaliações de clientes"]').count()) === 0,
+    "REV-CAR-006: avaliações exibem setas no mobile",
   );
-  await reviewTrack.evaluate((element) => element.scrollTo({ left: 0, behavior: "instant" }));
-  await reviewNext.click();
-  await page.waitForTimeout(600);
+  await mobileReviewTrack.dispatchEvent("pointerdown");
+  const mobileReviewStart = await mobileReviewTrack.evaluate((element) => element.scrollLeft);
+  await page.waitForTimeout(5200);
   check(
-    (await reviewTrack.evaluate((element) => element.scrollLeft)) > 0,
-    "CAR-003: avaliações não avançam no mobile",
+    (await mobileReviewTrack.evaluate((element) => element.scrollLeft)) > mobileReviewStart,
+    "REV-CAR-007: autoplay das avaliações não continua após toque no mobile",
   );
 
   for (const path of ["/", "/servicos/"]) {

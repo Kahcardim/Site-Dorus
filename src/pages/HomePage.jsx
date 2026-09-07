@@ -154,7 +154,14 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
             </div>
           </div>
         </div>
-        <Carousel label="Avaliações de clientes" className="review-carousel">
+        <Carousel
+          label="Avaliações de clientes"
+          className="review-carousel"
+          autoPlay
+          showNavigation={false}
+          pauseOnPointer={false}
+          interval={4500}
+        >
           {selectedReviews.map((review) => (
             <article className="review-card" key={`${review.author}-${review.text}`}>
               <div className="review-top">
@@ -170,7 +177,7 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
               <div className="stars" aria-label={`${review.rating} estrelas`}>
                 {"★".repeat(review.rating)}
               </div>
-              <p>“{review.text}”</p>
+              <p>“{review.displayText || review.text}”</p>
             </article>
           ))}
         </Carousel>
