@@ -133,6 +133,7 @@
     }
 
     function restoreFallbackOptions() {
+      var selectedPeriod = periodSelect.value;
       periodSelect.dataset.calendarMode = 'fallback';
       periodSelect.disabled = false;
       periodSelect.innerHTML = [
@@ -141,6 +142,9 @@
         '<option value="tarde">Tarde - 13h às 18h</option>',
         '<option value="integral">Dia inteiro - 8h às 18h</option>'
       ].join('');
+      if (['manha', 'tarde', 'integral'].indexOf(selectedPeriod) !== -1) {
+        periodSelect.value = selectedPeriod;
+      }
       var label = periodSelect.closest('label');
       if (label && label.firstChild && label.firstChild.nodeType === Node.TEXT_NODE) {
         label.firstChild.nodeValue = 'Período';

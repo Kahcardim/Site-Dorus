@@ -125,6 +125,7 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   await privacyConsent.check();
   await submitSchedule.click();
   const scheduleUrl = await page.evaluate(() => window.__dorusOpened || "");
+  if (!scheduleUrl) console.error("Fallback invalid controls:", await form.evaluate(element => [...element.elements].filter(input => input.willValidate && !input.validity.valid).map(input => ({ name: input.name, value: input.value, message: input.validationMessage }))));
   check(
     scheduleUrl.includes("wa.me/5511913573932"),
     "Agenda: fallback do WhatsApp falhou",
