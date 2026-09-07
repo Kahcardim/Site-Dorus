@@ -1,0 +1,115 @@
+name: Limpeza administrativa do repositorio
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repository-cleanup.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  deployments: write
+
+concurrency:
+  group: repository-admin-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    name: Remover branches e deployments obsoletos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Remover branches obsoletos explicitamente aprovados
+        shell: bash
+        run: |
+          set -euo pipefail
+          branches=(
+            "backup/pre-sprint2-2026-09-05"
+            "backup-pre-squash-20260829"
+            "favicon-dorus"
+            "feat/google-reviews-refresh"
+            "feature/seo-sprint-2"
+            "fix/manual-layout-cta-validation"
+            "fix/reflow-texto-ampliado"
+            "fix/reviews-carousel-autoplay-ptbr"
+            "fix/revisao-visual-fase-1"
+            "fix/whatsapp-cta-copy"
+            "fix-structured-data"
+            "hotfix-final-qa-deploy"
+            "hotfix-home-visual-final"
+            "hotfix-home-visual-restore"
+            "hotfix-usabilidade-visual-global"
+            "hotfix-visual-home-v2"
+            "perf/home-avaliacoes"
+            "portfolio/repository-credibility"
+            "qa/analytics-private-message"
+            "qa/consolidated-regression-suite"
+            "qa/modular-regression"
+            "qa/stabilize-date-boundary-test"
+            "qa-classifica-backend-agenda"
+            "qa-prioridades-ux-seo"
+            "refactor/fase-2-repositorio"
+            "refactor/react-migration"
+            "release/portfolio-layout-hardening"
+            "seo-fase-2-conteudo-local"
+            "seo-profundo"
+            "smoke-fixes"
+            "test/agendamento-aceite"
+            "tmp-never"
+            "chore/repository-admin-cleanup"
+          )
+
+          for branch in "${branches[@]}"; do
+            if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              echo "Removendo branch: $branch"
+              git push origin --delete "$branch"
+            else
+              echo "Branch já ausente: $branch"
+            fi
+          done
+
+          echo "Preservadas intencionalmente: main, backup/pre-portfolio-layout-2026-09-07 e perf/desktop-critical-css."
+
+      - name: Excluir deployments antigos do GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t ids < <(
+            gh api --paginate "repos/${REPO}/deployments?environment=github-pages&per_page=100" \
+              --jq '.[].id'
+          )
+
+          if (( ${#ids[@]} <= 1 )); then
+            echo "Nenhum deployment antigo para excluir."
+            exit 0
+          fi
+
+          latest="${ids[0]}"
+          echo "Preservando deployment mais recente: ${latest}"
+
+          for id in "${ids[@]:1}"; do
+            state="$(gh api "repos/${REPO}/deployments/${id}/statuses?per_page=1" --jq '.[0].state // ""' 2>/dev/null || true)"
+            if [[ "$state" != "inactive" ]]; then
+              gh api -X POST "repos/${REPO}/deployments/${id}/statuses" \
+                -f state=inactive \
+                -f description='Deployment antigo desativado antes da limpeza administrativa.' >/dev/null
+            fi
+            echo "Excluindo deployment antigo: ${id}"
+            gh api -X DELETE "repos/${REPO}/deployments/${id}" >/dev/null
+          done
+
+      - name: Resumo
+        run: |
+          echo "### Limpeza concluída" >> "$GITHUB_STEP_SUMMARY"
+          echo "- branches obsoletos removidos" >> "$GITHUB_STEP_SUMMARY"
+          echo "- snapshot de recovery preservado" >> "$GITHUB_STEP_SUMMARY"
+          echo "- experimento perf/desktop-critical-css preservado por conter commit não integrado" >> "$GITHUB_STEP_SUMMARY"
+          echo "- somente o deployment mais recente do github-pages foi preservado" >> "$GITHUB_STEP_SUMMARY"
