@@ -1,7 +1,7 @@
 # D’orus Assistência Técnica
 
 [![Pipeline de produção](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml/badge.svg)](https://github.com/Kahcardim/Site-Dorus/actions/workflows/production-pipeline.yml)
-[![Licença MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Licença proprietária](https://img.shields.io/badge/license-proprietary-lightgrey.svg)](LICENSE)
 [![Node.js 22](https://img.shields.io/badge/Node.js-22-339933?logo=node.js&logoColor=white)](.nvmrc)
 [![Lighthouse Mobile](https://img.shields.io/badge/Lighthouse%20Mobile-94%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
 [![A11y](https://img.shields.io/badge/Acessibilidade-100%2F100-success)](https://github.com/Kahcardim/Site-Dorus/actions/runs/34132946867)
