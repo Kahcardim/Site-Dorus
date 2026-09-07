@@ -14,8 +14,8 @@ SEARCH_QUERY = "D'orus Assistência Técnica Guarulhos 11 91357-3932"
 EXPECTED_PLACE_ID = "ChIJZyk7iQ31zpQR0C-R3wgVywg"
 REVIEW_LIMIT = 10
 REVIEW_SELECTION = (
-    "10 avaliações reais priorizando comentários recentes, clareza do atendimento, "
-    "competência, honestidade, rapidez e preço justo."
+    "3 avaliações históricas validadas e 7 avaliações recentes priorizando "
+    "honestidade, competência, resolução, rapidez e preço justo."
 )
 
 
@@ -175,10 +175,20 @@ def select_reviews(raw_reviews: object) -> list[dict]:
 
 def merge_reviews(incoming: list[dict], previous: object) -> list[dict]:
     previous_reviews = previous.get("reviews", []) if isinstance(previous, dict) else []
+    pinned = [
+        review
+        for review in previous_reviews
+        if isinstance(review, dict) and review.get("pinned") is True
+    ]
+    unpinned = [
+        review
+        for review in previous_reviews
+        if isinstance(review, dict) and review.get("pinned") is not True
+    ]
     combined = []
     seen = set()
 
-    for review in [*incoming, *previous_reviews]:
+    for review in [*pinned, *incoming, *unpinned]:
         if not isinstance(review, dict):
             continue
         author = str(review.get("author", "")).strip()
