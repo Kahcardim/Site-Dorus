@@ -67,11 +67,13 @@ jobs:
         env:
           DORUS_REVISION: ${{ needs.gate.outputs.revision }}
         run: |
-          for file in scripts/test-regression.mjs scripts/regression/*.mjs; do
+          for file in scripts/test-regression.mjs scripts/regression/*.mjs scripts/test-live-calendar.mjs; do
             node --check "$file"
           done
           npm run check:static
           npm run test:maintenance
+      - name: Validar agenda real em modo de leitura
+        run: node scripts/test-live-calendar.mjs
       - name: Instalar navegador de regressão
         run: npx playwright install --with-deps chromium
       - name: Validar rotas, jornadas e acessibilidade no navegador
@@ -132,6 +134,30 @@ jobs:
       - run: npm run build
       - name: Comparar arquivos entregues
         run: node scripts/compare-builds.mjs .baseline/dist dist
+
+  recovery:
+    name: Restaurar snapshot independente
+    if: github.event_name == 'pull_request' && startsWith(github.event.pull_request.title, 'release:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Recuperar snapshot anterior em árvore separada
+        uses: actions/checkout@v4
+        with:
+          ref: backup/pre-portfolio-layout-2026-09-07
+          path: recovery-snapshot
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: recovery-snapshot/package-lock.json
+      - name: Reinstalar dependências a partir do snapshot
+        run: npm ci
+        working-directory: recovery-snapshot
+      - name: Reconstruir snapshot sem depender da árvore candidata
+        run: |
+          npm run build
+          npm run test:static
+        working-directory: recovery-snapshot
 
   preparar:
     name: Preparar publicação
@@ -213,6 +239,8 @@ jobs:
           python scripts/summarize_lighthouse.py
       - name: Validar conteúdo e integrações publicados
         run: node scripts/validate-deployment.mjs
+      - name: Revalidar agenda real após publicação
+        run: node scripts/test-live-calendar.mjs
       - name: Salvar relatorios Lighthouse
         if: always()
         uses: actions/upload-artifact@v4
