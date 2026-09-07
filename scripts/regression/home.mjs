@@ -28,10 +28,7 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     const brands = document.querySelector(".brands-section");
     const flow = document.querySelector(".home-flow-section");
     const guides = document.querySelector(".home-guides-section");
-    const faq = document.querySelector(".faq-section") ||
-      Array.from(document.querySelectorAll("main > section")).find((section) =>
-        section.textContent.includes("Perguntas frequentes"),
-      );
+    const faq = document.querySelector(".faq")?.closest("section");
     const finalCta = document.querySelector(".final-cta");
     const all = Array.from(document.querySelectorAll("main > section"));
     const index = (element) => all.indexOf(element);
