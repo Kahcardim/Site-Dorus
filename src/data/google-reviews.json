@@ -1,0 +1,37 @@
+{
+  "source": "Google",
+  "selection": "Até 5 avaliações positivas com texto, priorizando as mais recentes entre as retornadas pelo Google.",
+  "updatedAt": null,
+  "reviews": [
+    {
+      "author": "Romildo Oliveira",
+      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Daiana Marques",
+      "text": "Ótimo",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    },
+    {
+      "author": "Ju Kanashiro",
+      "text": "Avaliou a D’orus com 5 estrelas no Google.",
+      "rating": 5,
+      "relativeTime": null,
+      "publishTime": null,
+      "authorUri": null,
+      "photoUri": null,
+      "sourceUri": null
+    }
+  ]
+}
