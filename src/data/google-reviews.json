@@ -1,35 +1,11 @@
 {
   "source": "Google Business Profile",
-  "selection": "3 avaliações históricas validadas e 7 avaliações recentes priorizando honestidade, competência, resolução, rapidez e preço justo.",
+  "selection": "Até 6 avaliações públicas de 4 ou 5 estrelas, priorizando comentários escritos sobre atendimento, qualidade, rapidez, confiança e serviços atendidos.",
   "reviews": [
     {
       "author": "Romildo Oliveira",
       "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
       "displayText": "Bom lugar para consertos de geladeiras e máquinas de lavar",
-      "rating": 5,
-      "relativeTime": null,
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null,
-      "pinned": true
-    },
-    {
-      "author": "Daiana Marques",
-      "text": "Ótimo",
-      "displayText": "Ótimo",
-      "rating": 5,
-      "relativeTime": null,
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null,
-      "pinned": true
-    },
-    {
-      "author": "Ju Kanashiro",
-      "text": "Avaliou a D’orus com 5 estrelas no Google.",
-      "displayText": "Avaliou a D’orus com 5 estrelas no Google.",
       "rating": 5,
       "relativeTime": null,
       "publishTime": null,
@@ -92,29 +68,7 @@
       "authorUri": null,
       "photoUri": null,
       "sourceUri": null
-    },
-    {
-      "author": "GabiiH Zaffalon Personalizados",
-      "text": "Wonderful service, great price, and the team is amazing, very attentive...",
-      "displayText": "Atendimento maravilhoso, ótimo preço e uma equipe incrível, muito atenciosa...",
-      "rating": 5,
-      "relativeTime": "Recente",
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null
-    },
-    {
-      "author": "Luciene Souza",
-      "text": "Highly competent professional, charges fair prices.",
-      "displayText": "Profissional altamente competente e com preços justos.",
-      "rating": 5,
-      "relativeTime": "Recente",
-      "publishTime": null,
-      "authorUri": null,
-      "photoUri": null,
-      "sourceUri": null
     }
   ],
-  "updatedAt": "2026-09-07T12:57:02Z"
+  "updatedAt": "2026-09-14T23:51:23Z"
 }
