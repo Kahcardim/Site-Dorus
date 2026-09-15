@@ -1,6 +1,6 @@
 {
   "source": "Google Business Profile",
-  "selection": "Até 6 avaliações públicas de 4 ou 5 estrelas, priorizando comentários escritos sobre atendimento, qualidade, rapidez, confiança e serviços atendidos.",
+  "selection": "3 avaliações históricas validadas e 7 avaliações recentes priorizando honestidade, competência, resolução, rapidez e preço justo.",
   "reviews": [
     {
       "author": "Romildo Oliveira",
@@ -70,5 +70,5 @@
       "sourceUri": null
     }
   ],
-  "updatedAt": "2026-09-14T23:51:23Z"
+  "updatedAt": "2026-09-15T04:50:26Z"
 }
