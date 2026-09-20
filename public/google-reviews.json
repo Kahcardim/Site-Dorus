@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-08-29",
+  "updatedAt": "2026-09-20",
   "reviews": [
+    {
+      "name": "Josefa Julia",
+      "rating": 5,
+      "text": "Falar sobre o atendimento dele é muito gratificante para mim; ele é extremamente honesto...",
+      "source": "Google"
+    },
+    {
+      "name": "Francis Barros",
+      "rating": 5,
+      "text": "Conhecimento técnico exemplar, sem troca de peças desnecessárias. Problema resolvido...",
+      "source": "Google"
+    },
+    {
+      "name": "Simone Camata",
+      "rating": 5,
+      "text": "Trabalho impecável! Já utilizei os serviços de conserto de máquinas de lavar...",
+      "source": "Google"
+    },
+    {
+      "name": "Maria Inez Souza Pimenta",
+      "rating": 5,
+      "text": "Excelente atendimento, rápido e com preço justo. Recomendo muito!",
+      "source": "Google"
+    },
     {
       "name": "Romildo Oliveira",
       "rating": 5,
@@ -10,13 +34,7 @@
     {
       "name": "Daiana Marques",
       "rating": 5,
-      "text": "Otimo",
-      "source": "Google"
-    },
-    {
-      "name": "Ju Kanashiro",
-      "rating": 5,
-      "text": "",
+      "text": "Ótimo",
       "source": "Google"
     }
   ]
