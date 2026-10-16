@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-09-20",
+  "updatedAt": "2026-10-15",
   "reviews": [
     {
       "name": "Josefa Julia",
@@ -32,9 +32,21 @@
       "source": "Google"
     },
     {
-      "name": "Daiana Marques",
+      "name": "GabiiH Zaffalon Personalizados",
       "rating": 5,
-      "text": "Ótimo",
+      "text": "Atendimento maravilhoso, ótimo preço e uma equipe incrível, muito atenciosa...",
+      "source": "Google"
+    },
+    {
+      "name": "Luciene Souza",
+      "rating": 5,
+      "text": "Profissional altamente competente e com preços justos.",
+      "source": "Google"
+    },
+    {
+      "name": "Rafael Cardim",
+      "rating": 5,
+      "text": "Excelente profissional e muito experiente! Resolveu meu problema...",
       "source": "Google"
     }
   ]
