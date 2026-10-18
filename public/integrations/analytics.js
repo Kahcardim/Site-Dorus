@@ -70,18 +70,27 @@
 
   function sendEvent(name, params) {
     if (IS_LOCAL_PREVIEW || readConsent() !== 'all') return false;
-    params = params || {};
+    params = Object.assign({}, params || {});
     params.page_path = params.page_path || window.location.pathname;
     params.page_type = params.page_type || pageType();
+    params.page_type_label = ({home: 'Início', about: 'Sobre a empresa', service_listing: 'Lista de serviços', service_detail: 'Serviço', guide_listing: 'Lista de orientações', guide_detail: 'Orientação', schedule: 'Agendamento', contact: 'Fale conosco', other: 'Outra página'})[params.page_type] || 'Outra página';
+    if (params.cta_location) {
+      params.cta_location_label = ({floating_whatsapp: 'WhatsApp flutuante', page_closing: 'Final da página', service_detail_closing: 'Final do serviço', service_listing_closing: 'Final da lista de serviços', hero: 'Destaque principal', footer: 'Rodapé', header: 'Cabeçalho', related_services: 'Serviços relacionados', content: 'Conteúdo', schedule_form: 'Formulário de agendamento', contact_form: 'Formulário de contato'})[params.cta_location] || 'Conteúdo';
+    }
     if (!params.equipment) params.equipment = pageEquipment();
     window.gtag('event', name, params);
     return true;
   }
 
   function trackLead(method, params) {
-    params = params || {};
+    params = Object.assign({}, params || {});
     params.method = method;
     params.lead_source = params.lead_source || ('website_' + method);
+    params.contact_method = ({whatsapp: 'WhatsApp', phone: 'Telefone', contact_form: 'Formulário de contato', schedule_google: 'Agenda do site'})[method] || 'Outro contato';
+    // Preserve the historical generate_lead event while separating intent from
+    // a request actually accepted by the scheduling backend. Neither is a sale.
+    params.lead_stage = method === 'schedule_google' && params.schedule_status === 'registered'
+      ? 'Solicitação registrada' : 'Contato iniciado';
     return sendEvent('generate_lead', params);
   }
 

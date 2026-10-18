@@ -13,6 +13,8 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   );
   await page.locator(".contact-message > summary").click();
   await page.evaluate(() => {
+    window.__dorusTracked = [];
+    window.dorusAnalytics = {trackLead: (method, params) => window.__dorusTracked.push({method, params})};
     window.open = (url) => {
       window.__dorusOpened = url;
     };
@@ -22,6 +24,7 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
   await page.getByRole("button", { name: /Continuar no WhatsApp/ }).click();
   check(await page.locator("#nome").evaluate(e => !e.validity.valid), "Contato: somente espaços no nome deve ser rejeitado");
   check(!(await page.evaluate(() => window.__dorusOpened)), "Contato: somente espaços não pode abrir WhatsApp");
+  check(await page.evaluate(() => window.__dorusTracked.length === 0), "Contato: formulário inválido não pode registrar intenção de contato");
   await page.locator("#nome").fill("Teste QA");
   await page.locator("#problema").fill("Teste de regressão");
   await page.getByRole("button", { name: /Continuar no WhatsApp/ }).click();
@@ -31,6 +34,9 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     ),
     "Contato: não abriu WhatsApp",
   );
+  const trackedContact = await page.evaluate(() => window.__dorusTracked);
+  check(trackedContact.length === 1 && trackedContact[0].method === 'contact_form', "Contato: envio válido deve registrar uma intenção de contato");
+  check(!JSON.stringify(trackedContact).includes('Teste QA') && !JSON.stringify(trackedContact).includes('Teste de regressão'), "Contato: dados preenchidos não podem ir para Analytics");
 
   await page.goto("http://127.0.0.1:4174/agendamento/", {
     waitUntil: "domcontentloaded",

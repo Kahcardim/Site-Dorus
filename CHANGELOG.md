@@ -42,3 +42,13 @@ Este arquivo resume ciclos relevantes do produto. O histórico completo permanec
 ## Convenção
 
 Mudanças futuras devem registrar aqui apenas entregas relevantes para produto, arquitetura, qualidade ou operação. Ajustes triviais continuam documentados somente no histórico Git.
+
+
+## 2026-10-17 — Controle GA4 do atendimento
+
+- Preservados os eventos existentes e acrescentadas etapas distintas para contato iniciado e solicitação de agenda registrada.
+- Acrescentados rótulos em português para forma de contato, local do botão e tipo de página.
+- Formulário de contato passa a registrar intenção válida sem transmitir os campos preenchidos.
+- Payloads de eventos isolados para não alterar os parâmetros de outros eventos.
+- Testes unitários e regressão do formulário ampliados; configuração de dimensões e proteção de URLs feita na propriedade GA4.
+- Homologação manual e acompanhamento de resultados orgânicos permanecem pendentes.

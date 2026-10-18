@@ -124,3 +124,23 @@ test("PRI-004: preview local não carrega GA4 mesmo com consentimento total", ()
     assert.equal(harness.window.dataLayer.filter(item => item[0] === 'event').length, 0);
   }
 });
+
+test("leads distinguem contato iniciado de solicitação aceita sem alterar o payload original", () => {
+  const harness = createHarness('all');
+  const original = {cta_location: 'hero', cta_type: 'whatsapp'};
+  harness.window.dorusAnalytics.track('cta_click', original);
+  harness.window.dorusAnalytics.trackLead('whatsapp', original);
+  harness.window.dorusAnalytics.trackLead('contact_form', {cta_location: 'contact_form'});
+  harness.window.dorusAnalytics.trackLead('schedule_google', {schedule_status: 'registered', cta_location: 'schedule_form'});
+  const events = harness.window.dataLayer.map(x => Array.from(x)).filter(x => x[0] === 'event');
+  assert.deepEqual(original, {cta_location: 'hero', cta_type: 'whatsapp'});
+  assert.equal(events[0][2].method, undefined);
+  assert.equal(events[1][2].lead_stage, 'Contato iniciado');
+  assert.equal(events[1][2].contact_method, 'WhatsApp');
+  assert.equal(events[1][2].cta_location_label, 'Destaque principal');
+  assert.equal(events[2][2].contact_method, 'Formulário de contato');
+  assert.equal(events[2][2].lead_stage, 'Contato iniciado');
+  assert.equal(events[3][2].lead_stage, 'Solicitação registrada');
+  assert.equal(events[3][2].contact_method, 'Agenda do site');
+  assert.equal(events[3][2].page_type_label, 'Agendamento');
+});

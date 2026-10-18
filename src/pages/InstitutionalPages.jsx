@@ -41,6 +41,10 @@ export function ContactPage() {
       `Marca/modelo: ${data.get("modelo") || "Não informado"}`,
       `Problema: ${data.get("problema")}`,
     ].join("\n");
+    window.dorusAnalytics?.trackLead("contact_form", {
+      cta_type: "whatsapp",
+      cta_location: "contact_form",
+    });
     window.open(
       `${SITE.whatsapp}?text=${encodeURIComponent(message)}`,
       "_blank",
