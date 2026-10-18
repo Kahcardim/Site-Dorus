@@ -104,7 +104,9 @@ export function Layout({
           </details>
         </div>
       </header>
-      {!consent && <CookieBanner onChoice={saveConsent} />}
+      {(!consent || consent === "pending") && (
+        <CookieBanner onChoice={saveConsent} />
+      )}
       <main id="conteudo">
         {breadcrumbs.length > 2 && (
           <nav

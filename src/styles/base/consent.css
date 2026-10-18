@@ -113,3 +113,8 @@
     backdrop-filter: none;
   }
 }
+
+html[data-cookie-consent="essential"] .cookie-banner,
+html[data-cookie-consent="all"] .cookie-banner {
+  display: none;
+}

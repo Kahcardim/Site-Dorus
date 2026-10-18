@@ -97,10 +97,15 @@ export function useNativeAccessibility() {
 export function useConsent() {
   const readStored = () => {
     if (typeof window === "undefined") return "essential";
-    const cookie = document.cookie.match(/(?:^|; )dorus_consent=([^;]*)/);
-    return cookie
-      ? decodeURIComponent(cookie[1])
-      : localStorage.getItem(CONSENT_KEY);
+    try {
+      const cookie = document.cookie.match(/(?:^|; )dorus_consent=([^;]*)/);
+      const value = cookie
+        ? decodeURIComponent(cookie[1])
+        : localStorage.getItem(CONSENT_KEY);
+      return value === "all" || value === "essential" ? value : null;
+    } catch {
+      return null;
+    }
   };
   const [consent, setConsent] = useState("pending");
   useEffect(() => {
@@ -110,12 +115,23 @@ export function useConsent() {
   }, []);
   const saveConsent = (value) => {
     document.cookie = `${CONSENT_KEY}=${value}; Path=/; Max-Age=15552000; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
-    localStorage.setItem(CONSENT_KEY, value);
+    try {
+      localStorage.setItem(CONSENT_KEY, value);
+    } catch {
+      /* Cookie remains available. */
+    }
     document.documentElement.dataset.cookieConsent = value;
     window.dispatchEvent(
       new CustomEvent("dorus:consent", { detail: { value } }),
     );
     setConsent(value);
   };
-  return { consent, saveConsent, reopen: () => setConsent(null) };
+  return {
+    consent,
+    saveConsent,
+    reopen: () => {
+      delete document.documentElement.dataset.cookieConsent;
+      setConsent(null);
+    },
+  };
 }

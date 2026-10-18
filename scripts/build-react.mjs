@@ -25,6 +25,7 @@ try {
   for (const route of routes) {
     const { html, head } = render(route.path);
     const integrations = [
+      `<script>try{var c=document.cookie.match(/(?:^|; )dorus_consent=([^;]*)/),v=c?decodeURIComponent(c[1]):localStorage.getItem('dorus_consent');if(v==='all'||v==='essential')document.documentElement.dataset.cookieConsent=v;}catch(e){}</script>`,
       '<script defer src="/integrations/analytics.js"></script>',
       route.path === "/agendamento/"
         ? '<script defer src="/integrations/calendar.js"></script>'

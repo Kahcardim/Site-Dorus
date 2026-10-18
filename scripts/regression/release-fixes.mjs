@@ -5,6 +5,13 @@ export async function run({ browser, check }) {
     });
     const page = await context.newPage();
     await page.route("https://script.google.com/**", (route) => route.abort());
+    await page.addInitScript(() => {
+      window.__releaseCLS = 0;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries())
+          if (!entry.hadRecentInput) window.__releaseCLS += entry.value;
+      }).observe({ type: "layout-shift", buffered: true });
+    });
     let ratingRequests = 0;
     if (width === 390) {
       await page.clock.install();
@@ -40,6 +47,10 @@ export async function run({ browser, check }) {
     check(
       await page.locator('.hero .actions a[href="/fale-conosco/"]').isVisible(),
       `${width}px: contato secundário ausente da home`,
+    );
+    check(
+      await page.evaluate(() => window.__releaseCLS <= 0.1),
+      `${width}px: cookies causaram deslocamento de layout`,
     );
     const cookie = page.locator("[data-cookie-banner]");
     await cookie.waitFor();
