@@ -17,6 +17,11 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
       window.__dorusOpened = url;
     };
   });
+  await page.locator("#nome").fill("   ");
+  await page.locator("#problema").fill("   ");
+  await page.getByRole("button", { name: /Continuar no WhatsApp/ }).click();
+  check(await page.locator("#nome").evaluate(e => !e.validity.valid), "Contato: somente espaços no nome deve ser rejeitado");
+  check(!(await page.evaluate(() => window.__dorusOpened)), "Contato: somente espaços não pode abrir WhatsApp");
   await page.locator("#nome").fill("Teste QA");
   await page.locator("#problema").fill("Teste de regressão");
   await page.getByRole("button", { name: /Continuar no WhatsApp/ }).click();
@@ -67,7 +72,12 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     `Agenda: janela mínima mensal esperada, recebido D+${limitDays}`,
   );
   await form.locator('[name="nome"]').fill("Teste QA");
-  await form.locator('[name="telefone"]').fill("11999999999");
+  for (const invalidPhone of ["          ", "abcdefghij", "119999", "00999999999"]) {
+    await form.locator('[name="telefone"]').fill(invalidPhone);
+    check(await form.locator('[name="telefone"]').evaluate(e => !e.validity.valid), `Agenda: telefone inválido aceito: ${JSON.stringify(invalidPhone)}`);
+  }
+  await form.locator('[name="telefone"]').fill("(11) 99999-9999");
+  check(await form.locator('[name="telefone"]').evaluate(e => e.validity.valid), "Agenda: telefone formatado válido rejeitado");
   await form.locator('[name="bairro"]').fill("Centro");
   await form.locator('[name="endereco"]').fill("Rua de teste, 1");
   await form

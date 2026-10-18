@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+const selectedReviews = JSON.parse(await readFile(new URL("../../src/data/google-reviews.json", import.meta.url), "utf8")).reviews;
 export async function run({ browser, page, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages }) {
   await page.goto("http://127.0.0.1:4174/", { waitUntil: "networkidle" });
   const chunks = await page.evaluate(() =>
@@ -18,11 +20,11 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     "Home: nota ausente do topo",
   );
   check(
-    (await page.locator("#avaliacoes .review-card").count()) === 10,
-    "Home: carrossel deve exibir exatamente 10 avaliações",
+    (await page.locator("#avaliacoes .review-card").count()) === selectedReviews.length,
+    "Home: carrossel deve preservar a seleção pública",
   );
   check(
-    (await page.locator('#avaliacoes .review-card small', { hasText: "Recente" }).count()) >= 7,
+    (await page.locator('#avaliacoes .review-card small', { hasText: "Recente" }).count()) >= selectedReviews.filter(review => review.relativeTime === "Recente").length,
     "Home: seleção de avaliações não prioriza comentários recentes",
   );
 
@@ -98,9 +100,10 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
     (await page.locator("main .actions").count()) === 2 &&
       (await page.locator('.hero .actions > a[href*="wa.me"]').count()) === 1 &&
       (await page.locator('.final-cta .actions > a[href*="wa.me"]').count()) === 1 &&
-      (await page.locator('.hero .actions > a[href="/agendamento/"]').count()) === 0 &&
+      (await page.locator('.hero .actions > a[href="/fale-conosco/"]').count()) === 1 &&
+    (await page.locator('.hero .actions > a[href="/agendamento/"]').count()) === 0 &&
       (await page.locator('.final-cta .actions > a[href="/agendamento/"]').count()) === 0,
-    "Home: Hero e CTA final devem ter somente o botão do WhatsApp",
+    "Home: WhatsApp principal e Fale conosco secundário devem estar disponíveis",
   );
 
   const ratingContract = await page.evaluate(() => ({

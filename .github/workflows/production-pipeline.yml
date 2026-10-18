@@ -41,8 +41,14 @@ jobs:
           revision="$(git rev-parse HEAD)"
           should_run=true
           if [[ "$EVENT_NAME" == "workflow_run" && "$revision" == "$SYNC_SOURCE_SHA" ]]; then
-            should_run=false
-            echo "A sincronização terminou sem gerar commit; regressão completa dispensada."
+            # A failed release must be retried even when Places returns unchanged data.
+            published="$(curl -fsSL --max-time 15 "https://assistenciadorus.com.br/?revision_check=${revision}" || true)"
+            if grep -q "name=\"dorus-revision\" content=\"${revision}\"" <<< "$published"; then
+              should_run=false
+              echo "Sincronização sem alteração e revisão já publicada; regressão dispensada."
+            else
+              echo "A revisão ainda não está em produção; repetindo os gates e a publicação."
+            fi
           fi
           echo "revision=$revision" >> "$GITHUB_OUTPUT"
           echo "should_run=$should_run" >> "$GITHUB_OUTPUT"

@@ -3,9 +3,12 @@ import initialRating from "../../public/google-rating.json";
 
 const CONSENT_KEY = "dorus_consent";
 let ratingRequest;
+let ratingRequestedAt = 0;
+const RATING_REFRESH_MS = 5 * 60 * 1000;
 
 function loadRating() {
-  if (!ratingRequest) {
+  if (!ratingRequest || Date.now() - ratingRequestedAt >= RATING_REFRESH_MS) {
+    ratingRequestedAt = Date.now();
     ratingRequest = fetch(`/google-rating.json?v=${Date.now()}`, {
       cache: "no-store",
     })
@@ -30,27 +33,39 @@ export function useGoogleRating() {
 
   useEffect(() => {
     let active = true;
-    loadRating()
-      .then((data) => {
-        if (
-          active &&
-          Number.isFinite(Number(data.rating)) &&
-          Number.isInteger(Number(data.reviews))
-        ) {
-          setRating((previous) =>
-            previous.rating === Number(data.rating) &&
-            previous.reviews === Number(data.reviews)
-              ? previous
-              : { rating: Number(data.rating), reviews: Number(data.reviews) },
-          );
-        }
-      })
-      .catch((error) => {
-        if (error.name !== "AbortError")
-          console.error("[D’orus] Avaliação indisponível.", error);
-      });
+    const refresh = () =>
+      loadRating()
+        .then((data) => {
+          if (
+            active &&
+            Number.isFinite(Number(data.rating)) &&
+            Number.isInteger(Number(data.reviews))
+          ) {
+            setRating((previous) =>
+              previous.rating === Number(data.rating) &&
+              previous.reviews === Number(data.reviews)
+                ? previous
+                : {
+                    rating: Number(data.rating),
+                    reviews: Number(data.reviews),
+                  },
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.name !== "AbortError")
+            console.error("[D’orus] Avaliação indisponível.", error);
+        });
+    refresh();
+    const timer = window.setInterval(refresh, RATING_REFRESH_MS);
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    document.addEventListener("visibilitychange", onVisible);
     return () => {
       active = false;
+      window.clearInterval(timer);
+      document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
 

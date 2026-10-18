@@ -125,8 +125,8 @@ assert.match(
 );
 assert.equal(
   (home.match(/class="review-card"/g) || []).length,
-  10,
-  "Home: carrossel deve preservar 10 avaliações reais",
+  JSON.parse(await readFile(new URL("../src/data/google-reviews.json", import.meta.url), "utf8")).reviews.length,
+  "Home: carrossel deve preservar a seleção pública de avaliações reais",
 );
 assert.match(
   home,

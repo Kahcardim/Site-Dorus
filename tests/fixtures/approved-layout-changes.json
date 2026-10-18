@@ -43,6 +43,54 @@
       "before": "WhatsApp e agendamento simples para reduzir o tempo entre o problema e o atendimento.",
       "after": "",
       "reason": "Card redundante removido durante a fusão dos dois fluxos."
+    },
+    {
+      "path": "/",
+      "before": "Daiana Marques",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/",
+      "before": "“Otimo”",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/",
+      "before": "Ju Kanashiro",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/",
+      "before": "Avaliou a D’orus com 5 estrelas no Google.",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/servicos/",
+      "before": "Daiana Marques",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/servicos/",
+      "before": "“Ótimo”",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/servicos/",
+      "before": "Ju Kanashiro",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/servicos/",
+      "before": "Avaliou a D’orus com 5 estrelas no Google.",
+      "after": "",
+      "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
     }
   ]
 }

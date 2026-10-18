@@ -97,7 +97,8 @@ for (const [path, expected] of Object.entries(metadata)) {
     );
     const expectedCount = path.split("/").filter(Boolean).length + 1;
     assert.equal(crumbs.itemListElement.length, expectedCount);
-    assert.match(html, /aria-label="Caminho de navegação"/);
+    if (expectedCount > 2) assert.match(html, /aria-label="Caminho de navegação"/);
+    else assert.doesNotMatch(html, /aria-label="Caminho de navegação"/);
   }
   if (path.startsWith("/curiosidades/") && path !== "/curiosidades/") {
     const article = schema["@graph"].find(

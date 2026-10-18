@@ -164,13 +164,17 @@ export function Reviews({ title = "Experiências de clientes da D’orus" }) {
           interval={4500}
         >
           {selectedReviews.map((review) => (
-            <article className="review-card" key={`${review.author}-${review.text}`}>
+            <article
+              className="review-card"
+              key={`${review.author}-${review.text}`}
+            >
               <div className="review-top">
                 <div className="review-avatar">{review.author[0]}</div>
                 <div>
                   <h3>{review.author}</h3>
                   <small>
-                    Google{review.relativeTime ? ` · ${review.relativeTime}` : ""}
+                    Google
+                    {review.relativeTime ? ` · ${review.relativeTime}` : ""}
                   </small>
                 </div>
                 <span className="google-mark">G</span>
@@ -199,7 +203,8 @@ export function HomePage() {
               Há mais de 10 anos, a D’orus realiza conserto e manutenção de
               geladeiras, máquinas de lavar, fogões, freezers e outros
               eletrodomésticos de linha branca, com diagnóstico técnico,
-              comunicação clara e atendimento em domicílio em {SITE.serviceArea}.
+              comunicação clara e atendimento em domicílio em {SITE.serviceArea}
+              .
             </p>
             <div className="actions">
               <a
@@ -209,6 +214,9 @@ export function HomePage() {
                 rel="noopener noreferrer"
               >
                 Falar no WhatsApp
+              </a>
+              <a className="button button-white" href="/fale-conosco/">
+                Fale conosco
               </a>
             </div>
             <div className="hero-points">

@@ -33,10 +33,7 @@ function CookieBanner({ onChoice }) {
     >
       <div className="cookie-copy">
         <strong>Privacidade e cookies</strong>
-        <p>
-          Usamos recursos necessários para o funcionamento do site e para
-          lembrar suas preferências.
-        </p>
+        <p>Métricas opcionais só com sua autorização.</p>
         <a href="/privacidade/">Ver política de privacidade</a>
       </div>
       <div className="cookie-actions">
@@ -107,8 +104,9 @@ export function Layout({
           </details>
         </div>
       </header>
+      {!consent && <CookieBanner onChoice={saveConsent} />}
       <main id="conteudo">
-        {breadcrumbs.length > 1 && (
+        {breadcrumbs.length > 2 && (
           <nav
             className="container breadcrumbs"
             aria-label="Caminho de navegação"
@@ -182,7 +180,11 @@ export function Layout({
               >
                 @assistenciadorus
               </a>
-              <a href={WHATSAPP_CTA_URL} target="_blank" rel="noopener noreferrer">
+              <a
+                href={WHATSAPP_CTA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 WhatsApp da D’orus
               </a>
             </div>
@@ -200,7 +202,6 @@ export function Layout({
           </button>
         </div>
       </footer>
-      {!consent && <CookieBanner onChoice={saveConsent} />}
     </>
   );
 }
@@ -238,13 +239,18 @@ export function InternalHero({
 function CtaRating() {
   const { rating, reviews: count } = useGoogleRating();
   return (
-    <div className="cta-rating" aria-label={`${rating} de 5 estrelas no Google`}>
+    <div
+      className="cta-rating"
+      aria-label={`${rating} de 5 estrelas no Google`}
+    >
       <strong data-final-google-rating>
         {rating.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
       </strong>
       <span aria-hidden="true">★★★★★</span>
       <small>
-        <span data-final-google-review-count>{count.toLocaleString("pt-BR")}</span>{" "}
+        <span data-final-google-review-count>
+          {count.toLocaleString("pt-BR")}
+        </span>{" "}
         avaliações no Google
       </small>
     </div>

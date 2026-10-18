@@ -1,3 +1,4 @@
+import { run as runReleaseFixes } from "./regression/release-fixes.mjs";
 import { run as runIntegratedAgenda } from "./regression/agenda-integrated.mjs";
 import { run as runRoutes } from "./regression/routes.mjs";
 import { run as runMenu } from "./regression/menu.mjs";
@@ -80,7 +81,7 @@ async function loadLazyImages(targetPage) {
 }
 
 try {
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({ headless: true, executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH, args: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH ? ["--no-zygote"] : [] });
   const shared = { browser, root, routePaths, accessibilityPaths, check, failures, accessibility, loadLazyImages };
   const runGroup = async (name, run) => {
     activeGroup = name;
@@ -103,6 +104,7 @@ try {
   await runGroup("carousels", runCarousels);
 
   await runGroup("forms", runForms);
+  await runGroup("release-fixes", runReleaseFixes);
   await runGroup("agenda-integrated", runIntegratedAgenda);
 
   await runGroup("accessibility", runAccessibility);

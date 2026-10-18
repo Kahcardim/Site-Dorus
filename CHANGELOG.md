@@ -1,3 +1,14 @@
+## 2026-10-17 — Navegação, formulários e atualização Google
+
+- Home com acesso secundário a Fale conosco; trilhas visuais somente nas páginas detalhadas.
+- Contato e agendamento usam um link contextual em vez de outro seletor de navegação.
+- Aviso de cookies compacto no fluxo mobile, sem sobrepor conteúdo.
+- Rejeição de campos contendo somente espaços e validação de telefone com DDD, inclusive antes da integração de agenda.
+- Atualização periódica compartilhada da nota/quantidade exibidas, sem expor credenciais Google.
+- Contratos de avaliações alinhados à seleção de seis já registrada em 14/09; nenhuma avaliação ou contagem foi inventada.
+- Pipeline volta a tentar uma revisão não publicada após uma sincronização sem alterações.
+- Testes de regressão cobrindo os casos corrigidos. Homologação manual pendente.
+
 # Changelog
 
 Este arquivo resume ciclos relevantes do produto. O histórico completo permanece nos commits e pull requests.

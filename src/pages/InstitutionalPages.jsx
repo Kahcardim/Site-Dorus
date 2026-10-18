@@ -1,3 +1,4 @@
+import { validateBeforeSubmit, validateField } from "../formValidation.js";
 import institutionalContent from "../data/institutional-content.json";
 import { ContentSections } from "../components/ContentSections.jsx";
 import { useEffect, useState } from "react";
@@ -109,6 +110,8 @@ export function ContactPage() {
             <form
               className="form"
               onSubmit={submit}
+              onSubmitCapture={validateBeforeSubmit}
+              onInput={(event) => validateField(event.target)}
               aria-labelledby="contact-title"
             >
               <div>
@@ -165,7 +168,7 @@ export function SchedulePage() {
   }, []);
   useEffect(() => {
     if (!minDate || !maxDate) return;
-    const form = document.querySelector('[data-schedule-form]');
+    const form = document.querySelector("[data-schedule-form]");
     if (!form) return;
     form.dataset.scheduleReady = "true";
     document.dispatchEvent(new Event("dorus:schedule-ready"));
@@ -218,6 +221,8 @@ export function SchedulePage() {
           <form
             className="form schedule-form"
             onSubmit={submit}
+            onSubmitCapture={validateBeforeSubmit}
+            onInput={(event) => validateField(event.target)}
             data-schedule-form
           >
             <div className="form-heading">
@@ -267,7 +272,7 @@ export function SchedulePage() {
                     type="tel"
                     autoComplete="tel"
                     inputMode="tel"
-                    pattern="[0-9 ()+\\-]{10,20}"
+                    pattern={"[+0-9\\s\\(\\)\\-]{10,20}"}
                     maxLength="20"
                     required
                   />
@@ -392,34 +397,17 @@ export function SchedulePage() {
 
 function JourneySwitch({ current }) {
   return (
-    <nav className="journey-switch" aria-label="Escolha o tipo de atendimento">
-      {[
-        {
-          key: "contact",
-          href: "/fale-conosco/",
-          title: "Falar com a equipe",
-          description: "Tirar dúvidas, sem escolher uma data",
-        },
-        {
-          key: "schedule",
-          href: "/agendamento/",
-          title: "Solicitar uma visita",
-          description: "Informar endereço, data e período",
-        },
-      ].map((item) =>
-        current === item.key ? (
-          <span key={item.key} aria-current="page">
-            {item.title}
-            <small>{item.description}</small>
-          </span>
-        ) : (
-          <a key={item.key} href={item.href}>
-            {item.title}
-            <small>{item.description}</small>
-          </a>
-        ),
+    <p className="journey-link">
+      {current === "contact" ? (
+        <a href="/agendamento/">
+          Solicitar uma visita: escolher data e período →
+        </a>
+      ) : (
+        <a href="/fale-conosco/">
+          Prefere tirar dúvidas antes? Fale com a equipe →
+        </a>
       )}
-    </nav>
+    </p>
   );
 }
 
