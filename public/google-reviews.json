@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-16",
+  "updatedAt": "2026-10-18",
   "reviews": [
     {
       "name": "Josefa Julia",
@@ -26,27 +26,15 @@
       "source": "Google"
     },
     {
-      "name": "Romildo Oliveira",
-      "rating": 5,
-      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
-      "source": "Google"
-    },
-    {
       "name": "GabiiH Zaffalon Personalizados",
       "rating": 5,
       "text": "Atendimento maravilhoso, ótimo preço e uma equipe incrível, muito atenciosa...",
       "source": "Google"
     },
     {
-      "name": "Luciene Souza",
+      "name": "Romildo Oliveira",
       "rating": 5,
-      "text": "Profissional altamente competente e com preços justos.",
-      "source": "Google"
-    },
-    {
-      "name": "Rafael Cardim",
-      "rating": 5,
-      "text": "Excelente profissional e muito experiente! Resolveu meu problema...",
+      "text": "Bom lugar para consertos de geladeiras e máquinas de lavar",
       "source": "Google"
     }
   ]
