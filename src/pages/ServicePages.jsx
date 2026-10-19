@@ -193,7 +193,7 @@ export function ServiceDetailPage({ service }) {
         </div>
       </section>
       <Faq items={content.faq} title={`Dúvidas sobre ${service.name.toLowerCase()}`} />
-      <CtaPanel title={content.ctaTitle}>{content.ctaDescription}</CtaPanel>
+      <CtaPanel title={content.ctaTitle} serviceMode={service.slug === "micro-ondas" ? "Micro-ondas: retirada e devolução" : undefined}>{content.ctaDescription}</CtaPanel>
     </>
   );
 }

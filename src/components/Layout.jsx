@@ -151,7 +151,7 @@ export function Layout({
               />
               <p>
                 Assistência técnica de linha branca com atendimento em
-                domicílio.
+                domicílio. Para micro-ondas, retirada e devolução.
               </p>
               <p className="footer-company-data">
                 <strong>{SITE.name}</strong>
@@ -263,6 +263,7 @@ export function CtaPanel({
   title = "Conte o problema e fale direto com a D’orus.",
   children,
   showRating = false,
+  serviceMode = "Atendimento em domicílio",
 }) {
   return (
     <section className="section section-soft final-cta">
@@ -275,7 +276,7 @@ export function CtaPanel({
               `Atendimento em ${SITE.serviceArea}, conforme disponibilidade.`}
           </p>
           <div className="cta-trust">
-            <span>Atendimento em domicílio</span>
+            <span>{serviceMode}</span>
             <span>Garantia mínima de 90 dias</span>
           </div>
           {showRating && <CtaRating />}

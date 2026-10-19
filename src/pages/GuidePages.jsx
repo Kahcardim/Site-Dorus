@@ -32,7 +32,7 @@ export function GuideDetailPage({ guide }) {
         <p>{content.intro}</p>
       </InternalHero>
       <ContentSections sections={content.sections} />
-      <CtaPanel />
+      <CtaPanel serviceMode={guide.slug === "micro-ondas-nao-aquece" ? "Micro-ondas: retirada e devolução" : undefined} />
     </>
   );
 }
