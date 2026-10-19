@@ -39,7 +39,7 @@ export function ServicesPage() {
                 />
                 <img
                   src={`/assets/servicos/${service.image}.webp`}
-                  alt={service.name}
+                  alt={`Ilustração de ${service.name.toLowerCase()}`}
                   loading="lazy"
                   width="1254"
                   height="1254"
@@ -109,7 +109,7 @@ export function ServiceDetailPage({ service }) {
               src={`/assets/servicos/${service.image}.webp`}
               width="1254"
               height="1254"
-              alt={`${service.name} atendido pela D’orus`}
+              alt={`Ilustração de ${service.name.toLowerCase()}`}
               fetchPriority="high"
             />
           </picture>
@@ -164,9 +164,7 @@ export function ServiceDetailPage({ service }) {
                   </h3>
                   <p>{guide.description}</p>
                   <span>Ler guia →</span>
-                  {service.slug === "micro-ondas" && (
-                    <p>Leia os sinais e cuidados de segurança →</p>
-                  )}
+
                 </a>
               ))}
             </div>
@@ -176,20 +174,25 @@ export function ServiceDetailPage({ service }) {
       <section className="section section-soft">
         <div className="container prose">
           <h2>Como solicitar o conserto de {service.name.toLowerCase()}</h2>
-          <p>
-            Informe marca, modelo, o sintoma e sua cidade. A D’orus atende em
-            domicílio em {SITE.serviceArea}, conforme disponibilidade. A região
-            e a data são confirmadas no contato.
-          </p>
+          <h3>{content.triageTitle}</h3>
+          <p>{content.triageDescription}</p>
+          <p>Informe a marca e o modelo para confirmar a possibilidade de atendimento. As condições variam conforme o equipamento.</p>
+          <p>{service.slug === "micro-ondas"
+            ? `Retirada e devolução em ${SITE.serviceArea}, conforme cobertura e disponibilidade. Região, condições e data são confirmadas no contato.`
+            : `A D’orus atende em domicílio em ${SITE.serviceArea}, conforme disponibilidade. A região e a data são confirmadas no contato.`}</p>
+          <p>Atendimento de segunda a sábado, das 8h às 18h, conforme disponibilidade. Foto ou vídeo são opcionais no primeiro contato.</p>
+          <p>Nas visitas em domicílio, a D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor é informado antes do agendamento e, quando o reparo é aprovado, é abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e deve ser confirmado antes da visita.</p>
           <p>
             O diagnóstico define o serviço recomendado, as condições do
             orçamento e a previsão, que também depende da disponibilidade de
             peças. Os serviços executados têm garantia mínima de 90 dias,
             conforme a ordem de serviço.
           </p>
-          <a href="/agendamento/">Solicitar uma visita técnica</a>
+          {service.slug === "micro-ondas" ? <a href="/fale-conosco/">Consultar retirada e devolução de micro-ondas</a> : <a href="/agendamento/">Solicitar uma visita técnica</a>}
+          <p className="image-note">Imagem ilustrativa do equipamento; não representa um serviço realizado.</p>
         </div>
       </section>
+      <Faq items={content.faq} title={`Dúvidas sobre ${service.name.toLowerCase()}`} />
       <CtaPanel title={content.ctaTitle}>{content.ctaDescription}</CtaPanel>
     </>
   );

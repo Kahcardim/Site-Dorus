@@ -59,8 +59,8 @@ export function ContactPage() {
         title="Conte o que está acontecendo com seu aparelho."
       >
         <p>
-          Quanto mais detalhes você enviar, melhor conseguimos preparar o
-          primeiro atendimento.
+          Informe o aparelho, o sintoma e seu bairro. Marca e modelo ajudam;
+          fotos ou vídeos são opcionais no primeiro contato.
         </p>
         <p className="journey-lead">
           Converse primeiro com a equipe, sem precisar escolher uma data.
@@ -95,7 +95,12 @@ export function ContactPage() {
             <div className="contact-item">
               <small>Área de atendimento</small>
               <strong>{SITE.serviceArea}</strong>
-              <p>Atendimento em domicílio, conforme disponibilidade.</p>
+              <p>Visitas em domicílio, conforme disponibilidade. Para micro-ondas, consulte retirada e devolução.</p>
+            </div>
+            <div className="contact-item">
+              <small>Horário de atendimento</small>
+              <strong>Segunda a sábado, das 8h às 18h</strong>
+              <p>Combine a visita ou a retirada antes, conforme disponibilidade.</p>
             </div>
             <a
               className="contact-item"
@@ -218,6 +223,7 @@ export function SchedulePage() {
           Informe o aparelho, o problema e o endereço onde o atendimento deverá
           ser realizado. A disponibilidade é confirmada pelo WhatsApp.
         </p>
+        <p>Para micro-ondas, a modalidade é retirada e devolução. <a href="/fale-conosco/">Combine a coleta com a equipe</a>.</p>
         <JourneySwitch current="schedule" />
       </InternalHero>
       <section className="section">

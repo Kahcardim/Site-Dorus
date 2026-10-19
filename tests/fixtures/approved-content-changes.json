@@ -160,7 +160,7 @@
     {
       "path": "/servicos/micro-ondas/",
       "before": "Problemas de aquecimento, comandos ou funcionamento podem ser avaliados conforme marca, modelo e defeito.",
-      "after": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região. Micro-ondas que liga mas não aquece, apresenta falhas no painel, prato giratório ou funcionamento irregular deve ser avaliado conforme marca, modelo e defeito."
+      "after": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região, com retirada e devolução. Se o aparelho liga, mas não aquece, apresenta ruídos ou falhas de comando, consulte atendimento conforme marca e modelo e combine as condições da coleta."
     },
     {
       "path": "/servicos/micro-ondas/",
@@ -180,12 +180,12 @@
     {
       "path": "/",
       "before": "Seu eletrodoméstico apresentou problema? Fale com quem entende.",
-      "after": "Assistência técnica de linha branca em Guarulhos e região."
+      "after": "Conserto de eletrodomésticos em Guarulhos, no seu endereço."
     },
     {
       "path": "/",
       "before": "Há mais de 10 anos, a D’orus atende linha branca com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
-      "after": "Há mais de 10 anos, a D’orus realiza conserto e manutenção de geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos de linha branca, com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo."
+      "after": "Há mais de 10 anos, a D’orus realiza conserto e manutenção de geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos de linha branca em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeira não gela ou máquina não centrifuga? Informe o aparelho, o sintoma e seu bairro para consultar atendimento e condições da visita."
     },
     {
       "path": "/",
@@ -202,11 +202,11 @@
     "/": {
       "description": {
         "before": "Assistência técnica de linha branca com atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeiras, lavadoras, fogões e mais.",
-        "after": "Assistência técnica de linha branca em Guarulhos e região, com atendimento em domicílio para geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos."
+        "after": "Conserto de geladeiras, máquinas de lavar e outros eletrodomésticos em Guarulhos. Consulte atendimento, condições da visita e disponibilidade com a D’orus."
       },
       "title": {
         "before": "D’orus Assistência Técnica em Guarulhos | Linha Branca",
-        "after": "Assistência Técnica de Linha Branca em Guarulhos | D’orus"
+        "after": "Assistência Técnica de Eletrodomésticos em Guarulhos | D’orus"
       }
     },
     "/agendamento/": {
@@ -284,7 +284,7 @@
     "/servicos/micro-ondas/": {
       "description": {
         "before": "Assistência técnica de micro-ondas em Guarulhos e região para falhas de aquecimento, painel, prato giratório e funcionamento. Garantia mínima de 90 dias nos serviços executados.",
-        "after": "Conserto e assistência técnica de micro-ondas em Guarulhos para aparelho que não aquece, falhas no painel, prato giratório e funcionamento irregular. Atendimento conforme marca e modelo."
+        "after": "Conserto de micro-ondas em Guarulhos com retirada e devolução. Consulte atendimento por marca e modelo, região, orçamento e condições da coleta com a D’orus."
       }
     }
   }

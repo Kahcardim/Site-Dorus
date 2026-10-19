@@ -47,7 +47,7 @@ function HeroRating() {
 function ServiceCards() {
   return (
     <div className="service-grid">
-      {services.map((service) => (
+      {[...services.filter((service) => ["geladeiras", "maquinas-de-lavar", "micro-ondas"].includes(service.slug)), ...services.filter((service) => !["geladeiras", "maquinas-de-lavar", "micro-ondas"].includes(service.slug))].map((service) => (
         <a
           className="service-card"
           href={`/servicos/${service.slug}/`}
@@ -60,7 +60,7 @@ function ServiceCards() {
             />
             <img
               src={`/assets/servicos/${service.image}.webp`}
-              alt={service.name}
+              alt={`Ilustração de ${service.name.toLowerCase()}`}
               loading="lazy"
               width="1254"
               height="1254"
@@ -198,14 +198,15 @@ export function HomePage() {
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="eyebrow">Assistência técnica em domicílio</span>
-            <h1>Assistência técnica de linha branca em Guarulhos e região.</h1>
+            <h1>Conserto de eletrodomésticos em Guarulhos, no seu endereço.</h1>
             <p>
               Há mais de 10 anos, a D’orus realiza conserto e manutenção de
               geladeiras, máquinas de lavar, fogões, freezers e outros
-              eletrodomésticos de linha branca, com diagnóstico técnico,
-              comunicação clara e atendimento em domicílio em {SITE.serviceArea}
-              .
+              eletrodomésticos de linha branca em {SITE.serviceArea}.
+              Geladeira não gela ou máquina não centrifuga? Informe o aparelho,
+              o sintoma e seu bairro para consultar atendimento e condições da visita.
             </p>
+            <p>Atendimento em domicílio para os demais equipamentos; para micro-ondas, retirada e devolução com condições combinadas antes.</p>
             <div className="actions">
               <a
                 className="button button-green"
@@ -213,7 +214,7 @@ export function HomePage() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Falar no WhatsApp
+                Consultar atendimento no WhatsApp
               </a>
               <a className="button button-white" href="/fale-conosco/">
                 Fale conosco
@@ -246,7 +247,7 @@ export function HomePage() {
               />
               <img
                 src="/assets/banner-principal-dorus.webp"
-                alt="Eletrodomésticos de linha branca atendidos pela D’orus"
+                alt="Ilustração de eletrodomésticos de linha branca"
                 width="1693"
                 height="929"
                 fetchPriority="high"
@@ -271,6 +272,7 @@ export function HomePage() {
             </a>
           </div>
           <ServiceCards />
+          <p className="image-note">Imagens ilustrativas dos equipamentos; não são registros de serviços realizados.</p>
         </div>
       </section>
       <Reviews />
@@ -293,8 +295,8 @@ export function HomePage() {
               <span className="num">02</span>
               <h3>Envie as informações</h3>
               <p>
-                Marca, modelo, foto e vídeo ajudam a preparar o primeiro
-                contato.
+                Marca, modelo e uma descrição do problema ajudam no primeiro
+                contato. Foto ou vídeo são opcionais.
               </p>
             </article>
             <article className="step">
@@ -309,8 +311,8 @@ export function HomePage() {
               <span className="num">04</span>
               <h3>Combine a visita</h3>
               <p>
-                A disponibilidade é confirmada e o atendimento é realizado no
-                endereço informado.
+                A equipe confirma modalidade, região e disponibilidade antes do
+                atendimento. Para micro-ondas, consulte retirada e devolução.
               </p>
             </article>
           </div>
@@ -346,6 +348,14 @@ export function HomePage() {
               </a>
             ))}
           </div>
+        </div>
+      </section>
+      <section className="section">
+        <div className="container prose">
+          <h2>Visita técnica: condições antes do agendamento</h2>
+          <p>A D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor é informado antes do agendamento e, quando o reparo é aprovado, é abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e deve ser confirmado antes da visita.</p>
+          <p>Atendimento de segunda a sábado, das 8h às 18h, conforme disponibilidade. O diagnóstico orienta o orçamento; o reparo depende da sua aprovação e o prazo varia conforme o modelo e as peças necessárias.</p>
+          <a href="/fale-conosco/">Consultar condições do atendimento</a>
         </div>
       </section>
       <Faq items={faq} />

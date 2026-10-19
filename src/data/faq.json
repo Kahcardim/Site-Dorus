@@ -9,7 +9,7 @@
   },
   {
     "question": "O atendimento é em domicílio?",
-    "answer": "Sim. A visita é realizada no endereço informado pelo cliente, conforme disponibilidade e área de atendimento."
+    "answer": "A D’orus realiza visitas em domicílio, conforme disponibilidade e área de atendimento. Para micro-ondas, trabalhamos com retirada e devolução: consulte região, condições e prazo antes de combinar a coleta."
   },
   {
     "question": "Quais cidades são atendidas?",
@@ -17,6 +17,10 @@
   },
   {
     "question": "O que enviar antes da visita?",
-    "answer": "Se possível, envie marca, modelo, foto da etiqueta e um vídeo curto mostrando o defeito."
+    "answer": "Informe o aparelho, a marca e o modelo, se souber, o sintoma e seu bairro. Foto da etiqueta ou vídeo são opcionais; você pode iniciar o contato sem imagens."
+  },
+  {
+    "question": "A D’orus atende aos sábados?",
+    "answer": "Sim. O atendimento é de segunda a sábado, das 8h às 18h, conforme disponibilidade. Combine a visita ou a retirada do aparelho antes de aguardar atendimento."
   }
 ]

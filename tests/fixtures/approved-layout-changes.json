@@ -91,6 +91,90 @@
       "before": "Avaliou a D’orus com 5 estrelas no Google.",
       "after": "",
       "reason": "Seleção pública reduzida a seis no commit 1ffecccbbb0408e24298310f6a3631a66c7e23ae (14/09/2026); baseline antigo não acompanhou a decisão."
+    },
+    {
+      "path": "/",
+      "before": "Assistência técnica de linha branca em Guarulhos e região.",
+      "after": "Conserto de eletrodomésticos em Guarulhos, no seu endereço.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "Há mais de 10 anos, a D’orus realiza conserto e manutenção de geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos de linha branca, com diagnóstico técnico, comunicação clara e atendimento em domicílio em Guarulhos, Arujá, Itaquaquecetuba e São Paulo.",
+      "after": "Há mais de 10 anos, a D’orus realiza conserto e manutenção de geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos de linha branca em Guarulhos, Arujá, Itaquaquecetuba e São Paulo. Geladeira não gela ou máquina não centrifuga? Informe o aparelho, o sintoma e seu bairro para consultar atendimento e condições da visita.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "Falar no WhatsApp",
+      "after": "Consultar atendimento no WhatsApp",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "Marca, modelo, foto e vídeo ajudam a preparar o primeiro contato.",
+      "after": "Marca, modelo e uma descrição do problema ajudam no primeiro contato. Foto ou vídeo são opcionais.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "A disponibilidade é confirmada e o atendimento é realizado no endereço informado.",
+      "after": "A equipe confirma modalidade, região e disponibilidade antes do atendimento. Para micro-ondas, consulte retirada e devolução.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "Sim. A visita é realizada no endereço informado pelo cliente, conforme disponibilidade e área de atendimento.",
+      "after": "A D’orus realiza visitas em domicílio, conforme disponibilidade e área de atendimento. Para micro-ondas, trabalhamos com retirada e devolução: consulte região, condições e prazo antes de combinar a coleta.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/",
+      "before": "Se possível, envie marca, modelo, foto da etiqueta e um vídeo curto mostrando o defeito.",
+      "after": "Informe o aparelho, a marca e o modelo, se souber, o sintoma e seu bairro. Foto da etiqueta ou vídeo são opcionais; você pode iniciar o contato sem imagens.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/servicos/geladeiras/",
+      "before": "Envie marca, modelo, foto e uma breve descrição do defeito.",
+      "after": "Envie marca, modelo e uma breve descrição do defeito. Foto ou vídeo são opcionais.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região. Micro-ondas que liga mas não aquece, apresenta falhas no painel, prato giratório ou funcionamento irregular deve ser avaliado conforme marca, modelo e defeito.",
+      "after": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região, com retirada e devolução. Se o aparelho liga, mas não aquece, apresenta ruídos ou falhas de comando, consulte atendimento conforme marca e modelo e combine as condições da coleta.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "Informe marca e modelo para confirmar a possibilidade de atendimento.",
+      "after": "Informe marca, modelo e bairro para consultar retirada e devolução do micro-ondas. Foto ou vídeo são opcionais.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/servicos/micro-ondas/",
+      "before": "Leia os sinais e cuidados de segurança →",
+      "after": "Ler guia →",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/fale-conosco/",
+      "before": "Quanto mais detalhes você enviar, melhor conseguimos preparar o primeiro atendimento.",
+      "after": "Informe o aparelho, o sintoma e seu bairro. Marca e modelo ajudam; fotos ou vídeos são opcionais no primeiro contato.",
+      "reason": "SEO e clareza comercial aprovados pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/fale-conosco/",
+      "before": "Atendimento em domicílio, conforme disponibilidade.",
+      "after": "Visitas em domicílio, conforme disponibilidade. Para micro-ondas, consulte retirada e devolução.",
+      "reason": "Modalidade de micro-ondas confirmada pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/servicos/",
+      "before": "Aquecimento, painel e funcionamento.",
+      "after": "Avaliação e conserto com retirada e devolução, conforme cobertura e disponibilidade.",
+      "reason": "Modalidade confirmada pelo usuário em 19/10/2026."
     }
   ]
 }

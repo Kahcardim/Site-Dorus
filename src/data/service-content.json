@@ -21,7 +21,15 @@
         "title": "Forno com problema"
       }
     ],
-    "title": "Conserto e assistência técnica de fogões em Guarulhos."
+    "title": "Conserto e assistência técnica de fogões em Guarulhos.",
+    "triageTitle": "Confirme o equipamento e o serviço necessário",
+    "triageDescription": "Informe marca, modelo, tipo de gás e o sintoma. Instalação e conversão de gás precisam ser consultadas separadamente; não são presumidas no pedido de conserto. Se houver cheiro de gás, interrompa o uso e procure orientação de segurança.",
+    "faq": [
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "fornos": {
     "ctaDescription": "Envie marca, modelo e uma breve descrição do defeito.",
@@ -41,7 +49,15 @@
         "title": "Comandos e acionamento"
       }
     ],
-    "title": "Conserto e assistência técnica de fornos em Guarulhos."
+    "title": "Conserto e assistência técnica de fornos em Guarulhos.",
+    "triageTitle": "O forno é elétrico ou a gás?",
+    "triageDescription": "Informe o tipo de alimentação, marca, modelo e se o forno é embutido. Conte se não aquece, perde temperatura ou apresenta falha nos comandos. Confirme a possibilidade de atendimento antes de solicitar a visita.",
+    "faq": [
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "freezers": {
     "ctaDescription": "Envie marca, modelo e uma descrição do comportamento do aparelho.",
@@ -61,10 +77,18 @@
         "title": "Funcionamento irregular"
       }
     ],
-    "title": "Conserto e assistência técnica de freezers em Guarulhos."
+    "title": "Conserto e assistência técnica de freezers em Guarulhos.",
+    "triageTitle": "Qual é o tipo e o uso do freezer?",
+    "triageDescription": "Informe se o modelo é horizontal ou vertical e se o uso é doméstico ou comercial. A possibilidade de atendimento depende do equipamento; serviços em sistemas industriais precisam ser consultados antes.",
+    "faq": [
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "geladeiras": {
-    "ctaDescription": "Envie marca, modelo, foto e uma breve descrição do defeito.",
+    "ctaDescription": "Envie marca, modelo e uma breve descrição do defeito. Foto ou vídeo são opcionais.",
     "ctaTitle": "Conte o problema da sua geladeira.",
     "intro": "A D’orus realiza conserto e assistência técnica de geladeiras em Guarulhos e região. Se a geladeira não está gelando, está formando gelo demais, vazando água, fazendo barulho ou apresentando falhas de refrigeração, observe os sintomas e evite desmontar o aparelho.",
     "issues": [
@@ -93,7 +117,19 @@
         "title": "Liga e desliga demais"
       }
     ],
-    "title": "Conserto e assistência técnica de geladeiras em Guarulhos."
+    "title": "Conserto e assistência técnica de geladeiras em Guarulhos.",
+    "triageTitle": "O que contar sobre a geladeira",
+    "triageDescription": "Informe se o refrigerador, o freezer ou os dois perderam refrigeração, quando começou e se há gelo, vazamento ou ruído diferente. Esses sinais ajudam a preparar a avaliação, mas não confirmam a causa nem a necessidade de trocar peças.",
+    "faq": [
+      {
+        "question": "Já é possível saber o valor pelo sintoma?",
+        "answer": "A descrição ajuda na triagem, mas o diagnóstico define o orçamento. As condições e o valor da visita técnica são informados antes do agendamento, e o reparo só é executado após aprovação."
+      },
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "lava-e-seca": {
     "ctaDescription": "Envie marca, modelo e o erro apresentado.",
@@ -113,7 +149,15 @@
         "title": "Erros e drenagem"
       }
     ],
-    "title": "Conserto e assistência técnica de lava e seca em Guarulhos."
+    "title": "Conserto e assistência técnica de lava e seca em Guarulhos.",
+    "triageTitle": "A falha acontece na lavagem ou na secagem?",
+    "triageDescription": "Informe em qual etapa o ciclo para, se a roupa sai molhada e se aparece código de erro. A avaliação depende da marca, do modelo e do sintoma; não é possível concluir a causa apenas pela descrição.",
+    "faq": [
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "lava-loucas": {
     "ctaDescription": "Se houver código de erro, envie também uma foto.",
@@ -133,7 +177,15 @@
         "title": "Erros e interrupções"
       }
     ],
-    "title": "Conserto e assistência técnica de lava-louças em Guarulhos."
+    "title": "Conserto e assistência técnica de lava-louças em Guarulhos.",
+    "triageTitle": "Informe o modelo e as condições de acesso",
+    "triageDescription": "Conte se a máquina não enche, não drena, não aquece ou interrompe o ciclo. Avise se é embutida e como é o acesso ao aparelho para combinar as condições da avaliação.",
+    "faq": [
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "maquinas-de-lavar": {
     "ctaDescription": "Informe marca, modelo e em qual etapa o problema aparece.",
@@ -165,12 +217,24 @@
         "title": "Ciclo para no meio"
       }
     ],
-    "title": "Conserto e assistência técnica de máquinas de lavar em Guarulhos."
+    "title": "Conserto e assistência técnica de máquinas de lavar em Guarulhos.",
+    "triageTitle": "Em qual etapa a máquina de lavar para?",
+    "triageDescription": "Conte se a falha aparece ao encher, lavar, drenar ou centrifugar. Informe se sobra água no cesto, se há vazamento e o código de erro, quando existir. Marca e modelo ajudam a confirmar a possibilidade de atendimento.",
+    "faq": [
+      {
+        "question": "A máquina não centrifuga: preciso trocar uma peça?",
+        "answer": "Esse sintoma pode ter causas diferentes. Conte em qual etapa ocorre e se fica água no cesto. A necessidade de reparo ou troca de peças só pode ser definida após avaliação."
+      },
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   },
   "micro-ondas": {
-    "ctaDescription": "Informe marca e modelo para confirmar a possibilidade de atendimento.",
+    "ctaDescription": "Informe marca, modelo e bairro para consultar retirada e devolução do micro-ondas. Foto ou vídeo são opcionais.",
     "ctaTitle": "Conte o problema do seu micro‑ondas.",
-    "intro": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região. Micro-ondas que liga mas não aquece, apresenta falhas no painel, prato giratório ou funcionamento irregular deve ser avaliado conforme marca, modelo e defeito.",
+    "intro": "A D’orus realiza conserto e assistência técnica de micro-ondas em Guarulhos e região, com retirada e devolução. Se o aparelho liga, mas não aquece, apresenta ruídos ou falhas de comando, consulte atendimento conforme marca e modelo e combine as condições da coleta.",
     "issues": [
       {
         "description": "Micro-ondas que liga, mas não aquece os alimentos como deveria, precisa de avaliação técnica. Não abra o gabinete em casa.",
@@ -185,6 +249,18 @@
         "title": "Funcionamento irregular"
       }
     ],
-    "title": "Conserto e assistência técnica de micro-ondas em Guarulhos."
+    "title": "Conserto e assistência técnica de micro-ondas em Guarulhos.",
+    "triageTitle": "Como funciona a retirada do micro-ondas",
+    "triageDescription": "Informe marca, modelo, sintoma e bairro para consultar retirada e devolução. Combine previamente região, condições da coleta e prazo estimado. O diagnóstico define o orçamento e o reparo depende da sua aprovação; o prazo depende da avaliação e das peças necessárias.",
+    "faq": [
+      {
+        "question": "O micro-ondas é consertado na casa do cliente?",
+        "answer": "A modalidade atual é retirada e devolução. Consulte cobertura, condições da coleta e prazo estimado antes de entregar o aparelho. Não abra o gabinete: componentes internos podem manter alta tensão mesmo fora da tomada."
+      },
+      {
+        "question": "É preciso enviar foto para pedir atendimento?",
+        "answer": "Não. Informe o equipamento, o sintoma e seu bairro. Marca e modelo ajudam; envie foto ou vídeo somente se puder e sem desmontar o aparelho."
+      }
+    ]
   }
 }

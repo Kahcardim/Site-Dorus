@@ -88,3 +88,6 @@
     border-radius: 16px;
   }
 }
+
+/* Transparência das imagens de equipamentos. */
+.image-note { color: #4b5563; font-size: .875rem; line-height: 1.6; margin-top: 1rem; }

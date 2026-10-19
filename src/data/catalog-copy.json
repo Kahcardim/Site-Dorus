@@ -4,7 +4,8 @@
     "maquinas-de-lavar": "Centrifugação, drenagem, enchimento, vazamentos e ciclos.",
     "fogoes": "Falhas de acendimento, chama irregular, queimadores e forno.",
     "freezers": "Baixo rendimento, excesso de gelo e falhas de refrigeração.",
-    "lava-loucas": "Drenagem, lavagem, aquecimento e interrupções de ciclo."
+    "lava-loucas": "Drenagem, lavagem, aquecimento e interrupções de ciclo.",
+    "micro-ondas": "Não aquece, faz ruído ou apresenta falha de comando? Consulte retirada e devolução."
   },
   "serviceSummaries": {
     "geladeiras": "Refrigeração, gelo, vazamentos e ruídos.",
@@ -14,7 +15,7 @@
     "lava-loucas": "Lavagem, drenagem e interrupções.",
     "lava-e-seca": "Lavagem, centrifugação, drenagem e secagem.",
     "fornos": "Aquecimento, acionamento e comandos.",
-    "micro-ondas": "Aquecimento, painel e funcionamento."
+    "micro-ondas": "Avaliação e conserto com retirada e devolução, conforme cobertura e disponibilidade."
   },
   "serviceLinks": {
     "geladeiras": [

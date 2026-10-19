@@ -1,3 +1,13 @@
+## 2026-10-19 — SEO e clareza comercial
+
+- Home com foco em conserto de eletrodomésticos em Guarulhos e condições da visita.
+- Oito serviços com triagem específica; perguntas frequentes e fotos opcionais.
+- Retirada e devolução somente de micro-ondas; demais aparelhos em domicílio.
+- Atendimento de segunda a sábado, das 8h às 18h, confirmado pelo responsável.
+- Micro-ondas entre os três primeiros serviços da home, após geladeiras e lavadoras.
+- Imagens identificadas como ilustrativas; URLs e links entre serviços e guias preservados.
+- Substituições explícitas nos contratos, mantendo a referência histórica intacta.
+
 ## 2026-10-17 — Navegação, formulários e atualização Google
 
 - Home com acesso secundário a Fale conosco; trilhas visuais somente nas páginas detalhadas.

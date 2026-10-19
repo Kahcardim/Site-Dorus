@@ -1,11 +1,11 @@
 {
   "/": {
-    "description": "Assistência técnica de linha branca em Guarulhos e região, com atendimento em domicílio para geladeiras, máquinas de lavar, fogões, freezers e outros eletrodomésticos.",
+    "description": "Conserto de geladeiras, máquinas de lavar e outros eletrodomésticos em Guarulhos. Consulte atendimento, condições da visita e disponibilidade com a D’orus.",
     "image": "/assets/banner-principal-dorus.webp",
     "imageAlt": "Eletrodomésticos de linha branca atendidos pela D’orus",
     "imageHeight": 929,
     "imageWidth": 1693,
-    "title": "Assistência Técnica de Linha Branca em Guarulhos | D’orus"
+    "title": "Assistência Técnica de Eletrodomésticos em Guarulhos | D’orus"
   },
   "/agendamento/": {
     "description": "Agende uma visita técnica da D’orus para conserto de eletrodomésticos em domicílio em Guarulhos e região, conforme disponibilidade.",
@@ -152,7 +152,7 @@
     "title": "Conserto de Máquina de Lavar em Guarulhos | D’orus"
   },
   "/servicos/micro-ondas/": {
-    "description": "Conserto e assistência técnica de micro-ondas em Guarulhos para aparelho que não aquece, falhas no painel, prato giratório e funcionamento irregular. Atendimento conforme marca e modelo.",
+    "description": "Conserto de micro-ondas em Guarulhos com retirada e devolução. Consulte atendimento por marca e modelo, região, orçamento e condições da coleta com a D’orus.",
     "image": "/assets/servicos/servico-microondas.webp",
     "imageAlt": "Micro-ondas atendido pela D’orus",
     "imageHeight": 1254,
