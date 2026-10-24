@@ -35,7 +35,7 @@ export function GuideDetailPage({ guide }) {
         {service && (
           <p>
             Precisa de atendimento? Conheça o{" "}
-            <a href={`/servicos/${service.slug}/`}>
+            <a className="text-link" href={`/servicos/${service.slug}/`}>
               conserto de {service.name.toLowerCase()} em Guarulhos
             </a>
             {service.slug === "micro-ondas"

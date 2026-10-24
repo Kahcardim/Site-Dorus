@@ -112,6 +112,7 @@ export function ServiceDetailPage({ service }) {
             <Warranty />
             <p>
               <a
+                className="text-link"
                 href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg"
                 target="_blank"
                 rel="noopener noreferrer"
