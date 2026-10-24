@@ -154,7 +154,7 @@ test("backend aplica limites e saneia texto controlado pelo usuário", () => {
   assert.equal(harness.call(`sanitize(" <b>teste</b> ")`), "bteste/b");
 });
 
-test("backend cobre a janela mensal, passado e domingo", () => {
+test("backend cobre a janela mensal, passado, sábado e domingo", () => {
   const harness = createHarness();
   assert.doesNotThrow(() => harness.call(`validateDate("2026-09-07")`));
   assert.doesNotThrow(() => harness.call(`validateDate("2026-10-07")`));
@@ -162,6 +162,7 @@ test("backend cobre a janela mensal, passado e domingo", () => {
     () => harness.call(`validateDate("2026-09-06")`),
     /data passada/,
   );
+  assert.throws(() => harness.call(`validateDate("2026-09-12")`), /sábados/);
   assert.throws(() => harness.call(`validateDate("2026-09-13")`), /domingos/);
 });
 

@@ -380,6 +380,7 @@ function validateDate(date) {
   if (selected > max) throw new Error('O agendamento pode ser feito com até 60 dias de antecedência.');
 
   const weekday = Number(Utilities.formatDate(selected, TIMEZONE, 'u'));
+  if (weekday === 6) throw new Error('Não há atendimento aos sábados.');
   if (weekday === 7) throw new Error('Não há atendimento aos domingos.');
 }
 

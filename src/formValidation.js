@@ -20,7 +20,9 @@ export function validPhone(value) {
 export function validateField(field) {
   if (!field?.setCustomValidity) return;
   field.setCustomValidity("");
-  if (field.name === "telefone" && field.value && !validPhone(field.value)) {
+  if (field.name === "data" && field.value && [0, 6].includes(new Date(`${field.value}T12:00:00`).getDay())) {
+    field.setCustomValidity("Não há expediente aos sábados e domingos. Escolha uma data de segunda a sexta-feira.");
+  } else if (field.name === "telefone" && field.value && !validPhone(field.value)) {
     field.setCustomValidity(
       "Informe um telefone válido com DDD, como (11) 91234-5678.",
     );

@@ -1,3 +1,9 @@
+## 2026-10-24 — Sem expediente aos sábados
+
+- Atendimento de segunda a sexta-feira, das 8h às 18h, na home, serviços, contato e FAQ.
+- Datas de sábado e domingo bloqueadas no cliente e no código do backend da agenda.
+- Testes de rejeição de fim de semana e recuperação em dia útil.
+
 ## 2026-10-19 — SEO e clareza comercial
 
 - Home com foco em conserto de eletrodomésticos em Guarulhos e condições da visita.

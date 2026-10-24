@@ -155,6 +155,8 @@
     async function loadAvailability() {
       resetStatus();
       if (!dateInput.value) return;
+      var weekend = [0, 6].indexOf(new Date(dateInput.value + "T12:00:00").getDay()) !== -1;
+      dateInput.setCustomValidity(weekend ? "Não há expediente aos sábados e domingos. Escolha uma data de segunda a sexta-feira." : "");
       if (!dateInput.checkValidity()) {
         periodSelect.innerHTML = '<option value="">Escolha uma data válida</option>';
         periodSelect.disabled = true;

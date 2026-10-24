@@ -38,3 +38,11 @@ test("texto obrigatório não aceita só espaços e recupera validade após corr
   validateField(field);
   assert.equal(field.error, "");
 });
+
+
+test("agenda rejeita sábado e domingo e recupera validade na segunda-feira", () => {
+  const field = {type: "date", name: "data", required: true, value: "2026-10-24", setCustomValidity(message) { this.error = message; }};
+  validateField(field); assert.match(field.error, /sábados e domingos/);
+  field.value = "2026-10-25"; validateField(field); assert.match(field.error, /sábados e domingos/);
+  field.value = "2026-10-26"; validateField(field); assert.equal(field.error, "");
+});

@@ -99,8 +99,8 @@ export function ContactPage() {
             </div>
             <div className="contact-item">
               <small>Horário de atendimento</small>
-              <strong>Segunda a sábado, das 8h às 18h</strong>
-              <p>Combine a visita ou a retirada antes, conforme disponibilidade.</p>
+              <strong>Segunda a sexta-feira, das 8h às 18h</strong>
+              <p>Não há expediente aos sábados e domingos. Combine a visita ou a retirada antes, conforme disponibilidade.</p>
             </div>
             <a
               className="contact-item"
@@ -243,7 +243,7 @@ export function SchedulePage() {
               <legend>1. Data e período da visita</legend>
               <div className="form-grid">
                 <label>
-                  Data preferida
+                  Data preferida (segunda a sexta-feira)
                   <input
                     name="data"
                     type="date"

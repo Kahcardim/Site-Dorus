@@ -46,7 +46,9 @@ export async function run({ browser, page, root, routePaths, accessibilityPaths,
       window.__dorusOpened = url;
     };
   });
-  const tomorrow = new Date(Date.now() + 86400000).toISOString().slice(0, 10);
+  const nextBusinessDay = new Date(Date.now() + 86400000);
+  while ([0, 6].includes(nextBusinessDay.getDay())) nextBusinessDay.setDate(nextBusinessDay.getDate() + 1);
+  const tomorrow = nextBusinessDay.toISOString().slice(0, 10);
   const form = page.locator("[data-schedule-form]");
   await page.waitForFunction(() => {
     const input = document.querySelector('[data-schedule-form] [name="data"]');

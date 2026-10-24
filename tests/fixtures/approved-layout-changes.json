@@ -175,6 +175,12 @@
       "before": "Aquecimento, painel e funcionamento.",
       "after": "Avaliação e conserto com retirada e devolução, conforme cobertura e disponibilidade.",
       "reason": "Modalidade confirmada pelo usuário em 19/10/2026."
+    },
+    {
+      "path": "/agendamento/",
+      "before": "Data preferida",
+      "after": "Data preferida (segunda a sexta-feira)",
+      "reason": "Sem expediente aos sábados, conforme instrução de 24/10/2026."
     }
   ]
 }

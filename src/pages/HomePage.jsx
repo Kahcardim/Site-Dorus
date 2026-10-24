@@ -354,7 +354,7 @@ export function HomePage() {
         <div className="container prose">
           <h2>Visita técnica: condições antes do agendamento</h2>
           <p>A D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor é informado antes do agendamento e, quando o reparo é aprovado, é abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e deve ser confirmado antes da visita.</p>
-          <p>Atendimento de segunda a sábado, das 8h às 18h, conforme disponibilidade. O diagnóstico orienta o orçamento; o reparo depende da sua aprovação e o prazo varia conforme o modelo e as peças necessárias.</p>
+          <p>Atendimento de segunda a sexta-feira, das 8h às 18h, conforme disponibilidade. O diagnóstico orienta o orçamento; o reparo depende da sua aprovação e o prazo varia conforme o modelo e as peças necessárias.</p>
           <a href="/fale-conosco/">Consultar condições do atendimento</a>
         </div>
       </section>

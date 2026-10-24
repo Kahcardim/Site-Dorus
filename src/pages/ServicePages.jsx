@@ -180,7 +180,7 @@ export function ServiceDetailPage({ service }) {
           <p>{service.slug === "micro-ondas"
             ? `Retirada e devolução em ${SITE.serviceArea}, conforme cobertura e disponibilidade. Região, condições e data são confirmadas no contato.`
             : `A D’orus atende em domicílio em ${SITE.serviceArea}, conforme disponibilidade. A região e a data são confirmadas no contato.`}</p>
-          <p>Atendimento de segunda a sábado, das 8h às 18h, conforme disponibilidade. Foto ou vídeo são opcionais no primeiro contato.</p>
+          <p>Atendimento de segunda a sexta-feira, das 8h às 18h, conforme disponibilidade. Foto ou vídeo são opcionais no primeiro contato.</p>
           <p>Nas visitas em domicílio, a D’orus cobra uma visita técnica que inclui deslocamento e diagnóstico. O valor é informado antes do agendamento e, quando o reparo é aprovado, é abatido do serviço. Para áreas fora da região principal de atendimento, o valor pode variar conforme a localização e deve ser confirmado antes da visita.</p>
           <p>
             O diagnóstico define o serviço recomendado, as condições do
