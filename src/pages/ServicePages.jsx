@@ -78,7 +78,7 @@ export function ServiceDetailPage({ service }) {
     service.guideSlugs.includes(guide.slug),
   );
   const message = encodeURIComponent(
-    `Olá, preciso de assistência para ${service.name.toLowerCase()}.`,
+    `Olá, preciso de assistência para ${service.name.toLowerCase()}. ${service.slug === "micro-ondas" ? "Gostaria de consultar retirada e devolução." : "Gostaria de consultar uma visita técnica em domicílio."}\nBairro e cidade: \nMarca e modelo: \nO que está acontecendo: `,
   );
   return (
     <>
@@ -88,6 +88,12 @@ export function ServiceDetailPage({ service }) {
             <span className="eyebrow">{service.name}</span>
             <h1>{content.title}</h1>
             <p>{content.intro}</p>
+            <p>
+              {service.slug === "micro-ondas"
+                ? "Retirada e devolução: combine a cobertura, as condições e a data pelo contato."
+                : "Atendimento em domicílio: informe seu bairro para consultar a cobertura e a disponibilidade de visita."}
+              {" "}De segunda a sexta-feira, das 8h às 18h.
+            </p>
             <div className="actions">
               <a
                 className="button button-green"
@@ -97,8 +103,22 @@ export function ServiceDetailPage({ service }) {
               >
                 Chamar no WhatsApp
               </a>
+              <a className="button button-blue" href="/fale-conosco/">
+                {service.slug === "micro-ondas"
+                  ? "Consultar retirada de micro-ondas"
+                  : "Fale conosco"}
+              </a>
             </div>
             <Warranty />
+            <p>
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Dorus%20Assist%C3%AAncia%20T%C3%A9cnica&query_place_id=ChIJZyk7iQ31zpQR0C-R3wgVywg"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ver avaliações de clientes da D’orus no Google
+              </a>
+            </p>
           </div>
           <picture className="service-hero-media">
             <source

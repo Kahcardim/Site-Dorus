@@ -1,5 +1,6 @@
 import guideContent from "../data/guide-content.json";
 import guideListing from "../data/guide-listing.json";
+import { services } from "../data/site.js";
 import { ContentSections } from "../components/ContentSections.jsx";
 import { CtaPanel, InternalHero } from "../components/Layout.jsx";
 
@@ -23,6 +24,7 @@ export function GuidesPage() {
 
 export function GuideDetailPage({ guide }) {
   const content = guideContent[guide.slug];
+  const service = services.find((item) => item.slug === guide.service);
   return (
     <>
       <InternalHero
@@ -30,6 +32,17 @@ export function GuideDetailPage({ guide }) {
         title={content.title}
       >
         <p>{content.intro}</p>
+        {service && (
+          <p>
+            Precisa de atendimento? Conheça o{" "}
+            <a href={`/servicos/${service.slug}/`}>
+              conserto de {service.name.toLowerCase()} em Guarulhos
+            </a>
+            {service.slug === "micro-ondas"
+              ? ", com retirada e devolução combinadas antes."
+              : ", com visita técnica em domicílio conforme disponibilidade."}
+          </p>
+        )}
       </InternalHero>
       <ContentSections sections={content.sections} />
       <CtaPanel serviceMode={guide.slug === "micro-ondas-nao-aquece" ? "Micro-ondas: retirada e devolução" : undefined} />
