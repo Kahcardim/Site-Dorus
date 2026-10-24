@@ -64,20 +64,27 @@ let sunday = today;
 while (weekday(sunday) !== 0) sunday = addDays(sunday, 1);
 if (sunday === today) sunday = addDays(sunday, 7);
 
+let saturday = today;
+while (weekday(saturday) !== 6) saturday = addDays(saturday, 1);
+let businessDay = today;
+while ([0, 6].includes(weekday(businessDay))) businessDay = addDays(businessDay, 1);
+
 const cases = [
   { id: "past", date: yesterday, ok: false, error: /passada/i },
   {
     id: "today",
     date: today,
-    ok: weekday(today) !== 0,
-    error: /domingo/i,
+    ok: ![0, 6].includes(weekday(today)),
+    error: /sábados|domingo/i,
   },
   {
     id: "d+30",
     date: monthlyWindow,
-    ok: weekday(monthlyWindow) !== 0,
-    error: /domingo/i,
+    ok: ![0, 6].includes(weekday(monthlyWindow)),
+    error: /sábados|domingo/i,
   },
+  { id: "saturday", date: saturday, ok: false, error: /sábados/i },
+  { id: "weekday", date: businessDay, ok: true },
   { id: "sunday", date: sunday, ok: false, error: /domingo/i },
 ];
 
